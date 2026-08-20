@@ -5,7 +5,7 @@ metadata:
 spec:
   productId: mariadb-helm
   sourceType: helm-git
-  repoURL: git@github.ibm.com:djkernic/gori-catalogathon-gitops.git
+  repoURL: git@github.company.com:user/prod-gitops.git
   version: "1.0.0"
   catalogRegistration:
     displayName: MariaDB Database
