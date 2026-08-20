@@ -1,0 +1,24 @@
+name: Apache Kafka Event Streaming
+metadata:
+  name: apache-kafka-helm-git
+  namespace: byop-broker
+spec:
+  productId: apache-kafka-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Apache Kafka Event Streaming
+    description: Full-lifecycle Apache Kafka distributed event-streaming service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard Kafka deployment with persistent storage and auto-generated credentials
+      - id: kafkahelm_plan
+        name: Default
+        description: Default Kafka deployment with persistent storage and auto-generated credentials
+    category: middleware
+    tags: [Messaging, EventStreaming, DataPipeline, RealTime, Kafka]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 15

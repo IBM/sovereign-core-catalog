@@ -1,0 +1,40 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: ServiceProfile
+metadata:
+  companyRef: "companies/tech-mahindra"
+  name: "Tech Mahindra Orion + DSLM Sovereign Services"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  serviceType: "ManagedOperations"
+  additionalServiceTypes:
+    - "SystemIntegration"
+    - "AuditAndCompliance"
+  description: "Sovereign technology and services offering supporting controlled AI deployments, digital transformation, and data lifecycle management within regulated environments."
+  sovereignty:
+    corporateHQ: "India"
+    ultimateParentCompanyHQ: "India"
+    staffClearanceLevel: "EU-GDPR DPO certified; India IT Act compliant; EU-national staff available for EU sovereign contracts under TechM EU entity"
+    remoteAccessRequired: false
+  certifications:
+    - framework: "ISO-27001"
+      status: "Active"
+    - framework: "SOC2"
+      status: "Active"
+    - framework: "BSI-C5"
+      status: "In Progress"
+  capabilities:
+    hosting:
+      providesBareMetal: false
+      airGappedReady: true
+      datacentreLocations: ["Amsterdam, Netherlands", "Frankfurt, Germany", "Mumbai, India", "Hyderabad, India"]
+      networkIsolation: "Dedicated private connectivity; no shared internet uplinks for sovereign zones"
+    managedOperations:
+      sla: "99.95% uptime; 4-hour response SLA for critical incidents"
+      supportTiers: ["24/7 NOC", "Dedicated TAM", "AI lifecycle management", "Data sovereignty compliance reporting"]
+    aiPlatformServices:
+      llmOpsManaged: true
+      modelFinetuningOnPrem: true
+      sovereignDataPipelineManagement: true
+      supportedFrameworks: ["PyTorch", "TensorFlow", "LangChain", "IBM watsonx"]
+      complianceReporting: "Automated BSI-C5 and ISO-27001 evidence packs; DSLM data lifecycle audit trails"

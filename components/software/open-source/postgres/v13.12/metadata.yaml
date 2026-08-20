@@ -1,0 +1,30 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "PostgreSQL Global Development Group"
+  product: "PostgreSQL"
+  version: "13.12"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: true
+    license: "PostgreSQL"
+    upstreamProject: "https://github.com/postgres/postgres"
+    upstreamVersion: "13.12"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://registry-1.docker.io/bitnamicharts/postgresql"

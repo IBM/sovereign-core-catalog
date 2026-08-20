@@ -1,0 +1,24 @@
+name: Odoo CRM
+metadata:
+  name: odoo-helm-git
+  namespace: byop-broker
+spec:
+  productId: odoo-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Odoo CRM
+    description: Full-lifecycle Odoo CRM service with embedded PostgreSQL, broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard CRM deployment with embedded PostgreSQL, persistent storage and auto-generated credentials
+      - id: odoohelm_plan
+        name: Default
+        description: Default CRM deployment with embedded PostgreSQL, persistent storage and auto-generated credentials
+    category: BusinessApplications
+    tags: [BusinessApplications, CRM, ERP, Odoo]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

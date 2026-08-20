@@ -1,0 +1,24 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "ibm"
+  displayName: "International Business Machines Corporation"
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+    registrationNumber: "US-NY-13-0871985"
+  contact:
+    website: "https://www.ibm.com"
+    partnerEmail: "sovereign@ibm.com"
+  certifications:
+    - framework: "FedRAMP-High"
+      status: "Active"
+    - framework: "ISO-27001"
+      status: "Active"
+    - framework: "SOC2"
+      status: "Active"
+    - framework: "BSI-C5"
+      status: "Active"
+    - framework: "Gaia-X-Label-Level-3"
+      status: "In Progress"

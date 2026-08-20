@@ -1,0 +1,8 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "open-source"
+  displayName: "Open Source Community"
+spec:
+  contact:
+    website: "https://opensource.org"

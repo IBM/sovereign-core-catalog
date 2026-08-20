@@ -1,0 +1,58 @@
+# Helm values override for instance
+namespaceOverride: {{ namespace }}
+
+# Helm values override for MongoDB instance
+commonLabels:
+  app: mongodb
+  service-type: mongodb
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+imagePullSecrets:
+{% if image_pull_secret_name %}
+  - name: {{ image_pull_secret_name }}
+{% else %}
+  []
+{% endif %}
+
+image:
+  registry: BYOP_REGISTRY
+  repository: byop/mongo
+  tag: "7.0.34"
+
+initImage:
+  registry: BYOP_REGISTRY
+  repository: byop/busybox
+  tag: "stable"
+
+# Authentication configuration
+settings:
+  rootUsername: root
+  rootPassword: {{ spec.root_password | yaml_safe }}
+
+userDatabase:
+  name: {{ spec.database_name | yaml_safe }}
+  user: {{ spec.database_user | yaml_safe }}
+  password: {{ spec.database_password | yaml_safe }}
+
+
+# Storage (shared by primary and all secondaries)
+storage:
+  requestedSize: {{ storage_size }}
+  # className: "ceph-rbd-platform"
+
+# Replica set configuration (only used if architecture=replicaset)
+replicaSet:
+  enabled: {{ (spec.architecture | default("standalone")) == "replicaset" }}
+  name: {{ spec.replicaset_name | default("rs0") }}
+  secondaries: {{ spec.secondary_replicas | default(2) }}

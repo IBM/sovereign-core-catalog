@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Langflow Runtime Instance Parameters",
+  "description": "Parameters for provisioning a Langflow backend-only runtime instance",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster server URL (optional, defaults to broker's cluster). Must be a registered ArgoCD cluster.",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "api_key": {
+      "type": "string",
+      "description": "API key for authenticating requests to the Langflow runtime API. Auto-generated if not provided.",
+      "minLength": 32,
+      "maxLength": 128,
+      "x-generate": {
+        "type": "password",
+        "length": 64,
+        "include": "alphanumeric"
+      }
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

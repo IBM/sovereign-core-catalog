@@ -1,0 +1,24 @@
+name: MySQL Database
+metadata:
+  name: mysql-helm-git
+  namespace: byop-broker
+spec:
+  productId: mysql-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: MySQL Database
+    description: Full-lifecycle MySQL database service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard mysql deployment with persistent storage and auto-generated credentials
+      - id: mysqlhelm_plan
+        name: Default
+        description: Default mysql deployment with persistent storage and auto-generated credentials
+    category: databases
+    tags: [Database, SQL, RelationalDB, MySQL]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

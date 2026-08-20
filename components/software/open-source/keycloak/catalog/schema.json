@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Keycloak Instance Parameters (External Helm Repository)",
+  "description": "Parameters for provisioning a Keycloak identity and access management instance from an external Helm repository",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster server URL (optional, defaults to broker's cluster). Must be a registered ArgoCD cluster.",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "admin_user": {
+      "type": "string",
+      "description": "Keycloak admin username",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$",
+      "minLength": 1,
+      "maxLength": 64,
+      "default": "admin",
+      "examples": ["admin", "keycloak-admin"]
+    },
+    "admin_password": {
+      "type": "string",
+      "description": "Keycloak admin password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["SecureAdm1nP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "replica_count": {
+      "type": "integer",
+      "description": "Number of Keycloak replicas for high availability",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 1,
+      "examples": [1, 3, 5]
+    },
+    "database_name": {
+      "type": "string",
+      "description": "PostgreSQL database name for Keycloak",
+      "default": "keycloak",
+      "examples": ["keycloak"]
+    },
+    "database_user": {
+      "type": "string",
+      "description": "PostgreSQL database user for Keycloak",
+      "default": "keycloak",
+      "examples": ["keycloak"]
+    },
+    "database_password": {
+      "type": "string",
+      "description": "PostgreSQL database password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["SecureDbP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "postgres_superuser_password": {
+      "type": "string",
+      "description": "PostgreSQL superuser password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["SecureSuP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "postgres_storage_size": {
+      "type": "string",
+      "description": "Storage size for the PostgreSQL persistent volume",
+      "default": "1Gi",
+      "examples": ["1Gi", "5Gi", "10Gi"]
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

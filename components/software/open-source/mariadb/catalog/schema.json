@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "MariaDB Instance Parameters",
+  "description": "Parameters for provisioning a MariaDB database instance",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster server URL (optional, defaults to broker's cluster). Must be a registered ArgoCD cluster.",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "database_name": {
+      "type": "string",
+      "description": "Name of the database to create",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 64,
+      "examples": ["myapp", "production_db", "test_database"]
+    },
+    "database_user": {
+      "type": "string",
+      "description": "Database user name (auto-generated if not provided)",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 32,
+      "default": "appuser",
+      "examples": ["appuser", "dbadmin", "service_account"]
+    },
+    "database_password": {
+      "type": "string",
+      "description": "Database user password (auto-generated if not provided)",
+      "minLength": 8,
+      "maxLength": 128,
+      "examples": ["SecureP@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 24,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "root_password": {
+      "type": "string",
+      "description": "Root password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["VerySecureR00tP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "character_set": {
+      "type": "string",
+      "description": "Default character set for the database",
+      "enum": ["utf8mb4", "utf8", "latin1", "ascii"],
+      "default": "utf8mb4",
+      "examples": ["utf8mb4"]
+    },
+    "collation": {
+      "type": "string",
+      "description": "Default collation for the database",
+      "enum": [
+        "utf8mb4_unicode_ci",
+        "utf8mb4_general_ci",
+        "utf8_unicode_ci",
+        "utf8_general_ci",
+        "latin1_swedish_ci"
+      ],
+      "default": "utf8mb4_unicode_ci",
+      "examples": ["utf8mb4_unicode_ci"]
+    }
+  },
+  "required": ["database_name"],
+  "additionalProperties": false
+}

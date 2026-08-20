@@ -1,0 +1,131 @@
+{{- $instanceName := default .Release.Name .Values.instance.name -}}
+{{- $serviceName := printf "mariadb-%s" $instanceName -}}
+{{- $statefulSetName := printf "mariadb-%s" $instanceName -}}
+{{- $secretName := printf "mariadb-%s" $instanceName -}}
+{{- $configMapName := printf "mariadb-%s" $instanceName -}}
+{{- $namespace := default .Release.Namespace .Values.namespaceOverride -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $statefulSetName }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ .Values.commonLabels.app | quote }}
+    service-type: {{ index .Values.commonLabels "service-type" | quote }}
+    instance: {{ $instanceName | quote }}
+    managed-by: byop-broker
+    environment: {{ .Values.instance.environment | quote }}
+    {{- range $key, $value := .Values.commonLabels }}
+    {{- if and (ne $key "app") (ne $key "service-type") }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+    byop.ibm.com/service-type: "mariadb"
+    byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  serviceName: {{ $serviceName }}
+  replicas: {{ .Values.statefulset.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.commonLabels.app | quote }}
+      instance: {{ $instanceName | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.commonLabels.app | quote }}
+        instance: {{ $instanceName | quote }}
+        service-type: {{ index .Values.commonLabels "service-type" | quote }}
+        managed-by: byop-broker
+        environment: {{ .Values.instance.environment | quote }}
+        {{- range $key, $value := .Values.commonLabels }}
+        {{- if and (ne $key "app") (ne $key "service-type") }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+        byop.ibm.com/service-type: "mariadb"
+        byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+        {{- with .Values.commonAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range . }}
+        - name: {{ . | quote }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.container.name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: mariadb
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: root-password
+            - name: MARIADB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ $configMapName }}
+                  key: database
+            - name: MARIADB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: user
+            - name: MARIADB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: password
+          volumeMounts:
+            - name: mariadb-data
+              mountPath: /var/lib/mysql
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  mariadb -h 127.0.0.1 -u$MARIADB_USER -p$MARIADB_PASSWORD -e 'SELECT 1'
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  mariadb-admin ping -h 127.0.0.1 -u$MARIADB_USER -p$MARIADB_PASSWORD
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+          {{- with .Values.container.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: mariadb-data
+      spec:
+        accessModes:
+          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
+  {{- end }}
+
+# Made with Bob

@@ -1,0 +1,32 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/duality-tech"
+  vendor: "Duality Technologies, Inc."
+  product: "Duality SecurePlus Analytics"
+  version: "3.2.0"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: false
+    license: "Duality Technologies Commercial License"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: false
+  security:
+    podSecurityStandard: "restricted"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: true
+    kmsIntegration: true
+  deployment:
+    type: "Helm"
+    repository: "oci://registry.dualitytech.com/charts/secureplus:3.2.0"

@@ -1,0 +1,48 @@
+# Helm values override for instance
+namespaceOverride: {{ namespace }}
+
+commonLabels:
+  app: rabbitmq
+  service-type: rabbitmq
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+imagePullSecrets:
+{% if image_pull_secret_name %}
+  - name: {{ image_pull_secret_name }}
+{% else %}
+  []
+{% endif %}
+
+image:
+  registry: BYOP_REGISTRY
+  repository: byop/rabbitmq
+  tag: "4.3.2"
+
+initImage:
+  registry: BYOP_REGISTRY
+  repository: byop/busybox
+  tag: "stable"
+
+authentication:
+  user:
+    value: {{ spec.username | yaml_safe }}
+  password:
+    value: {{ spec.password | yaml_safe }}
+  erlangCookie:
+    value: {{ spec.erlang_cookie | yaml_safe }}
+
+
+storage:
+  requestedSize: {{ storage_size }}
+  # className: "ceph-rbd-platform"

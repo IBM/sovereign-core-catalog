@@ -1,0 +1,80 @@
+# Helm values override for Keycloak instance
+namespaceOverride: {{ namespace }}
+
+commonLabels:
+  app: keycloak
+  service-type: keycloak
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+imagePullSecrets:
+{% if image_pull_secret_name %}
+  - name: {{ image_pull_secret_name }}
+{% else %}
+  []
+{% endif %}
+
+# Replica count for high availability
+replicaCount: {{ spec.replica_count | default(1) }}
+
+# Admin credentials
+auth:
+  adminUser: {{ spec.admin_user | default('admin') | yaml_safe }}
+  adminPassword: {{ spec.admin_password | yaml_safe }}
+
+# PostgreSQL subchart configuration
+image:
+  registry: BYOP_REGISTRY
+  repository: byop/keycloak
+  tag: "26.6"
+
+postgres:
+  enabled: true
+
+  image:
+    registry: BYOP_REGISTRY
+    repository: byop/postgres
+    tag: "17.10"
+
+  # Database credentials
+  settings:
+    superuserPassword: {{ spec.postgres_superuser_password | yaml_safe }}
+
+  userDatabase:
+    name: {{ spec.database_name | default('keycloak') | yaml_safe }}
+    user: {{ spec.database_user | default('keycloak') | yaml_safe }}
+    password: {{ spec.database_password | yaml_safe }}
+
+  # PostgreSQL storage
+  storage:
+    requestedSize: {{ spec.postgres_storage_size | default("1Gi") }}
+    # storageClass: "ceph-rbd-platform"
+    accessModes:
+      - ReadWriteOnce
+
+route:
+  enabled: true
+
+# Persistence (if needed for themes, etc.)
+persistence:
+  enabled: true
+  size: {{ storage_size }}
+
+# Resource limits - Keycloak requires adequate memory
+resources:
+  requests:
+    cpu: 500m
+    memory: 1Gi
+  limits:
+    cpu: 2000m
+    memory: 2Gi

@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Langflow Instance Parameters",
+  "description": "Parameters for provisioning a Langflow IDE instance",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster server URL (optional, defaults to broker's cluster). Must be a registered ArgoCD cluster.",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "superuser": {
+      "type": "string",
+      "description": "Langflow admin login email.",
+      "format": "email",
+      "default": "admin@localhost",
+      "examples": ["admin@localhost"]
+    },
+    "superuser_password": {
+      "type": "string",
+      "description": "Langflow admin password. Auto-generated if not provided.",
+      "minLength": 8,
+      "maxLength": 128,
+      "examples": ["SecureP@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "secret_key": {
+      "type": "string",
+      "description": "Encryption key for stored credentials and flow secrets. Must be at least 32 characters. Leave blank to auto-generate a secure 64-character key.",
+      "minLength": 32,
+      "maxLength": 128,
+      "examples": ["a-32-char-minimum-key-for-langflow!!"],
+      "x-generate": {
+        "type": "password",
+        "length": 64,
+        "include": "alphanumeric"
+      }
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

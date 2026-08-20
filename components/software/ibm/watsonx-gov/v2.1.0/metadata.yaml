@@ -1,0 +1,32 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/ibm"
+  vendor: "International Business Machines Corporation"
+  product: "IBM watsonx.gov"
+  version: "2.1.0"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: false
+    license: "IBM International Program License Agreement"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce", "ReadWriteMany"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "restricted"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: true
+    kmsIntegration: true
+  deployment:
+    type: "Operator"
+    repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-gov-operator-bundle:2.1.0"

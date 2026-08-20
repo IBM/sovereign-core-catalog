@@ -1,0 +1,24 @@
+name: Keycloak Identity & Access Management
+metadata:
+  name: keycloak-helm-git
+  namespace: byop-broker
+spec:
+  productId: keycloak-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Keycloak Identity & Access Management
+    description: Full-lifecycle Keycloak identity and access management service with bundled PostgreSQL, broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard Keycloak deployment with bundled PostgreSQL and auto-generated credentials
+      - id: keycloakhelm_plan
+        name: Default
+        description: Default Keycloak deployment with bundled PostgreSQL and auto-generated credentials
+    category: security
+    tags: [Security, IdentityManagement, IAM, SSO, OIDC, Keycloak]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

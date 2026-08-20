@@ -1,0 +1,62 @@
+# Helm values override for Langflow Runtime instance
+namespaceOverride: {{ namespace }}
+
+commonLabels:
+  app: langflowrt
+  service-type: langflowrt
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+imagePullSecrets:
+{% if image_pull_secret_name %}
+  - name: {{ image_pull_secret_name }}
+{% else %}
+  []
+{% endif %}
+
+langflow:
+  global:
+    image:
+      tag: "1.10.2"
+
+  backend:
+    image:
+      repository: BYOP_REGISTRY/byop/langflow
+      tag: "1.10.2"
+
+    backendOnly: true
+    autoLogin: false
+
+    env:
+      - name: LANGFLOW_PORT
+        value: "7860"
+      - name: LANGFLOW_ALEMBIC_LOG_FILE
+        value: "/app/db/alembic.log"
+      - name: LANGFLOW_UPDATE_STARTER_PROJECTS
+        value: "false"
+{% if spec.api_key %}
+      - name: LANGFLOW_AUTO_LOGIN
+        value: "false"
+{% endif %}
+
+    sqlite:
+      enabled: true
+      volume:
+        size: {{ storage_size }}
+        # existingStorageClassName: "ceph-rbd-platform"
+
+  frontend:
+    enabled: false
+
+route:
+  enabled: true

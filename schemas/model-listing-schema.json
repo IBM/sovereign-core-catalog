@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/model-listing/v1alpha1",
+  "title": "ModelListing",
+  "description": "Schema for AI model catalog entries in the Sovereign Store.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "ModelListing"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["companyRef", "vendor", "product", "version", "lifecycleStatus", "storefrontVisibility"],
+      "properties": {
+        "companyRef": {
+          "type": "string",
+          "pattern": "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Relative path to the canonical company profile (e.g. companies/mistral)."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Legal entity name of the model vendor."
+        },
+        "product": {
+          "type": "string",
+          "description": "Model display name."
+        },
+        "version": {
+          "type": "string",
+          "description": "Model version identifier."
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "deprecated", "retired"],
+          "description": "Current lifecycle state of this catalog entry. Drives storefront visibility and deployment eligibility."
+        },
+        "storefrontVisibility": {
+          "type": "string",
+          "enum": ["public", "unlisted", "private"],
+          "description": "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["openSource", "jurisdiction", "architecture", "deployment"],
+      "properties": {
+        "openSource": {
+          "type": "object",
+          "required": ["enabled", "license"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether this model is distributed under an open-source licence."
+            },
+            "license": {
+              "type": "string",
+              "description": "SPDX licence identifier or name of proprietary/research licence."
+            },
+            "upstreamProject": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL of the upstream project or model card."
+            },
+            "sourceAvailable": {
+              "type": "boolean",
+              "description": "Whether model weights or source are publicly accessible even if not OSI-approved."
+            }
+          },
+          "additionalProperties": false
+        },
+        "jurisdiction": {
+          "type": "object",
+          "required": ["hq"],
+          "properties": {
+            "hq": {
+              "type": "string",
+              "description": "Country/region where the model vendor is headquartered."
+            },
+            "ultimateParentCompanyHQ": {
+              "type": "string",
+              "description": "Country/region of the ultimate parent company."
+            }
+          },
+          "additionalProperties": false
+        },
+        "architecture": {
+          "type": "object",
+          "required": ["format"],
+          "properties": {
+            "format": {
+              "type": "string",
+              "enum": ["Safetensors", "GGUF", "ONNX", "PyTorch", "TensorFlow"],
+              "description": "Model weight serialization format."
+            },
+            "contextWindow": {
+              "type": "integer",
+              "description": "Maximum context window size in tokens."
+            },
+            "hardwareRequirements": {
+              "type": "object",
+              "properties": {
+                "minimumVramGB": {
+                  "type": "integer",
+                  "description": "Minimum VRAM required in GB."
+                },
+                "recommendedAccelerator": {
+                  "type": "string",
+                  "description": "Reference path to a recommended hardware profile."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "deployment": {
+          "type": "object",
+          "required": ["weightsRepository", "servingEngine"],
+          "properties": {
+            "weightsRepository": {
+              "type": "string",
+              "description": "URI for downloading model weights (e.g., hf:// or oci://)."
+            },
+            "servingEngine": {
+              "type": "string",
+              "description": "Inference serving engine (e.g., vLLM, TGI, Triton)."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,36 @@
+{{- $instanceName := default .Release.Name .Values.instance.name -}}
+{{- $configMapName := printf "mariadb-%s" $instanceName -}}
+{{- $namespace := default .Release.Namespace .Values.namespaceOverride -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $configMapName }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ .Values.commonLabels.app | quote }}
+    service-type: {{ index .Values.commonLabels "service-type" | quote }}
+    instance: {{ $instanceName | quote }}
+    managed-by: byop-broker
+    environment: {{ .Values.instance.environment | quote }}
+    {{- range $key, $value := .Values.commonLabels }}
+    {{- if and (ne $key "app") (ne $key "service-type") }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+    byop.ibm.com/service-type: "mariadb"
+    byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+data:
+  database: {{ .Values.auth.database | quote }}
+  {{- with index .Values.databaseConfig "character-set" }}
+  character-set: {{ . | quote }}
+  {{- end }}
+  {{- with index .Values.databaseConfig "collation" }}
+  collation: {{ . | quote }}
+  {{- end }}
+
+# Made with Bob

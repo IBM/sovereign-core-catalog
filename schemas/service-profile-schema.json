@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/service-profile/v1alpha1",
+  "title": "ServiceProfile",
+  "description": "Schema for service partner catalog entries (hosting, audit, system integration, managed operations, etc.) in the Sovereign Store.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "ServiceProfile"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["companyRef", "name", "lifecycleStatus", "storefrontVisibility"],
+      "properties": {
+        "companyRef": {
+          "type": "string",
+          "pattern": "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Relative path to the canonical company profile (e.g. companies/infosys-eu)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name of the service partner entity."
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "deprecated", "retired"],
+          "description": "Current lifecycle state of this catalog entry. Drives storefront visibility and deployment eligibility."
+        },
+        "storefrontVisibility": {
+          "type": "string",
+          "enum": ["public", "unlisted", "private"],
+          "description": "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["serviceType", "sovereignty"],
+      "properties": {
+        "serviceType": {
+          "type": "string",
+          "enum": [
+            "Hosting",
+            "AuditAndCompliance",
+            "SystemIntegration",
+            "ManagedOperations",
+            "SecurityConsulting",
+            "TrainingAndEnablement"
+          ],
+          "description": "Primary category of service offered by this partner."
+        },
+        "additionalServiceTypes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "Hosting",
+              "AuditAndCompliance",
+              "SystemIntegration",
+              "ManagedOperations",
+              "SecurityConsulting",
+              "TrainingAndEnablement"
+            ]
+          },
+          "description": "Secondary service categories also offered by this partner.",
+          "uniqueItems": true
+        },
+        "sovereignty": {
+          "type": "object",
+          "required": ["corporateHQ"],
+          "properties": {
+            "corporateHQ": {
+              "type": "string",
+              "description": "Country/region where the partner entity is headquartered."
+            },
+            "ultimateParentCompanyHQ": {
+              "type": "string",
+              "description": "Country/region of the ultimate parent company."
+            },
+            "staffClearanceLevel": {
+              "type": "string",
+              "description": "Security clearance level required for staff."
+            }
+          },
+          "additionalProperties": false
+        },
+        "certifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["framework", "status"],
+            "properties": {
+              "framework": {
+                "type": "string",
+                "description": "Certification framework name (e.g., BSI-C5, SecNumCloud, ISO-27001)."
+              },
+              "status": {
+                "type": "string",
+                "enum": ["Active", "In Progress", "Expired", "Pending"],
+                "description": "Current status of the certification."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "hosting": {
+              "type": "object",
+              "properties": {
+                "providesBareMetal": {
+                  "type": "boolean"
+                },
+                "airGappedReady": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Redis Instance Parameters",
+  "description": "Parameters for provisioning a Redis instance",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster server URL (optional, defaults to broker's cluster). Must be a registered ArgoCD cluster.",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "password": {
+      "type": "string",
+      "description": "Redis password (requirepass). Auto-generated if not provided.",
+      "minLength": 8,
+      "maxLength": 128,
+      "examples": ["SecureP@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

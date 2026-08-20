@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/hardware-profile/v1alpha1",
+  "title": "HardwareProfile",
+  "description": "Schema for hardware vendor catalog entries in the Sovereign Store.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "HardwareProfile"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["companyRef", "vendor", "product", "category", "lifecycleStatus", "storefrontVisibility"],
+      "properties": {
+        "companyRef": {
+          "type": "string",
+          "pattern": "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Relative path to the canonical company profile (e.g. companies/amd)."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Legal entity name of the hardware vendor."
+        },
+        "product": {
+          "type": "string",
+          "description": "Product display name."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["GPU", "CPU", "Storage", "Networking", "Server"],
+          "description": "Hardware category."
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "deprecated", "retired"],
+          "description": "Current lifecycle state of this catalog entry. Drives storefront visibility and deployment eligibility."
+        },
+        "storefrontVisibility": {
+          "type": "string",
+          "enum": ["public", "unlisted", "private"],
+          "description": "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["jurisdiction", "capabilities"],
+      "properties": {
+        "jurisdiction": {
+          "type": "object",
+          "required": ["hq"],
+          "properties": {
+            "hq": {
+              "type": "string",
+              "description": "Country/region where the vendor is headquartered."
+            },
+            "supplyChainAttestation": {
+              "type": "string",
+              "description": "Statement about supply chain transparency."
+            }
+          },
+          "additionalProperties": false
+        },
+        "capabilities": {
+          "type": "object",
+          "properties": {
+            "memory": {
+              "type": "string",
+              "description": "Memory specification (e.g., 192GB HBM3)."
+            },
+            "confidentialComputing": {
+              "type": "object",
+              "properties": {
+                "supported": {
+                  "type": "boolean"
+                },
+                "technology": {
+                  "type": "string",
+                  "description": "Confidential computing technology name."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": true
+        },
+        "k8sIntegration": {
+          "type": "object",
+          "properties": {
+            "devicePluginOci": {
+              "type": "string",
+              "description": "OCI URI for the Kubernetes device plugin."
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

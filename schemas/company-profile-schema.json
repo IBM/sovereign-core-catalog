@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/company-profile/v1alpha1",
+  "title": "CompanyProfile",
+  "description": "Schema for canonical company / organisation profiles in the Sovereign Store.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "CompanyProfile"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["slug", "displayName"],
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "URL-safe unique identifier matching the folder name under companies/."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full legal name of the organisation."
+        },
+        "logo": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the company logo image."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["jurisdiction"],
+      "properties": {
+        "jurisdiction": {
+          "type": "object",
+          "required": ["corporateHQ"],
+          "properties": {
+            "corporateHQ": {
+              "type": "string",
+              "description": "Country/region where the company is legally headquartered."
+            },
+            "ultimateParentCompanyHQ": {
+              "type": "string",
+              "description": "Country/region of the ultimate parent company (for ownership transparency)."
+            },
+            "registrationNumber": {
+              "type": "string",
+              "description": "Official company registration or VAT number."
+            }
+          },
+          "additionalProperties": false
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "website": {
+              "type": "string",
+              "format": "uri",
+              "description": "Company website URL."
+            },
+            "partnerEmail": {
+              "type": "string",
+              "format": "email",
+              "description": "Contact email for sovereign catalog partnership enquiries."
+            }
+          },
+          "additionalProperties": false
+        },
+        "certifications": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["framework", "status"],
+            "properties": {
+              "framework": {
+                "type": "string",
+                "description": "Certification framework name (e.g., ISO-27001, SOC2, BSI-C5)."
+              },
+              "status": {
+                "type": "string",
+                "enum": ["Active", "In Progress", "Expired", "Pending"],
+                "description": "Current status of the certification."
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/sovereigncore-helm-mapping/v1alpha1",
+  "title": "SovereignCoreHelmMapping",
+  "description": "Schema for Sovereign Core deployment-acceleration Helm value-mapping files. These live alongside the software they accelerate under components/software/<company>/<product>/sovereigncore_ext/helm/.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "SovereignCoreHelmMapping"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["softwareRef", "companyRef"],
+      "properties": {
+        "softwareRef": {
+          "type": "string",
+          "pattern": "^components/software/[a-z0-9][a-z0-9-]*/[a-z0-9][a-z0-9-]*$",
+          "description": "Relative path to the parent SoftwareListing product folder (e.g. components/software/company-abc/nginx)."
+        },
+        "companyRef": {
+          "type": "string",
+          "pattern": "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Relative path to the canonical company profile (e.g. companies/company-abc)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["chart", "platformValueMappings"],
+      "properties": {
+        "chart": {
+          "type": "object",
+          "required": ["repository", "version"],
+          "properties": {
+            "repository": {
+              "type": "string",
+              "description": "OCI URI of the upstream Helm chart (e.g. oci://registry.example.com/charts/nginx)."
+            },
+            "version": {
+              "type": "string",
+              "description": "Chart version to map against."
+            }
+          },
+          "additionalProperties": false
+        },
+        "platformValueMappings": {
+          "type": "object",
+          "description": "Key/value pairs mapping Helm chart values to Sovereign Core platform template expressions.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "nodeSelector": {
+          "type": "object",
+          "description": "Node selector labels to constrain scheduling to sovereign node pools.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "tolerations": {
+          "type": "array",
+          "description": "Kubernetes tolerations for sovereign node taints.",
+          "items": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

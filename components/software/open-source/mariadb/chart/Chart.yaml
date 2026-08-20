@@ -1,0 +1,8 @@
+apiVersion: v2
+name: mariadb
+description: A Helm chart for MariaDB sample pod
+type: application
+version: 1.0.0
+appVersion: "1.0"
+
+# Made with Bob

@@ -1,0 +1,44 @@
+# Helm values override for Vault instance
+global:
+  namespace: {{ namespace }}
+  openshift: true
+{% if image_pull_secret_name %}
+  imagePullSecrets:
+    - name: {{ image_pull_secret_name }}
+{% endif %}
+
+commonLabels:
+  app: vault
+  service-type: vault
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+injector:
+  enabled: false
+
+server:
+  image:
+    repository: "BYOP_REGISTRY/byop/vault"
+    tag: "1.17.2"
+
+  affinity: ""
+
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+      setNodeId: true
+
+ui:
+  enabled: false

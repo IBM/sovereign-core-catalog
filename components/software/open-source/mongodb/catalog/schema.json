@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "MongoDB Instance Parameters",
+  "description": "Parameters for provisioning a MongoDB database instance from an external Helm repository",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target Kubernetes cluster URL",
+      "format": "uri",
+      "examples": ["https://kubernetes.default.svc", "https://api.cluster.example.com:6443"]
+    },
+    "architecture": {
+      "type": "string",
+      "description": "MongoDB deployment architecture",
+      "enum": ["standalone", "replicaset"],
+      "default": "standalone",
+      "examples": ["standalone", "replicaset"]
+    },
+    "database_name": {
+      "type": "string",
+      "description": "Name of the database to create",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 64,
+      "examples": ["myapp", "production_db", "test_database"]
+    },
+    "database_user": {
+      "type": "string",
+      "description": "Database user name (auto-generated if not provided)",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 32,
+      "default": "appuser",
+      "examples": ["appuser", "dbadmin", "service_account"]
+    },
+    "database_password": {
+      "type": "string",
+      "description": "Database user password (auto-generated if not provided)",
+      "minLength": 8,
+      "maxLength": 128,
+      "examples": ["SecureP@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 24,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "root_password": {
+      "type": "string",
+      "description": "Root password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["VerySecureR00tP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "replicaset_name": {
+      "type": "string",
+      "description": "Replica set name (only applicable for replicaset architecture)",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$",
+      "default": "rs0",
+      "examples": ["rs0", "mongo-rs"]
+    },
+    "secondary_replicas": {
+      "type": "integer",
+      "description": "Number of secondary replicas (only applicable for replicaset architecture)",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 2,
+      "examples": [2, 3]
+    }
+  },
+  "required": ["database_name"],
+  "additionalProperties": false
+}

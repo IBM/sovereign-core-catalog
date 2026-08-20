@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Odoo Instance Parameters",
+  "description": "Parameters for provisioning an Odoo ERP instance",
+  "properties": {
+    "cluster_url": {
+      "type": "string",
+      "description": "Target cluster URL (optional, defaults to broker's cluster)",
+      "format": "uri",
+      "pattern": "^https://.*",
+      "default": "https://kubernetes.default.svc",
+      "examples": [
+        "https://kubernetes.default.svc",
+        "https://192.168.2.89:6443",
+        "https://192.168.2.90:6443"
+      ]
+    },
+    "admin_password": {
+      "type": "string",
+      "description": "Odoo maste password ",
+      "minLength": 1,
+      "maxLength": 128,
+      "default": "",
+      "examples": ["VerySecureAdm1nP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "database_name": {
+      "type": "string",
+      "description": "PostgreSQL database name",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 64,
+      "default": "odoo",
+      "examples": ["odoo", "production_erp", "odoo_main"]
+    },
+    "database_user": {
+      "type": "string",
+      "description": "PostgreSQL user name",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 32,
+      "default": "odoo",
+      "examples": ["odoo", "erpuser", "odoo_app"]
+    },
+    "database_password": {
+      "type": "string",
+      "description": "PostgreSQL user password ",
+      "minLength": 1,
+      "maxLength": 128,
+      "default": "",
+      "examples": ["SecureDB_P@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 24,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "postgres_superuser_password": {
+      "type": "string",
+      "description": "PostgreSQL superuser password ",
+      "minLength": 1,
+      "maxLength": 128,
+      "default": "",
+      "examples": ["VerySecureP0stgresR00t"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "postgres_storage_size": {
+      "type": "string",
+      "description": "PostgreSQL volume size",
+      "pattern": "^[0-9]+[MGT]i$",
+      "default": "8Gi",
+      "examples": ["8Gi", "10Gi", "20Gi"]
+    },
+    "storage_size": {
+      "type": "string",
+      "description": "Odoo filestore volume size",
+      "pattern": "^[0-9]+[MGT]i$",
+      "default": "10Gi",
+      "examples": ["10Gi", "20Gi", "50Gi"]
+    },
+    "workers": {
+      "type": "integer",
+      "description": "Odoo worker processe number",
+      "minimum": 0,
+      "maximum": 16,
+      "default": 2,
+      "examples": [2, 4, 8]
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

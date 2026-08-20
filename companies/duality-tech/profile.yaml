@@ -1,0 +1,18 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "duality-tech"
+  displayName: "Duality Technologies, Inc."
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+    registrationNumber: "US-DUAL-0007645321"
+  contact:
+    website: "https://dualitytech.com"
+    partnerEmail: "sovereign@dualitytech.com"
+  certifications:
+    - framework: "ISO-27001"
+      status: "Active"
+    - framework: "SOC2"
+      status: "Active"

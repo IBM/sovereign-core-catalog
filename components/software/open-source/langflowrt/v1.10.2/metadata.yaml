@@ -1,0 +1,30 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "Langflow Project"
+  product: "Langflow Runtime"
+  version: "1.10.2"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: true
+    license: "MIT"
+    upstreamProject: "https://github.com/langflow-ai/langflow"
+    upstreamVersion: "1.10.2"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: false
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://registry-1.docker.io/langflowai/langflow-backend"

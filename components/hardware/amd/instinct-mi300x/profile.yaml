@@ -1,0 +1,22 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: HardwareProfile
+metadata:
+  companyRef: "companies/amd"
+  vendor: "Advanced Micro Devices, Inc."
+  product: "AMD Instinct MI300X GPU Accelerator"
+  category: "GPU"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  jurisdiction:
+    hq: "USA"
+    supplyChainAttestation: "Available via NDA — TSMC fabrication; US export controlled (EAR)"
+  capabilities:
+    memory: "192GB HBM3"
+    confidentialComputing:
+      supported: true
+      technology: "AMD Secure Encrypted Virtualization-Secure Nested Paging (SEV-SNP)"
+    computeUnits: "304 CUs, 19456 stream processors"
+    fp8TFlops: "2614"
+  k8sIntegration:
+    devicePluginOci: "oci://docker.io/rocm/k8s-device-plugin:latest"

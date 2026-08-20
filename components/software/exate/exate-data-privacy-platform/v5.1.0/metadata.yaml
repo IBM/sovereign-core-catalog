@@ -1,0 +1,32 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/exate"
+  vendor: "eXate Technology Ltd."
+  product: "eXate Data Privacy Platform"
+  version: "5.1.0"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: false
+    license: "eXate Commercial License"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "UK"
+    ultimateParentCompanyHQ: "UK"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: false
+  security:
+    podSecurityStandard: "restricted"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: true
+    kmsIntegration: true
+  deployment:
+    type: "Helm"
+    repository: "oci://registry.exate.com/charts/exate-platform:5.1.0"

@@ -1,0 +1,30 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "Cloud Native Computing Foundation"
+  product: "etcd"
+  version: "3.4.2"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: true
+    license: "Apache-2.0"
+    upstreamProject: "https://github.com/etcd-io/etcd"
+    upstreamVersion: "3.4.2"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://registry-1.docker.io/bitnamicharts/etcd"

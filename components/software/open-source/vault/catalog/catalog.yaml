@@ -1,0 +1,24 @@
+name: Hashicorp Vault Database
+metadata:
+  name: vault-helm-git
+  namespace: byop-broker
+spec:
+  productId: vault-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Hashicorp Vault Database
+    description: Full-lifecycle Hashicorp Vault database service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard Hashicorp Vault deployment with persistent storage and auto-generated credentials
+      - id: vaulthelm_plan
+        name: Default
+        description: Default Hashicorp Vault deployment with persistent storage and auto-generated credentials
+    category: security
+    tags: [Security, SecretManagement, PKI, Vault]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

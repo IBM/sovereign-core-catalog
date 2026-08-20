@@ -1,0 +1,24 @@
+name: etcd Key-Value Store
+metadata:
+  name: etcd-helm-git
+  namespace: byop-broker
+spec:
+  productId: etcd-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: etcd Key-Value Store
+    description: Full-lifecycle etcd distributed key-value store service with broker-generated cluster token stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard single-node etcd deployment with persistent storage
+      - id: etcdhelm_plan
+        name: Default
+        description: Default single-node etcd deployment with persistent storage
+    category: KeyValueStore
+    tags: [KeyValueStore, etcd, Kubernetes]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

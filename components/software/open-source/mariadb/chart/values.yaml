@@ -1,0 +1,64 @@
+# Default values for mariadb chart
+nameOverride: ""
+fullnameOverride: ""
+
+namespaceOverride: ""
+
+commonLabels:
+  app: mariadb
+  service-type: mariadb
+commonAnnotations: {}
+
+instance:
+  name: ""
+  id: ""
+  environment: ""
+  clusterName: ""
+
+image:
+  repository: mariadb
+  tag: "10.11"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+service:
+  name: mariadb
+  port: 3306
+  clusterIP: None
+
+statefulset:
+  name: mariadb
+  replicas: 1
+
+auth:
+  rootPassword: "change-me-root-password"
+  database: "appdb"
+  username: "appuser"
+  password: "change-me-password"
+
+databaseConfig: {}
+  # character-set: utf8mb4
+  # collation: utf8mb4_unicode_ci
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+
+container:
+  name: mariadb
+  resources: {}
+
+probes:
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+
+# Made with Bob

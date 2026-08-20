@@ -1,0 +1,28 @@
+# Mapping file: derives Sovereign Core platform values for IBM watsonx.ai.
+# watsonx.ai is deployed on top of IBM Cloud Pak for Data (Software Hub) v5.4.0
+# via the Cloud Pak Deployer Operator.
+# This is NOT a full Helm chart — it is a value-mapping overlay used by the
+# Sovereign Core deployment engine alongside the upstream operator at:
+#   oci://icr.io/cpopen/ibm-cpd-watsonx-ai-operator-catalog:v5.4.0
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SovereignCoreHelmMapping
+metadata:
+  softwareRef: "components/software/ibm/watsonx-ai"
+  companyRef: "companies/ibm"
+spec:
+  chart:
+    repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-ai-operator-catalog"
+    version: "5.4.0"
+  platformValueMappings:
+    global.storageClass: "{{ .SovereignCore.StorageClass }}"
+    global.tlsSecretName: "{{ .SovereignCore.TLSSecretName }}"
+    cp4d.project: "{{ .SovereignCore.TenantNamespace }}"
+    vaultUrl: "{{ .SovereignCore.VaultURL }}"
+    imageRegistryUrl: "{{ .SovereignCore.ImageRegistryURL }}"
+  nodeSelector:
+    sovereign-core/node-pool: "ai-workload"
+  tolerations:
+    - key: "sovereign-core/workload-class"
+      operator: "Equal"
+      value: "ai-workload"
+      effect: "NoSchedule"

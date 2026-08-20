@@ -1,0 +1,42 @@
+# Helm values override for PostgreSQL instance
+namespaceOverride: {{ namespace }}
+
+commonLabels:
+  app: postgres
+  service-type: postgres
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: {{ context.crn | default("crn:unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/account-id: {{ context.account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/sub-account-id: {{ context.sub_account_id | default("unknown") | yaml_safe }}
+  sovcore.byop.ibm.com/platform: {{ context.platform | default("unknown") | yaml_safe }}
+
+instance:
+  name: {{ instance_name }}
+  id: "{{ instance_id }}"
+  environment: {{ environment }}
+  clusterName: "{{ cluster_name }}"
+
+imagePullSecrets:
+{% if image_pull_secret_name %}
+  - name: {{ image_pull_secret_name }}
+{% else %}
+  []
+{% endif %}
+
+image:
+  registry: BYOP_REGISTRY
+  repository: byop/postgres
+  tag: "13.12"
+
+settings:
+  superuserPassword: {{ spec.superuser_password | yaml_safe }}
+
+userDatabase:
+  name: {{ spec.database_name | yaml_safe }}
+  user: {{ spec.database_user | yaml_safe }}
+  password: {{ spec.database_password | yaml_safe }}
+
+storage:
+  requestedSize: {{ storage_size }}
+  # className: "ceph-rbd-platform"

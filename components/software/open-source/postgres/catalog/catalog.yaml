@@ -1,0 +1,24 @@
+name: Postgres Database
+metadata:
+  name: postgres-helm-git
+  namespace: byop-broker
+spec:
+  productId: postgres-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Postgres Database
+    description: Full-lifecycle Postgres database service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard postgres deployment with persistent storage and auto-generated credentials
+      - id: postgreshelm_plan
+        name: Default
+        description: Default postgres deployment with persistent storage and auto-generated credentials
+    category: databases
+    tags: [Database, SQL, RelationalDB, PostgreSQL]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

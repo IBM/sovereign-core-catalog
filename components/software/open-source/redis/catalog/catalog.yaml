@@ -1,0 +1,24 @@
+name: Redis Database
+metadata:
+  name: redis-helm-git
+  namespace: byop-broker
+spec:
+  productId: redis-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Redis Database
+    description: Full-lifecycle Redis database service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard Redis deployment with persistent storage and auto-generated credentials
+      - id: redishelm_plan
+        name: Default
+        description: Default Redis deployment with persistent storage and auto-generated credentials
+    category: databases
+    tags: [Database, NoSQL, KeyValueStore, Cache, Redis]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

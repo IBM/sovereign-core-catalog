@@ -1,0 +1,68 @@
+name: Validate Metadata
+
+on:
+  pull_request:
+    paths:
+      - 'components/**/*.yaml'
+      - 'companies/**/*.yaml'
+      - 'schemas/**/*.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g ajv-cli ajv-formats js-yaml
+
+      - name: Validate SoftwareListing files
+        run: |
+          for file in $(find components/software -name 'metadata.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/software-listing-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Validate HardwareProfile files
+        run: |
+          for file in $(find components/hardware -name 'profile.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/hardware-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Validate ServiceProfile files
+        run: |
+          for file in $(find components/services -name 'profile.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/service-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Validate ModelListing files
+        run: |
+          for file in $(find components/ai-models -name 'metadata.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/model-listing-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Validate CompanyProfile files
+        run: |
+          for file in $(find companies -name 'profile.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/company-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

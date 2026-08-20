@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sovereign-catalog.io/schemas/software-listing/v1alpha1",
+  "title": "SoftwareListing",
+  "description": "Schema for software catalog entries in the Sovereign Store.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "sovereign-catalog.io/v1alpha1"
+    },
+    "kind": {
+      "type": "string",
+      "const": "SoftwareListing"
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["companyRef", "vendor", "product", "version", "lifecycleStatus", "storefrontVisibility"],
+      "properties": {
+        "companyRef": {
+          "type": "string",
+          "pattern": "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$",
+          "description": "Relative path to the canonical company profile (e.g. companies/company-abc)."
+        },
+        "vendor": {
+          "type": "string",
+          "description": "Legal entity name of the software vendor."
+        },
+        "product": {
+          "type": "string",
+          "description": "Product display name."
+        },
+        "version": {
+          "type": "string",
+          "description": "Semantic version of the software release."
+        },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["draft", "review", "approved", "deprecated", "retired"],
+          "description": "Current lifecycle state of this catalog entry. Drives storefront visibility and deployment eligibility."
+        },
+        "storefrontVisibility": {
+          "type": "string",
+          "enum": ["public", "unlisted", "private"],
+          "description": "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "spec": {
+      "type": "object",
+      "required": ["jurisdiction", "architecture", "security", "deployment"],
+      "properties": {
+        "openSource": {
+          "type": "object",
+          "required": ["enabled", "license"],
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether this software is distributed under an open-source licence."
+            },
+            "license": {
+              "type": "string",
+              "description": "SPDX licence identifier (e.g. Apache-2.0, MIT, PostgreSQL) or name of proprietary licence."
+            },
+            "upstreamProject": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL of the upstream open-source project repository."
+            },
+            "upstreamVersion": {
+              "type": "string",
+              "description": "Upstream version this build is based on."
+            },
+            "modifications": {
+              "type": "string",
+              "description": "Human-readable summary of modifications made to the upstream project."
+            },
+            "sourceAvailable": {
+              "type": "boolean",
+              "description": "Whether source code is publicly accessible even if not OSI-approved open source."
+            }
+          },
+          "additionalProperties": false
+        },
+        "jurisdiction": {
+          "type": "object",
+          "required": ["hq"],
+          "properties": {
+            "hq": {
+              "type": "string",
+              "description": "Country/region where the vendor is headquartered."
+            },
+            "ultimateParentCompanyHQ": {
+              "type": "string",
+              "description": "Country/region of the ultimate parent company."
+            }
+          },
+          "additionalProperties": false
+        },
+        "architecture": {
+          "type": "object",
+          "required": ["format", "airgapReady"],
+          "properties": {
+            "format": {
+              "type": "string",
+              "enum": ["Kubernetes", "VM", "BareMetal"],
+              "description": "Target deployment platform."
+            },
+            "airgapReady": {
+              "type": "boolean",
+              "description": "Whether the software can run with zero internet connectivity."
+            },
+            "dependencyEndpoints": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Explicit whitelist of external domains required. Empty array means fully air-gapped."
+            },
+            "storage": {
+              "type": "object",
+              "properties": {
+                "csiAccessModes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"]
+                  }
+                },
+                "volumeSnapshotSupport": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "kubernetesCompatibility": {
+              "type": "object",
+              "properties": {
+                "minKubernetesVersionTested": { "type": "string" },
+                "minOcpVersionTested": { "type": "string" },
+                "maxKubernetesVersionTested": { "type": "string" }
+               },
+               "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "security": {
+          "type": "object",
+          "required": ["podSecurityStandard"],
+          "properties": {
+            "podSecurityStandard": {
+              "type": "string",
+              "enum": ["restricted", "baseline", "privileged"],
+              "description": "Kubernetes Pod Security Standard level."
+            },
+            "requiresClusterAdmin": {
+              "type": "boolean",
+              "description": "Whether the software requires cluster-admin RBAC."
+            },
+            "readOnlyRootFilesystem": {
+              "type": "boolean",
+              "description": "Whether containers use a read-only root filesystem."
+            },
+            "kmsIntegration": {
+              "type": "boolean",
+              "description": "Whether the software integrates with local KMS/HSM."
+            }
+          },
+          "additionalProperties": false
+        },
+        "deployment": {
+          "type": "object",
+          "required": ["type", "repository"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["Helm", "Operator", "Kustomize", "Manifest"],
+              "description": "Delivery mechanism for the software."
+            },
+            "repository": {
+              "type": "string",
+              "description": "OCI registry URI for the deployment artifact."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

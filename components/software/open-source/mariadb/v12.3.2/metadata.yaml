@@ -1,0 +1,47 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "MariaDB Foundation"
+  product: "MariaDB"
+  version: "12.3.2"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+spec:
+  openSource:
+    enabled: true
+    license: "GPL-2.0"
+    upstreamProject: "https://github.com/MariaDB/server"
+    upstreamVersion: "12.3.2"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://registry-1.docker.io/bitnamicharts/mariadb"
+  catalog:
+    brokerType: "platform"
+    sourceType: "helm-git"
+    name: "mariadb"
+    sourceRepo: "oci://registry-1.docker.io/bitnamicharts/mariadb"
+    # The import script rewrites these to Quay mirror destinations.
+    # mariadb      — main database workload
+    # os-shell     — init container (volume permissions, readiness helpers)
+    # mysqld-exporter — Prometheus metrics sidecar (metrics.enabled=true)
+    # Required for ServiceMonitor / Prometheus scraping
+    images:
+      - source: "docker.io/bitnamilegacy/mariadb:latest"
+        destination: "registry-1.docker.io/bitnami/mariadb:latest"
+      - source: "docker.io/bitnamilegacy/os-shell:latest"
+        destination: "registry-1.docker.io/bitnami/os-shell:latest"
+      - source: "docker.io/bitnamilegacy/mysqld-exporter:latest"
+        destination: "registry-1.docker.io/bitnami/mysqld-exporter:latest"

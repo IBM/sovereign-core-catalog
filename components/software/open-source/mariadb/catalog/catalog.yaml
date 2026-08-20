@@ -1,0 +1,20 @@
+name: MariaDB Database
+metadata:
+  name: mariadb-helm-git
+  namespace: byop-broker
+spec:
+  productId: mariadb-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:djkernic/gori-catalogathon-gitops.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: MariaDB Database
+    description: Full-lifecycle MariaDB database service with broker-generated credentials stored in Git, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+    category: databases
+    tags: [Database, MariaDB]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10

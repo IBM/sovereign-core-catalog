@@ -1,0 +1,24 @@
+name: Langflow Runtime
+metadata:
+  name: langflowrt-helm-git
+  namespace: byop-broker
+spec:
+  productId: langflowrt-helm
+  sourceType: helm-git
+  repoURL: git@github.ibm.com:sovcore/sovcore-placeholder.git
+  version: "1.0.0"
+  catalogRegistration:
+    displayName: Langflow Runtime
+    description: Full-lifecycle Langflow backend-only runtime service for serving pre-built flows via API, deployed with Helm
+    plans:
+      - id: standard
+        name: Standard
+        description: Standard Langflow runtime deployment — backend API only, no IDE frontend
+      - id: langflowrthelm_plan
+        name: Default
+        description: Default Langflow runtime deployment — backend API only, no IDE frontend
+    category: AITools
+    tags: [AITools, LLM, Runtime, LangflowRuntime]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products
+    provisioningDurationMinutes: 10
