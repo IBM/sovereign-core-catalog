@@ -40,7 +40,7 @@ spec:
     productPageUrl: "https://mariadb.org"
   catalog:
     brokerType: "platform"
-    sourceType: "helm-git"
+    sourceType: "helm-registry"
     name: "mariadb"
     sourceRepo: "oci://registry-1.docker.io/bitnamicharts/mariadb"
     # The import script rewrites these to Quay mirror destinations.
@@ -55,3 +55,6 @@ spec:
         destination: "registry-1.docker.io/bitnami/os-shell:latest"
       - source: "docker.io/bitnamilegacy/mysqld-exporter:latest"
         destination: "registry-1.docker.io/bitnami/mysqld-exporter:latest"
+brokerType: "platform"
+sourceType: "helm-registry"
+name: "mariadb"
