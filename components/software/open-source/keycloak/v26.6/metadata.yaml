@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Red Hat, Inc."
   product: "Keycloak"
+  shortDescription: "Open-source identity and access management platform providing single sign-on, social login, identity brokering, and fine-grained authorization using OpenID Connect, OAuth 2.0, and SAML 2.0."
+  fullDescription: "Keycloak is an open-source identity and access management solution that lets teams add authentication and secure services with minimal effort, removing the need to handle user storage or login logic within individual applications. It delivers single sign-on so that users authenticate once with Keycloak and gain access to all connected applications without logging in again; a single logout simultaneously ends all active sessions across every application. Social login can be enabled directly from the admin console with no code changes required, and Keycloak can broker authentication to external OpenID Connect or SAML 2.0 identity providers through the same configuration-only workflow. Built-in user federation connects to existing LDAP or Active Directory servers, with support for custom providers for users stored in relational databases or other systems. The admin console provides centralized management of all server aspects including identity brokering, user federation, application registrations, and fine-grained authorization policies. Users can self-manage their own accounts, update profiles, change passwords, enable two-factor authentication, and link social or brokered identity providers via the account management console. Keycloak implements OpenID Connect, OAuth 2.0, and SAML 2.0, making it compatible with virtually any modern application stack. It supports fine-grained authorization services beyond role-based access control, enabling teams to define and manage precise permissions centrally. The platform is designed to be lightweight, fast, and scalable, with clustering support for high availability. Release 26.6.0 introduces JWT Authorization Grant, zero-downtime patch releases, Java 25 support, step-up authentication for SAML, Administration Workflows, DPoP guidance, and improved Kubernetes operator configurability. Keycloak is a CNCF incubation project."
+  sovereignCoreRelevance: "Provides fully self-contained identity and access management within sovereign perimeters, eliminating dependency on external identity providers or cloud-hosted SSO services."
+  category: "security"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Platform engineers", "Security architects", "Identity administrators"]
   version: "26.6"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/keycloak"
+  links:
+    docsUrl: "https://www.keycloak.org/documentation"
+    productPageUrl: "https://www.keycloak.org"

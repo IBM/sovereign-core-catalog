@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Langflow Project"
   product: "Langflow"
+  shortDescription: "Low-code visual platform for building and deploying AI agents and MCP servers, with support for all major LLMs, vector databases, and a growing library of pre-built components and integrations."
+  fullDescription: "Langflow is an open-source platform designed to eliminate boilerplate and accelerate AI development through a drag-and-drop visual canvas. It lets teams build, test, and deploy AI agents and MCP servers without fighting infrastructure — shipping with batteries included and native support for all major large language models, vector databases, and an extensive library of AI tools and data connectors. Visual state flows and reusable components replace repetitive integration code, enabling rapid iteration from notebook to production. For teams that need deeper control, every component and workflow is backed by Python, allowing full customization of any logic or behavior. Pre-built flows and components can be selected from a growing catalog, and agents can run individually or as a coordinated fleet, with access to all connected components as tools. Workflows are exposed as APIs, enabling seamless integration into existing applications and services. Langflow connects to a wide ecosystem of providers including OpenAI, Anthropic, Meta, Mistral, Groq, NVIDIA, Ollama, Amazon Bedrock, Azure, HuggingFace, LangChain, CrewAI, Pinecone, Milvus, Weaviate, Qdrant, MongoDB, Cassandra, Supabase, Upstash, Google Cloud, Google Drive, Confluence, GitHub, Slack, Zapier, Airbyte, Composio, Tavily, Serper, Wolfram Alpha, and many more. Teams can deploy on their own infrastructure or use the enterprise-grade secure cloud platform, with the same Langflow experience whether running open-source or cloud. The platform is trusted by leading AI development teams, with over 153,000 downloads and 25,000 GitHub stars, and is used to accelerate everything from RAG application development to complex multi-agent orchestration workflows."
+  sovereignCoreRelevance: "Enables visual composition and deployment of LLM workflows entirely within sovereign perimeters, supporting air-gapped model inference and private data retrieval."
+  category: "ai"
+  industries: ["government", "bfsi", "healthcare", "telco"]
+  intendedUsers: ["Data scientists", "AI engineers", "Application developers"]
   version: "1.10.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/langflowai/langflow"
+  links:
+    docsUrl: "https://docs.langflow.org/1.10.0"
+    productPageUrl: "https://langflow.org"

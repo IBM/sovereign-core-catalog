@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Cloud Native Computing Foundation"
   product: "etcd"
+  shortDescription: "Strongly consistent, distributed key-value store for reliably storing critical data across distributed systems and clusters, with built-in leader election, fault tolerance, and change watching."
+  fullDescription: "etcd is a strongly consistent, distributed key-value store built to provide a reliable data layer for distributed systems and machine clusters. It uses the Raft consensus protocol to ensure proper distribution and consistency of data, and gracefully manages leader elections during network partitions — remaining operational even when the leader node itself fails. Data is organized in hierarchically structured directories, similar to a standard filesystem, and can be read or written using standard HTTP tools such as curl, lowering the barrier to integration. etcd supports watching specific keys or directories for changes, enabling applications and infrastructure components to react immediately when values are updated. Optional SSL client certificate authentication secures access to the store, making it suitable for regulated and security-sensitive environments. TTL-based key expiration allows time-limited entries, useful for leases, locks, and ephemeral registrations. etcd is benchmarked at thousands of writes per second per instance, providing the throughput needed for production cluster workloads. As a CNCF project, it serves as the foundational data store for Kubernetes, holding all critical cluster state including configuration, secrets, and service metadata. Beyond Kubernetes, it is widely adopted as a backend for distributed locking, leader election, service discovery, and configuration management in microservices and cloud-native architectures. Its combination of strong consistency guarantees, simplicity of interface, and tolerance for node and network failures makes it a trusted building block for platforms where data correctness and availability are non-negotiable."
+  sovereignCoreRelevance: "Acts as the foundational key-value store for Kubernetes control planes in sovereign environments, with full air-gap support and TLS-secured peer communication."
+  category: "infrastructure"
+  industries: ["government", "bfsi", "telco", "energy"]
+  intendedUsers: ["Platform engineers", "Infrastructure architects", "SRE teams"]
   version: "3.4.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/etcd"
+  links:
+    docsUrl: "https://etcd.io/docs/v3.4/"
+    productPageUrl: "https://etcd.io"

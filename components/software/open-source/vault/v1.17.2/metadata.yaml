@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "HashiCorp, Inc."
   product: "HashiCorp Vault"
+  shortDescription: "Centrally manage secrets and protect sensitive data — securely store, access, and control tokens, passwords, certificates, and encryption keys via UI, CLI, or HTTP API."
+  fullDescription: "HashiCorp Vault is a secrets management and data protection platform that enables teams to securely store, access, and tightly control sensitive data including tokens, passwords, certificates, and encryption keys. It is accessible through a UI, CLI, or HTTP API, providing flexible integration options for both operators and application developers. Vault's core use cases span secrets management for applications, systems, and infrastructure; dynamic database credential management through its database secrets engine, which generates short-lived credentials on demand to eliminate static password sprawl; and encryption as a service via the Transit secrets engine, which encrypts data in transit and at rest so that even in the event of an intrusion, raw data remains protected. The Key/Value secrets engine persists arbitrary secrets within Vault's configured physical storage backend. The Transform secrets engine, an Enterprise feature, generates cryptographically secure tokens mapped to highly sensitive data. Vault is part of HashiCorp's Security Lifecycle Management suite, which also includes Boundary for secure remote access, Vault Radar for scanning embedded secrets, and Consul for securing network services. HCP Vault Dedicated is a fully managed cloud offering that allows teams to secure applications and protect sensitive data without managing infrastructure, available to try for free. The HashiCorp Well-Architected Framework provides validated best practices for securing data, secrets, identity and access management, and zero-trust infrastructure architecture using Vault. HashiCorp offers two professional certifications for Vault practitioners: Vault Associate (003) and Vault Operations Professional, providing a structured path for teams to validate and advance their Vault expertise. Vault integrates with the broader HashiCorp ecosystem including Terraform for infrastructure lifecycle management, Nomad for workload orchestration, and Packer for machine image management."
+  sovereignCoreRelevance: "Provides a fully air-gapped secrets management and encryption engine, ensuring key material and credentials never leave the sovereign perimeter."
+  category: "security"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Security architects", "Platform engineers", "DevSecOps teams", "Compliance officers"]
   version: "1.17.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/hashicorp/vault"
+  links:
+    docsUrl: "https://developer.hashicorp.com/vault/docs"
+    productPageUrl: "https://www.hashicorp.com/products/vault"

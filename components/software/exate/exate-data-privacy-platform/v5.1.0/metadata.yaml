@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/exate"
   vendor: "eXate Technology Ltd."
   product: "eXate Data Privacy Platform"
+  shortDescription: "API-driven data privacy platform delivering real-time tokenisation, masking, and encryption at the data layer. Enforces policy-based data protection across pipelines and applications with zero schema changes — reducing compliance risk for regulated government, financial, and healthcare organisations."
+  fullDescription: "The eXate Data Privacy Platform is a commercial, policy-driven solution that intercepts and transforms sensitive data in real time at the API and data-service layer, applying tokenisation, dynamic masking, format-preserving encryption, and role-based access controls without requiring any changes to source-system schemas or application code. Capabilities: real-time tokenisation and de-tokenisation, dynamic data masking, format-preserving encryption (FPE), attribute-level access policies, and automated data-residency enforcement. Deployment: delivered as a Helm chart into air-gapped Kubernetes clusters, operating as a sidecar or inline proxy with ReadWriteOnce storage under the restricted Pod Security Standard and a read-only root filesystem. Security: KMS-integrated key management, restricted pod security, read-only root filesystem, and full audit logging of every data-access event; no cluster-admin privileges required. Integrations: REST/gRPC APIs, IBM watsonx data pipelines, Kafka streams, and standard JDBC/ODBC data sources with no code changes. Use cases: cross-border data sharing with selective masking, GDPR/DPDP-compliant analytics, PII protection for AI training datasets, and real-time field redaction before data leaves a sovereign zone. Business benefits: reduces time-to-compliance for data-sharing agreements, eliminates manual masking workflows, and provides a consistent, auditable privacy control layer across heterogeneous application estates."
+  sovereignCoreRelevance: "Enforces data residency and privacy policies at the API layer in real time, ensuring that sensitive attributes are masked or tokenised before they can cross sovereign boundaries or reach unauthorised consumers."
+  category: "security"
+  industries: ["government", "bfsi", "healthcare", "telco"]
+  intendedUsers: ["Compliance officers", "Data architects", "Security architects", "Platform engineers"]
   version: "5.1.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false

@@ -1,0 +1,50 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: HardwareProfile
+metadata:
+  companyRef: "companies/amd"
+  vendor: "Advanced Micro Devices, Inc."
+  product: "AMD Instinct MI350P PCIe GPU Accelerator"
+  shortDescription: "Enterprise PCIe GPU accelerator purpose-built for AI inference in existing air-cooled servers. Validated with IBM Sovereign Core AI inference stack and the AMD Financial Stock Intelligence blueprint for sovereign on-premises AI workloads."
+  fullDescription: "The AMD Instinct MI350P is a PCIe-form-factor GPU card designed to bring enterprise AI inferencing to existing air-cooled data-centre servers without infrastructure changes. IBM Sovereign Core validated the MI350P across two scenarios: the Sovereign Core AI inference stack running vLLM on ROCm, and end-to-end integration with the AMD Financial Stock Intelligence enterprise AI blueprint. Capabilities: high-throughput AI inference via ROCm 7.13 and a custom vLLM build targeting the gfx950 architecture; drop-in PCIe fit for standard air-cooled server racks. Deployment: integrated into OpenShift 4.20 via the AMD Kubernetes GPU Operator (v1.5.1-beta.0, beta) and Kernel Module Management (KMM) Operator v2.4.1; GPU workloads are scheduled using the amd.com/gpu device resource; all images are mirrored to Sovereign Quay for fully air-gapped operation. Security: no privileged cluster-admin required for model workloads; images served from Sovereign Quay with role-based pull access. Integrations: IBM Sovereign Core AI Inference Service (KServe/ModelDeployment CR), vLLM ROCm runtime, AMD enterprise AI blueprints, ROCm ecosystem (PyTorch, TensorFlow, JAX). Use cases: on-premises LLM inference on existing server hardware, sovereign AI blueprint execution (Financial Stock Intelligence), and air-gapped regulated AI workloads. Business benefits: enables sovereign AI inference on installed server hardware with no new cooling infrastructure, accelerates enterprise AI blueprint adoption within regulated boundaries, and eliminates hyperscaler GPU dependency for inference workloads. Note: this configuration is a technical preview due to the use of a beta GPU Operator and preview-maturity ROCm driver."
+  sovereignCoreRelevance: "Validated by IBM Sovereign Core for on-premises LLM inference in air-gapped OpenShift environments. All images are mirrored to Sovereign Quay and deployed via ACM policy, ensuring no runtime dependency on external registries or cloud services."
+  industries: ["government", "bfsi", "healthcare", "energy", "sovereign_ai"]
+  intendedUsers: ["AI engineers", "Platform engineers", "Infrastructure teams", "Data scientists"]
+  category: "GPU"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+  availabilityState: "technical_assets_available"
+spec:
+  jurisdiction:
+    hq: "USA"
+    supplyChainAttestation: "PCIe add-in card; US export controlled (EAR)"
+  capabilities:
+    formFactor: "PCIe"
+    cooling: "Air-cooled (passive heatsink)"
+    confidentialComputing:
+      supported: false
+      technology: "N/A — MI350P PCIe does not support AMD SEV-SNP"
+    rocmVersion: "7.13 (Preview)"
+    gpuArchitecture: "gfx950"
+    sovereignCoreValidation:
+      status: "technical_preview"
+      openShiftVersion: "4.20"
+      validatedBlueprints:
+        - name: "Financial Stock Intelligence"
+          url: "https://enterprise-ai.docs.amd.com/en/latest/solution-blueprints/fsi/README.html"
+      componentVersions:
+        amdGpuOperator: "v1.5.1-beta.0 (Beta)"
+        amdGpuDriver: "31.30 (Preview, CoreOS 9.6)"
+        rocm: "7.13 (Preview)"
+        vllm: "ROCm 7.13 build — gfx950-dcgpu (Preview)"
+        kmm: "2.4.1 (GA)"
+        openShift: "4.20 (GA)"
+  k8sIntegration:
+    devicePluginOci: "oci://docker.io/rocm/k8s-device-plugin:rhubi-latest"
+    deviceResource: "amd.com/gpu"
+    operatorHelmChart: "https://github.com/ROCm/gpu-operator/releases/download/v1.5.1-beta.0/gpu-operator-charts-v1.5.1-beta.0.tgz"
+    kmmRequired: true
+    acmDeployment: true
+    clusterLabel: "sovcloud.open-cluster-management.io/amd-gpu=true"
+  links:
+    productPageUrl: "https://www.amd.com/en/blogs/2026/amd-instinct-mi350p-pcie-gpus-run-enterprise-ai-on-your.html"
+    docsUrl: "https://www.ibm.com/docs/en/sovereign-core/1.1.0?topic=service-ai-inference"

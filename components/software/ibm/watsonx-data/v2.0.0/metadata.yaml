@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM watsonx.data"
+  shortDescription: "IBM watsonx.data is an open, hybrid data foundation that connects, governs, and optimizes AI-ready data across cloud, multicloud, and on-premises environments — enabling organizations to move from data fragmentation to trusted, production-grade AI at scale."
+  fullDescription: "IBM watsonx.data is an open, hybrid data lakehouse platform designed to make enterprise data AI-ready — connected, governed, and context-rich. It addresses the core challenge of fragmented data sprawled across clouds, data warehouses, documents, streaming systems, and on-premises environments. The platform delivers four foundational capabilities: Hybrid access to query and govern data wherever it lives without forcing migration; Optimized workloads via a multi-engine architecture (Presto, Spark, OpenSearch, Cassandra) that matches each workload to the right engine for better performance at lower cost; Governance with built-in access controls, lineage, and data quality signals across all AI and analytics workloads; and Openness built on open standards, open formats, and zero-copy data access to avoid vendor lock-in. Key use cases include grounding AI agents with enterprise knowledge via OpenRAG, delivering real-time AI-ready context for low-latency applications, and optimizing analytical and operational workloads for price-performance. Client results demonstrate real-world impact: 40% more help desk tickets resolved daily (CrushBank), 50% reduction in contract review time (Dynamiq), 20% improvement in AI response accuracy (Lockheed Martin), and >95% first-pass invoice validation accuracy (EY)."
+  sovereignCoreRelevance: "Enables data sovereignty by providing governed, on-premises data lakehouse capabilities suited for regulated and air-gapped deployments."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "energy"]
+  intendedUsers: ["Data engineers", "Data architects", "Platform teams"]
   version: "2.0.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +37,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-data-operator-bundle:2.0.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/watsonx/watsonxdata"
+    productPageUrl: "https://www.ibm.com/products/watsonx-data"

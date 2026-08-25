@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "PostgreSQL Global Development Group"
   product: "PostgreSQL"
+  shortDescription: "The world's most advanced open-source object-relational database, with over 35 years of active development and a strong reputation for reliability, feature robustness, and performance."
+  fullDescription: "PostgreSQL is a powerful, open-source object-relational database system backed by over 35 years of active development, earning a strong reputation for reliability, feature robustness, and performance. It is maintained by the PostgreSQL Global Development Group, a global open-source community that releases regular updates covering security fixes, bug resolutions, and new capabilities across all supported versions. The project maintains a clear versioning policy with defined end-of-life dates per major release, ensuring predictable upgrade planning for production deployments. PostgreSQL is available for download across all major platforms, with official packages, installers, and cloud distribution options supported by the community. The open-source community provides extensive documentation, mailing lists, and direct access to active contributors, making it straightforward to get support, learn the system, and contribute back. Mailing lists span development discussion, usage guidance, and event announcements, all accessible through a free community account. The global community organizes a wide calendar of events including PGConf, PGDay, and regional user group meetups on every continent, providing learning opportunities and direct engagement with experienced PostgreSQL practitioners. The project actively encourages transparent governance, with a published feature matrix and governance model. PostgreSQL's open-source nature means no licensing fees, no vendor lock-in, and full access to source code, making it a cost-effective and legally straightforward foundation for any application requiring a relational database. It is trusted in production across enterprise, government, and startup environments alike, and its active development pipeline — currently progressing through PostgreSQL 19 Beta — demonstrates ongoing investment in performance, security, and new capabilities. Bug reporting is formally structured, reflecting the community's pride in software that reliably stores data."
+  sovereignCoreRelevance: "Offers a fully air-gapped, permissively licensed relational database with row-level security and no external dependencies, suitable for sovereign data environments."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Database administrators", "Application developers", "Data engineers", "Platform engineers"]
   version: "13.12"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/postgresql"
+  links:
+    docsUrl: "https://www.postgresql.org/docs/14/"
+    productPageUrl: "https://www.postgresql.org"

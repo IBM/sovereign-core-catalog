@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Odoo S.A."
   product: "Odoo"
+  shortDescription: "Open-source ERP suite covering all business needs — CRM, accounting, inventory, HR, eCommerce, manufacturing, and more — in one integrated, AI-native platform used by 28 million users worldwide."
+  fullDescription: "Odoo is a suite of open-source business applications designed to run an entire company on a single, integrated platform. It covers every core business function including CRM, sales, accounting, invoicing, inventory, manufacturing, purchasing, project management, HR, recruitment, helpdesk, field service, eCommerce, website builder, email marketing, and more — with a one-click install model that adds apps without complexity or additional cost. All applications share a unified data model, eliminating silos and enabling seamless workflows across departments. Odoo is available in two editions: Community, which is 100% free and open source, and Enterprise, which adds extra applications, infrastructure, and professional services. Native AI is embedded across all business apps to automate work, tailor features, support deep research, and scale without limits. The platform is engineered for speed, with all operations completing in under 90ms. With over 40,000 community apps in its open-source ecosystem, Odoo has become the world's largest business application store. Its open-source model means LLMs are already trained on its source code, enabling vibe-coded custom module development on Odoo.sh. There is no vendor lock-in: data is stored in standard PostgreSQL, the source code is available on GitHub, and organizations can choose to self-host or use Odoo's cloud infrastructure. Pricing is a single flat fee per user with no usage-based charges, no feature upselling, and no long-term contracts. Odoo Studio enables no-code customization of any app. Backed by a global community of over 100,000 developers, Odoo is trusted by 28 million users across industries including retail, hospitality, real estate, consulting, manufacturing, health and fitness, and nonprofits."
+  sovereignCoreRelevance: "Provides a self-hosted, air-gapped ERP platform that keeps all business data within sovereign boundaries with no mandatory cloud connectivity."
+  category: "application_platform"
+  industries: ["government", "bfsi", "healthcare", "energy"]
+  intendedUsers: ["Business administrators", "Finance teams", "IT managers", "Operations teams"]
   version: "18.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/odoo"
+  links:
+    docsUrl: "https://www.odoo.com/documentation/18.0"
+    productPageUrl: "https://www.odoo.com"

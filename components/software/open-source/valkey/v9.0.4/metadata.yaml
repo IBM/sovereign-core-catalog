@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Valkey Project"
   product: "Valkey"
+  shortDescription: "Fast, reliable, BSD-licensed open-source key/value datastore backed by the Linux Foundation, supporting caching, message queues, and primary database workloads — open source forever."
+  fullDescription: "Valkey is an open-source, high-performance key/value datastore released under the BSD licence and backed by the Linux Foundation, guaranteeing it will remain open source forever. It supports a variety of workloads including caching, message queues, and primary database use cases. Valkey can run as either a standalone daemon or in a cluster, with options for replication and high availability. It natively supports a rich collection of data types including strings, numbers, hashes, lists, sets, sorted sets, bitmaps, hyperloglogs, and more, with an expressive set of commands for in-place data structure operations. Native extensibility is provided through built-in Lua scripting support and a module plugin system for creating new commands, data types, and custom behaviors. Official client libraries are available for Python, Java, Go, Node.js, PHP, and C#. Binary artifacts and Docker images are published for arm64 and x86_64 architectures across multiple Linux distributions, with Docker Hub images available for Alpine and Ubuntu-based tags. Version 9.1 reduces per-key memory overhead by up to 44% for strings and up to 8.5 bytes per sorted set member, without any command or configuration changes. Valkey's AI workload support spans semantic caching, KV cache offload, hybrid retrieval, admission control, and observability, mapping directly to Valkey's native primitives. The project is supported by a diverse group of participant organizations including Alibaba Cloud, Amazon Web Services (ElastiCache), Google Cloud (Memorystore), Oracle Cloud Infrastructure, Ericsson, ByteDance, Percona, NetApp Instaclustr, Aiven, Heroku, and UpCloud, all contributing to its long-term health and viability. This breadth of participant support demonstrates strong industry demand for a community-driven, openly governed in-memory database solution with no vendor lock-in."
+  sovereignCoreRelevance: "Provides a permissively licensed, air-gapped in-memory data store with no vendor lock-in, well-suited for sovereign environments requiring open-source assurance."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Application developers", "Platform engineers", "Data engineers"]
   version: "9.0.4"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/valkey/valkey"
+  links:
+    docsUrl: "https://valkey.io/docs/"
+    productPageUrl: "https://valkey.io"

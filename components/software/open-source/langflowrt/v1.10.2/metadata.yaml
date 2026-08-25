@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Langflow Project"
   product: "Langflow Runtime"
+  shortDescription: "Headless production runtime for Langflow AI agents and workflows, exposing pipelines as APIs without the visual builder — optimized for scale, performance, and lean deployment footprints."
+  fullDescription: "Langflow Runtime is the headless backend component of the Langflow platform, purpose-built for serving AI agents and workflows in production environments without the overhead of the visual development interface. It exposes Langflow pipeline definitions as scalable REST API endpoints, enabling teams to integrate AI capabilities directly into their applications and services. The runtime retains the same Python-backed component ecosystem as the full Langflow application — supporting all major LLMs, vector databases, tool integrations, and data connectors — while removing the frontend dependency for a leaner and more resource-efficient deployment footprint. This separation allows teams to use the full Langflow canvas for development, iteration, and collaboration, then promote finalized workflows to the runtime for production serving. Agents can be deployed individually or as a coordinated fleet, with access to all connected components as tools, maintaining the same behavior as in the authoring environment. The runtime inherits Langflow's broad integration ecosystem, connecting to providers such as OpenAI, Anthropic, Ollama, Amazon Bedrock, Azure, HuggingFace, NVIDIA, Groq, Mistral, Pinecone, Milvus, Weaviate, Qdrant, MongoDB, Cassandra, Google Cloud, Slack, Zapier, and many others. Teams can self-host on their own infrastructure for full control over data residency and security, or deploy on the enterprise-grade Langflow cloud platform. Whether running open-source or cloud, the runtime provides consistent behavior across environments, supporting the same workflow definitions without modification. It is the recommended path for teams taking AI agents from notebook to production at scale."
+  sovereignCoreRelevance: "Provides a production-grade, air-gapped AI pipeline execution engine that keeps all inference and data processing within sovereign boundaries."
+  category: "ai"
+  industries: ["government", "bfsi", "healthcare", "telco"]
+  intendedUsers: ["AI engineers", "Platform engineers", "ML operations teams"]
   version: "1.10.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/langflowai/langflow-backend"
+  links:
+    docsUrl: "https://docs.langflow.org/1.10.0"
+    productPageUrl: "https://langflow.org"

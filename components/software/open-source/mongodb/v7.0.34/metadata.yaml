@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "MongoDB, Inc."
   product: "MongoDB Community"
+  shortDescription: "Free, source-available document database for learning, prototyping, and building self-managed applications — deployable on-premises, in containers, or in the cloud across Windows, macOS, and Linux."
+  fullDescription: "MongoDB Community Edition is the free, source-available version of MongoDB's document database, designed for local development, prototyping, and self-managed application deployments. It simplifies data management through an intuitive document model that stores data as JSON-like documents, consolidating related information and eliminating the rigid schema constraints of traditional relational databases. This flexibility allows developers to adapt data models quickly, reduce complexity, and accelerate innovation. Community Edition can be deployed in any preferred environment — on-premises, in containers, or in cloud infrastructure — with support for Windows, macOS, and all major Linux distributions, making it straightforward to build locally or integrate into self-managed infrastructure pipelines. It includes native full-text search and vector search capabilities, enabling builders to create modern intelligent applications with features like autocomplete, semantic search, and retrieval-augmented generation (RAG) directly in a self-managed setting. MongoDB Shell provides fast iteration with CRUD operations, aggregation pipeline construction, and automation through scripting. The aggregation framework supports complex data transformations and analytics natively within the database. Use cases span local development and testing, schema and index performance validation, application prototyping, upskilling on core MongoDB concepts including CRUD, indexing, and schema design, and building the foundation for workloads that can migrate seamlessly to fully managed MongoDB Atlas when scaling is needed. MongoDB 8.0 — the latest major release — delivers 36% higher throughput, easier horizontal scaling, and expanded queryable encryption for greater performance and security. Community Edition is a fully free starting point that grows with teams: the same document model, query language, and tooling carry forward without modification as workloads evolve from local prototype to production deployment."
+  sovereignCoreRelevance: "Provides fully air-gapped document storage with no external telemetry or licensing callbacks, suitable for sovereign and regulated application backends."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Application developers", "Database administrators", "Platform engineers"]
   version: "7.0.34"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/mongodb"
+  links:
+    docsUrl: "https://www.mongodb.com/docs/v7.0/administration/install-community/"
+    productPageUrl: "https://www.mongodb.com/products/self-managed/community-edition"

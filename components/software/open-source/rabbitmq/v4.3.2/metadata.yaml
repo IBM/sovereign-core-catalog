@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Broadcom Inc."
   product: "RabbitMQ"
+  shortDescription: "Powerful open-source messaging and streaming broker used by millions worldwide, enabling reliable, interoperable, and flexible communication for microservices, real-time data, IoT, and RPC workloads."
+  fullDescription: "RabbitMQ is a reliable, mature, and enterprise-grade open-source messaging and streaming broker that enables efficient, versatile communication between applications. Licensed under the Mozilla Public License 2.0, it is used by millions worldwide and deployable on cloud environments, on-premises infrastructure, and local machines with equal ease. RabbitMQ supports several open standard protocols including AMQP 1.0 and MQTT 5.0, with multiple client libraries available across all major programming languages, ensuring no vendor lock-in. Its flexible routing and filtering capabilities let teams define precisely how messages travel from publishers to one or many consumers — including routing, filtering, streaming, federation, and more. Message delivery acknowledgements and cross-cluster replication ensure messages are safe and reliably delivered, even in the face of failures. Common use cases include decoupling interconnected microservices to absorb load spikes and enable independent maintenance, implementing RPC patterns where correlated requests and responses flow through queues with low latency, streaming event-driven workflows where multiple backend consumers independently process the same events at their own pace, and IoT scenarios where local RabbitMQ nodes buffer data from constrained devices and shovel reports upstream once connectivity is restored. MQTT support makes RabbitMQ well suited for millions of concurrent IoT connections. Streams enable efficient multi-consumer event replay without message duplication. Quorum queues combined with acknowledgements provide strong safety guarantees for mission-critical message flows. Chained deployments using shovels and federation support complex multi-tier topologies. Broadcom offers Tanzu RabbitMQ as a commercial enterprise edition with 24/7 expert support from the product engineers, longer lifecycle, disaster recovery, cloud cost savings, and industry compliance for teams running mission-critical applications."
+  sovereignCoreRelevance: "Provides air-gapped, self-hosted message brokering with durable persistence and TLS security, enabling compliant asynchronous integration within sovereign environments."
+  category: "infrastructure"
+  industries: ["bfsi", "government", "healthcare", "telco", "energy"]
+  intendedUsers: ["Integration architects", "Application developers", "Platform engineers"]
   version: "4.3.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/rabbitmq"
+  links:
+    docsUrl: "https://www.rabbitmq.com/docs"
+    productPageUrl: "https://www.rabbitmq.com"

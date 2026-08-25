@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM watsonx Orchestrate"
+  shortDescription: "IBM watsonx Orchestrate is an agentic control plane that brings an organization's entire AI agent ecosystem into one unified platform — enabling teams to build, orchestrate, govern, and scale AI agents across cloud and on-premises environments without lock-in or rebuild."
+  fullDescription: "IBM watsonx Orchestrate is an open, integrated agentic control plane designed to maximize ROI from AI agents at enterprise scale. It provides a single plane to see, manage, and optimize every AI agent across the business — connecting agents, workflows, data, and applications end-to-end with built-in security, governance, and compliance. The platform delivers four core capabilities: Agentic orchestration — coordinating agents, tools, and workflows across systems to turn fragmented AI into connected business execution; Flexible agent building — creating and deploying agents via no-code or pro-code tools, or bringing existing agents without lock-in; Governed catalog — discovering and reusing enterprise-ready, pre-integrated agents and tools; and Agentic control plane — operating agents with full visibility, policy enforcement, and lifecycle control at scale. Key use cases span customer experience, sales, HR, finance, procurement, IT operations, and business knowledge agents. The platform is open by design, working with agents and frameworks teams already use across any cloud or on-premises environment. Client results include 3x increase in insight volume (UFC), 80% increase in ticketing efficiency (Recording Academy), 94% of complaints resolved within 48 hours (Serre Chevalier), and 59 workstreams integrated at Riyadh Air."
+  sovereignCoreRelevance: "Supports secure workflow automation within sovereign perimeters where enterprise data and processes must remain under organizational control."
+  category: "automation"
+  industries: ["bfsi", "government", "healthcare", "telco"]
+  intendedUsers: ["Business analysts", "Automation engineers", "Platform teams"]
   version: "4.0.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +37,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-watson-orchestrate-operator-bundle:4.0.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/watson-orchestrate"
+    productPageUrl: "https://www.ibm.com/products/watsonx/orchestrate"

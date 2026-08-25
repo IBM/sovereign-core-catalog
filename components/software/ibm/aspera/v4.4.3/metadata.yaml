@@ -4,9 +4,17 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM Aspera"
+  shortDescription: "IBM Aspera is a high-speed data transfer platform powered by patented FASP® technology that delivers massive files and datasets up to 100x faster than traditional TCP/FTP/SFTP — across any distance, latency, or network condition — with built-in security, governance, and multi-cloud support."
+  fullDescription: "IBM Aspera is an enterprise data transfer platform engineered to maximize existing network bandwidth without requiring infrastructure overhaul. At its core is patented FASP® (Fast, Adaptive, and Secure Protocol) technology — a fundamental rewrite of the transport layer that overcomes the limitations of legacy protocols like TCP, FTP, and SFTP, maintaining maximum line-speed even over long distances, high latency, packet loss, and congested real-world networks. Key capabilities include extreme-speed large file transfer at any distance, hybrid and multi-cloud data movement across on-premises environments, major cloud platforms, SaaS applications, and global partners without gateway bottlenecks, enterprise governance and compliance with centralized policy-based controls, real-time bandwidth monitoring, and dynamic pipeline prioritization, and flexible deployment and automation via APIs supporting directory synchronization, lightweight endpoints, and automated workflows. The product family spans IBM Aspera Enterprise (full-featured for large organizations), Aspera Lite (for SMBs), Aspera Endpoint (for scaling existing deployments), and Aspera faspio Gateway (bidirectional streaming for database replication and migrations). Real-world results include 5x faster data transfer (DMC), less than 10 seconds from live broadcast in Russia to editable footage in LA (FOX Sports), and 150 films transferred digitally with zero cancellations (FILMFEST MÜNCHEN)."
+  sovereignCoreRelevance: "Enables high-speed, encrypted data transfer within and across sovereign boundaries without reliance on standard internet transfer protocols."
+  category: "infrastructure"
+  industries: ["bfsi", "government", "healthcare", "energy", "telco"]
+  intendedUsers:
+    ["Platform engineers", "Data architects", "Infrastructure teams"]
   version: "4.4.3"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +38,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/aspera-hsts-operator-bundle:4.4.3"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/aspera-on-cloud"
+    productPageUrl: "https://www.ibm.com/products/aspera"

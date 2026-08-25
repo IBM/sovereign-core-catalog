@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/duality-tech"
   vendor: "Duality Technologies, Inc."
   product: "Duality SecurePlus Analytics"
+  shortDescription: "Privacy-preserving analytics platform powered by homomorphic encryption. Enables multi-party data collaboration and machine learning on encrypted data without exposing plaintext — delivering compliance-safe insights for regulated government, financial, and healthcare organisations."
+  fullDescription: "Duality SecurePlus Analytics is a commercial privacy-enhancing technology (PET) platform that allows organisations to perform analytics and train machine learning models directly on encrypted data using fully homomorphic encryption (FHE). Raw data is never decrypted outside the originating system, eliminating data-exposure risk during cross-organisational collaboration. Capabilities: FHE-accelerated analytics, encrypted model training, secure multi-party computation, and privacy-preserving data queries across siloed datasets. Deployment: Delivered as a Helm chart into any air-gapped Kubernetes cluster; no public egress endpoints required; supports ReadWriteOnce persistent storage under the restricted Pod Security Standard with a read-only root filesystem. Security: KMS integration for key management, restricted pod security, and read-only root filesystem; no cluster-admin privileges required. Integrations: Compatible with IBM watsonx, standard ML frameworks (scikit-learn, PyTorch), and enterprise data pipelines via REST and gRPC APIs. Use cases: Cross-agency threat intelligence sharing, encrypted credit-risk modelling across banking consortia, federated clinical-trial analytics, and privacy-safe customer segmentation. Business benefits: Unlocks high-value dataset collaboration without legal and regulatory friction, eliminates the risk of data breaches during joint analytics, and accelerates compliance sign-off by ensuring raw PII never leaves its origin system."
+  sovereignCoreRelevance: "Enables sovereign entities to collaborate on sensitive datasets across organisational boundaries using homomorphic encryption, ensuring raw data never leaves each party's sovereign perimeter."
+  category: "security"
+  industries: ["government", "bfsi", "healthcare"]
+  intendedUsers: ["Data scientists", "Compliance officers", "Security architects", "Data architects"]
   version: "3.2.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false

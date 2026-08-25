@@ -31,6 +31,31 @@
           "type": "string",
           "description": "Product display name."
         },
+        "shortDescription": {
+          "type": "string",
+          "description": "Short storefront summary for cards and carousel."
+        },
+        "fullDescription": {
+          "type": "string",
+          "description": "Longer product description for detail views."
+        },
+        "sovereignCoreRelevance": {
+          "type": "string",
+          "description": "Explanation of why this offering is relevant in sovereign or regulated environments."
+        },
+        "industries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["government", "bfsi", "healthcare", "telco", "energy", "sovereign_ai", "vmware_modernization"]
+          },
+          "description": "Industry segments this offering is intended for."
+        },
+        "intendedUsers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Primary user roles or personas for this offering (e.g. Data scientists, AI engineers, Data architects, Compliance officers, Platform engineers)."
+        },
         "category": {
           "type": "string",
           "enum": ["GPU", "CPU", "Storage", "Networking", "Server"],
@@ -45,6 +70,11 @@
           "type": "string",
           "enum": ["public", "unlisted", "private"],
           "description": "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+        },
+        "availabilityState": {
+          "type": "string",
+          "enum": ["available_central_it", "byop_ready", "technical_assets_available", "discoverable_only"],
+          "description": "Semantic availability state for storefront display and fulfillment handling."
         }
       },
       "additionalProperties": false
@@ -100,6 +130,22 @@
             }
           },
           "additionalProperties": true
+        },
+        "links": {
+          "type": "object",
+          "properties": {
+            "docsUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Public product documentation URL."
+            },
+            "productPageUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Canonical public product page URL."
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

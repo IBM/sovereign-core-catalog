@@ -4,9 +4,17 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM Optim"
+  shortDescription: "IBM Optim is a suite of data lifecycle management solutions that manages enterprise data from requirements through retirement — covering test data management, data privacy masking, and application archiving to improve performance, governance, and business agility while reducing costs."
+  fullDescription: "IBM Optim is an enterprise data lifecycle management suite designed to manage data from its initial requirements through to retirement. It boosts application performance, empowers collaboration, and improves governance across applications, databases, and platforms — helping organizations support business goals with reduced risk. The suite comprises three key products: IBM Optim Test Data Management — extracts and scales data across systems and databases into test environments for rapid, secure software testing while maintaining test integrity; IBM Optim Data Privacy — protects non-production confidential data using a variety of masking techniques across databases, applications, and systems; and IBM Optim Archive — decommissions and archives applications and their data to reduce storage costs and compliance risk while retaining ongoing access for query and reporting. Core capabilities include application retirement and consolidation with compliant data retention, comprehensive test data management to accelerate release cycles, big data lifecycle management to maximize data warehouse value and lower total cost of ownership, and a single scalable archiving solution that solves data growth problems at the source and improves mission-critical system efficiency."
+  sovereignCoreRelevance: "Supports data minimization, masking, and archival policies essential for regulatory compliance in sovereign and regulated deployments."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "energy"]
+  intendedUsers:
+    ["Data architects", "Compliance officers", "Database administrators"]
   version: "11.3.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +38,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-optim-operator-bundle:11.3.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/optim"
+    productPageUrl: "https://www.ibm.com/products/optim"

@@ -4,9 +4,22 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM watsonx.gov"
+  shortDescription: "IBM watsonx.governance is an AI-native governance platform that helps enterprises govern any AI, anywhere — delivering real-time visibility, automated policy enforcement, continuous monitoring, and regulatory compliance to scale trusted AI responsibly across the organization."
+  fullDescription: "IBM watsonx.governance is an enterprise AI governance platform that transforms AI investments into measurable business value through real-time visibility, enterprise controls, and continuous accountability. It is powered by AI-native governance capabilities and enterprise-grade GRC (Governance, Risk & Compliance). The platform is built around three pillars: Visibility — a living governance graph that maps AI ecosystems, relationships between AI systems, risks, controls, and policies; Control — automated policy enforcement, obligation mapping, compliance evidence capture, and shadow AI detection to surface unmanaged AI usage; and Accountability — continuous monitoring, AI risk management, and value tracking with end-to-end traceability for reporting and audits. Key capabilities include regulatory compliance alignment across leading frameworks, AI-native governance assistants embedded in enterprise tools, and seamless integrations across existing AI ecosystems to reduce adoption friction. IBM is recognized as a Leader across all major analyst reports — 2026 Gartner® Magic Quadrant™ for AI Governance Platforms, IDC MarketScape for Unified AI Governance Platforms, and The Forrester Wave™ for AI Governance Solutions. Client results include 150% increase in operational efficiency (Infosys), 97% faster résumé screening (Careerforce Pro), 58% reduction in data clearance processing time (IBM), and 50% reduction in internal audit fees."
+  sovereignCoreRelevance: "Supports AI governance requirements in sovereign environments where model accountability, auditability, and regulatory compliance are mandatory."
+  category: "ai"
+  industries: ["bfsi", "government", "healthcare", "telco"]
+  intendedUsers:
+    [
+      "Compliance officers",
+      "AI governance teams",
+      "Risk teams",
+      "Data scientists",
+    ]
   version: "2.1.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +43,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-gov-operator-bundle:2.1.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/watsonx/saas?topic=governing-ai-assets"
+    productPageUrl: "https://www.ibm.com/products/watsonx-ai/governance"

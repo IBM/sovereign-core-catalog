@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM watsonx.data Integration"
+  shortDescription: "IBM watsonx.data integration is a unified, AI-powered data integration platform that delivers governed, AI-ready pipelines across hybrid environments — handling structured and unstructured data, batch and real-time processing, all from a single control plane."
+  fullDescription: "IBM watsonx.data integration is an enterprise data integration platform purpose-built to power reliable AI pipelines across hybrid and multicloud environments. Unlike traditional tools that solve for only one integration style, it handles structured and unstructured data, batch and streaming workloads, on-premises and cloud — all from one unified control plane with embedded governance and observability. Its agentic data integration capability allows teams to describe data needs in natural language, automatically generating, validating, and deploying pipelines — reducing delivery time from weeks to minutes. Additional capabilities include unstructured data integration for documents and text, streaming integration for low-latency real-time decisions, batch ETL/ELT pipelines deployable anywhere, data observability for proactive anomaly detection and root cause analysis, and data replication for continuous, low-latency synchronization across systems. The platform supports connectivity to core systems such as Mainframe and SAP, enabling seamless migration to modern data lakehouses. IBM is recognized as a Leader in both the 2025 Gartner® Magic Quadrant™ and IDC MarketScape for Data Integration Tools. Client results include 85% less monitoring time (IBM CDO), ~100% SLA attainment (Tech Mahindra), 491 million customers unified on one platform (SBI), and 46 systems consolidated into one (Lockheed Martin)."
+  sovereignCoreRelevance: "Supports controlled data movement and integration patterns required for sovereign and regulated data architectures."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "telco"]
+  intendedUsers: ["Data engineers", "Integration architects", "Platform teams"]
   version: "2.0.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +37,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-data-integration-operator-bundle:2.0.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/watsonx/watsonxdata"
+    productPageUrl: "https://www.ibm.com/products/watsonx-data"

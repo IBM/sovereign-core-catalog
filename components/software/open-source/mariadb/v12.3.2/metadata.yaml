@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "MariaDB Foundation"
   product: "MariaDB"
+  shortDescription: "Innovative open-source relational database built by the original MySQL developers, guaranteed to stay open source, with advanced clustering, temporal data, Oracle compatibility, and broad Linux distribution support."
+  fullDescription: "MariaDB Server is one of the most popular open-source relational databases, created by the original developers of MySQL and committed to remaining fully open source in perpetuity. It is part of most cloud offerings and ships as the default database in most Linux distributions. Built on the values of performance, stability, and openness, the MariaDB Foundation ensures all contributions are accepted on technical merit, not commercial interest. MariaDB supports the full range of traditional relational workloads while continuously expanding its capabilities. Recent additions include advanced clustering via Galera Cluster 4 for synchronous multi-master replication, Oracle Database compatibility features to ease migration from proprietary systems, and Temporal Data Tables enabling historical queries that retrieve data exactly as it stood at any point in the past. JSON support has grown significantly, with operators and JSON_TABLE improvements making semi-structured data handling more expressive and efficient. The product family includes MariaDB Server for core relational workloads, MaxScale for database proxy and query routing, ColumnStore for analytical workloads, Galera Cluster for high availability, and a Kubernetes Operator for cloud-native deployments. An Enterprise MCP Server and AI RAG integration extend MariaDB into modern agentic and retrieval-augmented generation workflows. Connectors are available for all major programming languages and frameworks. The Ecosystem Hub connects users to the broader community of tools, services, and partners built around MariaDB. With an active community, a public issue tracker, mailing lists, and regular sponsorship from leading technology companies, MariaDB combines the reliability of a mature relational engine with the innovation pace of a community-driven open-source project."
+  sovereignCoreRelevance: "Delivers a fully air-gapped, open-source relational database with no external licensing dependencies, suitable for regulated and sovereign data environments."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "energy", "telco"]
+  intendedUsers: ["Database administrators", "Application developers", "Platform engineers"]
   version: "12.3.2"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,6 +35,9 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/mariadb"
+  links:
+    docsUrl: "https://mariadb.com/docs/release-notes/community-server/12.3/12.3.2"
+    productPageUrl: "https://mariadb.org"
   catalog:
     brokerType: "platform"
     sourceType: "helm-git"

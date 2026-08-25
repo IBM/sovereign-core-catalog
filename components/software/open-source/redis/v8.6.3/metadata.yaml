@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Redis Ltd."
   product: "Redis"
+  shortDescription: "Real-time data platform for agents and applications, delivering sub-millisecond caching, vector search, streaming, session management, and AI context retrieval at scale across cloud, on-premises, and hybrid deployments."
+  fullDescription: "Redis is a real-time data platform trusted by fast-growing companies globally for powering agents, applications, and AI workloads. It provides sub-millisecond read and write performance and serves as a unified platform covering caching, event-driven streaming, session management, search and query for structured data, and a real-time ML feature pipeline for apps and agents. Redis Iris is the platform's real-time context engine for AI agents, composed of purpose-built services: Redis LangCache reduces token costs for repeated queries, Redis Context Retriever delivers the most relevant data instantly via vector search for RAG and semantic search use cases, Redis Agent Memory enables consistent agentic experiences, and Redis Data Integration provides CDC across structured data. Redis Flex extends the platform with tiered RAM and flash storage for terabyte-scale deployments at up to 80% lower cost. Core workloads supported include fraud detection, real-time decisioning, caching and performance, real-time messaging via streams, session management, and leaderboards. Client libraries are available for Python, Node, Java, Go, and .NET, with SDKs for connecting Redis to any application stack. Redis Insight provides a UI for visualizing, querying, and debugging data. Deployment options span Redis Cloud (fully managed, multi-cloud), Redis Software (on-premises), and the open-source Redis framework (Redis 8.8). Cloud marketplace integrations are available on AWS, Azure (Azure Managed Redis), and Google Cloud. Active-active multi-region replication enables global scale without downtime. Customer results include a 40% increase in revenue generation, 37% faster API response times with 15% lower memory footprint, 100+ vector search queries per second, and over one billion API requests per month. Redis serves industries including financial services, e-commerce and retail, gaming, healthcare, and telecommunications."
+  sovereignCoreRelevance: "Provides air-gapped, sub-millisecond caching and pub/sub messaging within sovereign perimeters, supporting real-time workloads without external cloud dependencies."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "telco", "energy"]
+  intendedUsers: ["Application developers", "Platform engineers", "Data engineers"]
   version: "8.6.3"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/redis"
+  links:
+    docsUrl: "https://redis.io/docs/"
+    productPageUrl: "https://redis.io"

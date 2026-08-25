@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/ibm"
   vendor: "International Business Machines Corporation"
   product: "IBM watsonx.data Intelligence"
+  shortDescription: "IBM watsonx.data intelligence turns fragmented enterprise data into trusted, governed business context — enriching it with metadata, lineage, quality signals, and access controls so both people and AI agents can discover, understand, and act on data with confidence."
+  fullDescription: "IBM watsonx.data intelligence is an enterprise data intelligence platform that adds business context to fragmented data, making it more usable, trustworthy, and AI-ready. It connects metadata, definitions, lineage, data quality, and governance into a unified experience that enables confident decisions and reliable AI outcomes. The platform delivers four core capabilities: Data governance and catalog — enforcing policies and access rules at runtime while auto-labelling metadata from structured and unstructured sources into a searchable catalog; Data quality — continuously monitoring, profiling, cleansing, and validating data before it reaches AI models or business processes; Data lineage — tracking how data moves and transforms across systems with end-to-end AI lineage that traces which data reached which model, under which policy; and Data sharing — packaging governed, contextual data as reusable data products consumable by teams, applications, and AI agents. Its Agentic Data Intelligence capability extends all of the above through conversational natural language, enabling users and AI agents to discover, investigate, and act on enterprise data faster. IBM is recognized as a Leader in three 2025–2026 Gartner® Magic Quadrants: Augmented Data Quality Solutions, Data and Analytics Governance Platforms, and Metadata Management Solutions."
+  sovereignCoreRelevance: "Enables intelligent data analysis within sovereign perimeters, supporting compliant AI-driven insights without external data egress."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "energy"]
+  intendedUsers: ["Data scientists", "Data analysts", "Platform teams"]
   version: "2.0.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -30,3 +37,6 @@ spec:
   deployment:
     type: "Operator"
     repository: "oci://icr.io/cpopen/ibm-cpd-watsonx-data-intelligence-operator-bundle:2.0.0"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/watsonx/watsonxdata"
+    productPageUrl: "https://www.ibm.com/products/watsonx-data"

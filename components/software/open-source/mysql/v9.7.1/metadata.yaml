@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Oracle Corporation"
   product: "MySQL"
+  shortDescription: "World's most popular open-source relational database, powering web applications, cloud services, and enterprise systems with high scalability, security, and proven reliability across every major industry."
+  fullDescription: "MySQL is the world's most popular open-source relational database, trusted by thousands of organizations ranging from internet-scale web applications to embedded OEM deployments. The product family spans multiple editions to match different needs: MySQL HeatWave integrates automated generative AI and machine learning with lakehouse-scale analytics in a single cloud service, delivering faster insights across all data with unmatched performance across multiple cloud providers. MySQL Enterprise Edition provides the most comprehensive set of advanced features, management tools, and technical support for achieving the highest levels of scalability, security, reliability, and uptime. MySQL Cluster CGE enables users to meet the demands of next-generation web, cloud, and communications services with uncompromising scalability and agility. For OEM and ISV scenarios, over 2,000 ISVs, OEMs, and VARs rely on MySQL as their products' embedded database to make applications, hardware, and appliances more competitive and lower the cost of goods sold. MySQL AI extends the platform with integrated, automated, and secure machine learning and generative AI capabilities built directly into the database. MySQL Community Server is the freely downloadable edition underpinning local development and open-source application stacks. MySQL ships with a full suite of complementary tools including MySQL Shell for scriptable administration and development, MySQL Router for connection routing and load balancing, MySQL Workbench for visual database design and management, and connectors for all major programming languages and frameworks. Comprehensive documentation covers the reference manual, NDB Cluster, Workbench, and connectors. MySQL underpins the LAMP stack and powers widely used platforms including WordPress, Drupal, Joomla, and phpBB, as well as large-scale systems across government, financial services, telecommunications, healthcare, and retail."
+  sovereignCoreRelevance: "Delivers air-gapped, ACID-compliant relational storage with mature replication and no external dependencies, fitting regulated and sovereign application environments."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Application developers", "Database administrators", "Platform engineers"]
   version: "9.7.1"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/mysql"
+  links:
+    docsUrl: "https://dev.mysql.com/doc/refman/9.7/en/"
+    productPageUrl: "https://www.mysql.com"

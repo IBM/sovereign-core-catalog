@@ -4,9 +4,16 @@ metadata:
   companyRef: "companies/open-source"
   vendor: "Apache Software Foundation"
   product: "Apache Kafka"
+  shortDescription: "Open-source distributed event streaming platform for publishing, storing, and processing streams of events in real-time — powering data pipelines, event-driven architectures, and mission-critical applications at scale."
+  fullDescription: "Apache Kafka is an open-source event streaming platform that combines three fundamental capabilities in a single, battle-tested solution: publishing and subscribing to streams of events with continuous import/export from external systems; storing those event streams durably and reliably for as long as required; and processing streams both in real-time and retrospectively. All of this is delivered in a distributed, highly scalable, elastic, fault-tolerant, and secure manner. Kafka can be deployed on bare-metal hardware, virtual machines, and containers, on-premises or in the cloud, with the option to self-manage or use fully managed vendor services. Architecturally, Kafka runs as a cluster of servers spanning multiple datacenters or cloud regions. Brokers form the storage layer, while Kafka Connect servers continuously import and export data to integrate with relational databases and other systems. If any server fails, the remaining cluster members take over automatically with no data loss. Client libraries are available for Java, Scala, Go, Python, C/C++, and many other languages, as well as REST APIs. Events are organized into topics, which are partitioned across brokers for parallel read/write at scale. Topics are replicated — typically with a factor of three — across brokers and even geo-regions, ensuring high availability. Producers and consumers are fully decoupled, and Kafka guarantees exactly-once processing semantics. Five core APIs cover administration, producing, consuming, stream processing via the Kafka Streams library, and reusable data integration via Kafka Connect. Common use cases include real-time payment processing, logistics tracking, IoT sensor data collection, customer interaction analytics, patient monitoring, and serving as the backbone for microservices and event-driven architectures."
+  sovereignCoreRelevance: "Enables air-gapped, on-premises event streaming without any external broker dependency, supporting compliant data movement within sovereign perimeters."
+  category: "infrastructure"
+  industries: ["bfsi", "government", "healthcare", "telco", "energy"]
+  intendedUsers: ["Platform engineers", "Data engineers", "Integration architects"]
   version: "4.0.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
+  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: true
@@ -28,3 +35,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/kafka"
+  links:
+    docsUrl: "https://kafka.apache.org/documentation/"
+    productPageUrl: "https://kafka.apache.org"
