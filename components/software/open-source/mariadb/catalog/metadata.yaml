@@ -58,3 +58,4 @@ spec:
 brokerType: "platform"
 sourceType: "helm-registry"
 name: "mariadb"
+sourceRepo: oci://registry-1.docker.io/bitnamicharts/mariadb
