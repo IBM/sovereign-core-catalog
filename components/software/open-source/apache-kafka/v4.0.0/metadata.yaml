@@ -35,6 +35,31 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry-1.docker.io/bitnamicharts/kafka"
+  catalog:
+    brokerType: platform
+    sourceType: helm-registry # if no chart dir, requires sourceRepo and sourcePath
+    sourceRepo: oci://registry-1.docker.io/bitnamicharts/kafka
+    name: kafka
+    images:
+      # kafka — main broker workload
+      - source: docker.io/bitnamilegacy/kafka:4.0.0-debian-12-r10
+        destination: docker.io/bitnami/kafka:4.0.0-debian-12-r10
+
+      # os-shell — init container (volume permissions, readiness helpers)
+      - source: docker.io/bitnamilegacy/os-shell:12-debian-12-r51
+        destination: docker.io/bitnami/os-shell:12-debian-12-r51
+
+      # kubectl — init container (auto-discovery)
+      - source: docker.io/bitnamilegacy/kubectl:1.33.4-debian-12-r0
+        destination: docker.io/bitnami/kubectl:1.33.4-debian-12-r0
+
+      # jmx-exporter — Prometheus metrics sidecar (metrics.jmx.enabled=true)
+      - source: docker.io/bitnamilegacy/jmx-exporter:1.4.0-debian-12-r0
+        destination: docker.io/bitnami/jmx-exporter:1.4.0-debian-12-r0
   links:
     docsUrl: "https://kafka.apache.org/documentation/"
     productPageUrl: "https://kafka.apache.org"
+brokerType: platform
+sourceType: helm-registry # if no chart dir, requires sourceRepo and sourcePath
+sourceRepo: oci://registry-1.docker.io/bitnamicharts/kafka
+name: kafka
