@@ -1,0 +1,20 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "intel"
+  displayName: "Intel"
+  classification: "Hardware/AI Accelerator"
+  aboutDescription: "Provides hardware-rooted confidential computing ensuring data, models, and AI workloads remain protected at all times."
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+    registrationNumber: "US-INTEL-0000002488"
+  contact:
+    website: "https://www.intel.com"
+    partnerEmail: "sovereign@intel.com"
+  certifications:
+    - framework: "ISO-27001"
+      status: "Active"
+    - framework: "SOC2"
+      status: "Active"

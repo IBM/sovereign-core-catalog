@@ -31,13 +31,21 @@
           "type": "string",
           "format": "uri",
           "description": "URL to the company logo image."
+        },
+        "aboutDescription": {
+          "type": "string",
+          "description": "Short description of the organisation."
+        },
+        "classification": {
+          "type": "string",
+          "description": "Classification label for the organisation."
         }
       },
       "additionalProperties": false
     },
     "spec": {
       "type": "object",
-      "required": ["jurisdiction"],
+      "required": ["jurisdiction", "contact"],
       "properties": {
         "jurisdiction": {
           "type": "object",
@@ -60,6 +68,7 @@
         },
         "contact": {
           "type": "object",
+          "required": ["website"],
           "properties": {
             "website": {
               "type": "string",

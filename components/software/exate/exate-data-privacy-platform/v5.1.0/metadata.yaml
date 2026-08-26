@@ -11,9 +11,9 @@ metadata:
   industries: ["government", "bfsi", "healthcare", "telco"]
   intendedUsers: ["Compliance officers", "Data architects", "Security architects", "Platform engineers"]
   version: "5.1.0"
+  availabilityState: "available_central_it"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
-  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -37,3 +37,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry.exate.com/charts/exate-platform:5.1.0"
+  links:
+    docsUrl: "https://exate.com/resources/"
+    productPageUrl: "https://exate.com/platform/"

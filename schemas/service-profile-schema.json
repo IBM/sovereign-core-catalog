@@ -16,7 +16,7 @@
     },
     "metadata": {
       "type": "object",
-      "required": ["companyRef", "name", "lifecycleStatus", "storefrontVisibility"],
+      "required": ["companyRef", "name", "shortDescription", "fullDescription", "sovereignCoreRelevance", "industries", "intendedUsers", "availabilityState", "lifecycleStatus", "storefrontVisibility"],
       "properties": {
         "companyRef": {
           "type": "string",
@@ -157,6 +157,23 @@
             }
           },
           "additionalProperties": true
+        },
+        "links": {
+          "type": "object",
+          "required": ["productPageUrl"],
+          "properties": {
+            "docsUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Public product documentation URL."
+            },
+            "productPageUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Canonical public product page URL."
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

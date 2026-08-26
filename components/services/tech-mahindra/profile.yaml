@@ -8,9 +8,9 @@ metadata:
   sovereignCoreRelevance: "Provides the human and operational layer for sovereign deployments — delivering staff-cleared managed operations, on-premises LLMOps, and automated compliance evidence packs that keep control, data, and audit trails within the sovereign boundary."
   industries: ["government", "bfsi", "healthcare", "energy", "telco"]
   intendedUsers: ["Platform teams", "Compliance officers", "Infrastructure teams", "IT operations"]
+  availabilityState: "available_central_it"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
-  availabilityState: "available_central_it"
 spec:
   serviceType: "ManagedOperations"
   additionalServiceTypes:
@@ -44,3 +44,6 @@ spec:
       sovereignDataPipelineManagement: true
       supportedFrameworks: ["PyTorch", "TensorFlow", "LangChain", "IBM watsonx"]
       complianceReporting: "Automated BSI-C5 and ISO-27001 evidence packs; DSLM data lifecycle audit trails"
+  links:
+    docsUrl: "https://www.techmahindra.com/en-in/services/technology/orion-platform/"
+    productPageUrl: "https://www.techmahindra.com/en-in/services/technology/orion-platform/"

@@ -11,9 +11,9 @@ metadata:
   industries: ["government", "bfsi", "healthcare"]
   intendedUsers: ["Data scientists", "Compliance officers", "Security architects", "Data architects"]
   version: "3.2.0"
+  availabilityState: "available_central_it"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
-  availabilityState: "available_central_it"
 spec:
   openSource:
     enabled: false
@@ -37,3 +37,6 @@ spec:
   deployment:
     type: "Helm"
     repository: "oci://registry.dualitytech.com/charts/secureplus:3.2.0"
+  links:
+    docsUrl: "https://dualitytech.com/platform/secureplus/"
+    productPageUrl: "https://dualitytech.com/platform/secureplus/"

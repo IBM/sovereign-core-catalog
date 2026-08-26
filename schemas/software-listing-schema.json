@@ -16,7 +16,7 @@
     },
     "metadata": {
       "type": "object",
-      "required": ["companyRef", "vendor", "product", "version", "lifecycleStatus", "storefrontVisibility"],
+      "required": ["companyRef", "vendor", "product", "version", "shortDescription", "fullDescription", "sovereignCoreRelevance", "industries", "intendedUsers", "category", "availabilityState", "lifecycleStatus", "storefrontVisibility"],
       "properties": {
         "companyRef": {
           "type": "string",
@@ -222,6 +222,7 @@
         },
         "links": {
           "type": "object",
+          "required": ["productPageUrl"],
           "properties": {
             "docsUrl": {
               "type": "string",

@@ -4,5 +4,9 @@ metadata:
   slug: "open-source"
   displayName: "Open Source Community"
 spec:
+  jurisdiction:
+    corporateHQ: "Global"
+    ultimateParentCompanyHQ: "Global"
   contact:
     website: "https://opensource.org"
+    partnerEmail: "info@opensource.org"

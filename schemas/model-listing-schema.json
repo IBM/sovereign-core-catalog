@@ -16,7 +16,7 @@
     },
     "metadata": {
       "type": "object",
-      "required": ["companyRef", "vendor", "product", "version", "lifecycleStatus", "storefrontVisibility"],
+      "required": ["companyRef", "vendor", "product", "version", "shortDescription", "fullDescription", "sovereignCoreRelevance", "industries", "intendedUsers", "category", "availabilityState", "lifecycleStatus", "storefrontVisibility"],
       "properties": {
         "companyRef": {
           "type": "string",
@@ -34,6 +34,41 @@
         "version": {
           "type": "string",
           "description": "Model version identifier."
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "Short storefront summary for cards and carousel."
+        },
+        "fullDescription": {
+          "type": "string",
+          "description": "Longer model description for detail views."
+        },
+        "sovereignCoreRelevance": {
+          "type": "string",
+          "description": "Explanation of why this offering is relevant in sovereign or regulated environments."
+        },
+        "industries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["government", "bfsi", "healthcare", "telco", "energy", "sovereign_ai", "vmware_modernization"]
+          },
+          "description": "Industry segments this offering is intended for."
+        },
+        "intendedUsers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Primary user roles or personas for this offering (e.g. Data scientists, AI engineers, Compliance officers, Platform engineers)."
+        },
+        "category": {
+          "type": "string",
+          "enum": ["text_generation", "embeddings", "vision", "speech", "multimodal", "code_generation"],
+          "description": "Primary model capability category."
+        },
+        "availabilityState": {
+          "type": "string",
+          "enum": ["available_central_it", "byop_ready", "technical_assets_available", "discoverable_only"],
+          "description": "Semantic availability state for storefront display and fulfillment handling."
         },
         "lifecycleStatus": {
           "type": "string",
@@ -132,6 +167,23 @@
             "servingEngine": {
               "type": "string",
               "description": "Inference serving engine (e.g., vLLM, TGI, Triton)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "links": {
+          "type": "object",
+          "required": ["productPageUrl"],
+          "properties": {
+            "docsUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Public product documentation URL."
+            },
+            "productPageUrl": {
+              "type": "string",
+              "format": "uri",
+              "description": "Canonical public product page URL."
             }
           },
           "additionalProperties": false
