@@ -1,10 +1,10 @@
-# Sovereign Core Catalog
+# IBM Sovereign Core public catalog
 
 ---
 
 ## Table of contents
 
-1. [What is the Sovereign Core Catalog?](#what-is-the-sovereign-core-catalog)
+1. [What is the IBM Sovereign Core public catalog?](#what-is-the-ibm-sovereign-core-public-catalog)
 2. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
 3. [Repository structure](#repository-structure)
 4. [Asset lifecycle states](#asset-lifecycle-states)
@@ -12,9 +12,9 @@
 
 ---
 
-## What is the Sovereign Core Catalog?
+## What is the IBM Sovereign Core public catalog?
 
-A governed, Git-backed catalog powering the Sovereign Core platform catalog. Partner listings have historically lived in spreadsheets and wikis — stale, unvalidated, and with no way to verify sovereignty claims programmatically. The Sovereign Core Catalog solves this with a public Git repository on **github.com/IBM** where all catalog entries are structured YAML validated by CI on every PR. Partners contribute via pull request, IBM reviews and merges, and the repo feeds both the Public Catalog UI and the deployment engine, providing a governed onboarding path for partners and ISVs.
+A governed, Git-backed public catalog powering the Sovereign Core platform catalog. Partner listings have historically lived in spreadsheets and wikis — stale, unvalidated, and with no way to verify sovereignty claims programmatically. The Sovereign Core Catalog solves this with a public Git repository on **github.com/IBM** where all catalog entries are structured YAML validated by CI on every PR. Partners contribute via pull request, IBM reviews and merges, and the repo feeds both the Public Catalog UI and the deployment engine, providing a governed onboarding path for partners and ISVs.
 
 > **Design principle:** The repo stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, no product code. All actual artifacts remain in vendor-owned OCI registries.
 
@@ -25,7 +25,7 @@ A governed, Git-backed catalog powering the Sovereign Core platform catalog. Par
 | Catalog entries | 43 |
 | JSON schemas | 6 |
 
-Browse the public catalog at [www.ibm.com/products/sovereign-core/catalog](https://www.ibm.com/products/sovereign-core/catalog).
+Browse the public catalog at [www.ibm.com/products/sovereign-core/catalog](https://www.ibm.com/products/sovereign-core/catalog)
 
 ---
 
