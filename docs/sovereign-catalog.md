@@ -1,20 +1,20 @@
-# Sovereign Core Store
+# Sovereign Core Catalog
 
 ---
 
-## Table of Contents
+## Table of contents
 
-1. [What is the Sovereign Store?](#what-is-the-sovereign-store)
-2. [The 5 Pillars of Sovereign Attributes](#the-5-pillars-of-sovereign-attributes)
-3. [Repository Structure](#repository-structure)
-4. [Asset Lifecycle States](#asset-lifecycle-states)
-5. [Contribution Flow & Lifecycle](#contribution-flow--lifecycle)
+1. [What is the Sovereign Core Catalog?](#what-is-the-sovereign-core-catalog)
+2. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
+3. [Repository structure](#repository-structure)
+4. [Asset lifecycle states](#asset-lifecycle-states)
+5. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
 
 ---
 
-## What is the Sovereign Store?
+## What is the Sovereign Core Catalog?
 
-A governed, Git-backed catalog powering the Sovereign Core platform storefront. Partner listings have historically lived in spreadsheets and wikis — stale, unvalidated, and with no way to verify sovereignty claims programmatically. The Sovereign Store solves this with a public Git repository on **github.com/IBM** where all catalog entries are structured YAML validated by CI on every PR. Partners contribute via pull request, IBM reviews and merges, and the repo feeds both the storefront UI and the deployment engine, providing a governed onboarding path for partners and ISVs.
+A governed, Git-backed catalog powering the Sovereign Core platform catalog. Partner listings have historically lived in spreadsheets and wikis — stale, unvalidated, and with no way to verify sovereignty claims programmatically. The Sovereign Core Catalog solves this with a public Git repository on **github.com/IBM** where all catalog entries are structured YAML validated by CI on every PR. Partners contribute via pull request, IBM reviews and merges, and the repo feeds both the Public Catalog UI and the deployment engine, providing a governed onboarding path for partners and ISVs.
 
 > **Design principle:** The repo stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, no product code. All actual artifacts remain in vendor-owned OCI registries.
 
@@ -25,39 +25,38 @@ A governed, Git-backed catalog powering the Sovereign Core platform storefront. 
 | Catalog entries | 43 |
 | JSON schemas | 6 |
 
+Browse the public catalog at [www.ibm.com/products/sovereign-core/catalog](https://www.ibm.com/products/sovereign-core/catalog).
+
 ---
 
-## The 5 Pillars of Sovereign Attributes
+## The 5 pillars of sovereign attributes
 
-Metadata fields are architectural constraints — not informational labels. CI rejects entries that fail any pillar.
-
-### Pillar 1 — Sovereignty & Legal Jurisdiction
+### Pillar 1 — Sovereignty & legal jurisdiction
 - Corporate HQ & ultimate parent HQ
 - Air-gap capability declaration
 - External dependency endpoints (must be empty or redirectable)
 - SBOM format & base image provenance
 
-### Pillar 2 — Kubernetes Architecture & Day-2
+### Pillar 2 — Kubernetes architecture & day-2
 - Delivery mechanism (Helm / Operator / Kustomize)
-- Operator maturity level (L1–L5)
 - Target Kubernetes & OCP versions
 - CSI access modes & snapshot support
 - Node selectors & resource guarantees
 
-### Pillar 3 — Security & Infrastructure Isolation
+### Pillar 3 — Security & infrastructure isolation
 - Pod Security Standard (`restricted` / `baseline` / `privileged`)
 - Read-only root filesystem
 - RBAC scope (namespace-isolated vs cluster-wide)
 - FIPS 140-3 compliance
 - KMS / HSM integration
 
-### Pillar 4 — Compliance, Auditing & Certification
+### Pillar 4 — Compliance, auditing & certification
 - Framework attestations (BSI-C5, SecNumCloud, FedRAMP, Gaia-X)
 - Verifiable credentials from third-party auditors
 - Structured audit log output (stdout/stderr JSON)
 - OpenTelemetry / FluentBit SIEM mapping
 
-### Pillar 5 — Ecosystem & Commercial Models
+### Pillar 5 — Ecosystem & commercial models
 - Offline / disconnected licensing (BYOL or Marketplace-Metered)
 - Offline licence validation mechanism
 - Support personnel security clearance level
@@ -67,12 +66,12 @@ Metadata fields are architectural constraints — not informational labels. CI r
 
 ---
 
-## Repository Structure
+## Repository structure
 
 Two-step model: company identity first, component listing second.
 
 ```
-sovereign-store/
+sovereign-core-catalog/
 ├── .github/workflows/            # CI validation — runs on every PR
 ├── companies/                    # WHO you are — one profile per organisation
 │   └── <company-slug>/
@@ -102,9 +101,9 @@ sovereign-store/
 
 ---
 
-## Asset Lifecycle States
+## Asset lifecycle states
 
-Every catalog entry carries a `lifecycleStatus` field that controls storefront visibility and deployment eligibility. Transitions are enforced by the CI pipeline — a PR cannot set `approved` directly without passing through `review` first.
+Every catalog entry carries a `lifecycleStatus` field that controls the Public Catalog visibility and deployment eligibility. Transitions are enforced by the CI pipeline — a PR cannot set `approved` directly without passing through `review` first.
 
 ```
                     ┌─────────────────────────────────────────────────────┐
@@ -126,15 +125,15 @@ Every catalog entry carries a `lifecycleStatus` field that controls storefront v
 |---|---|---|---|
 | `draft` | Hidden | No | Entry submitted, CI validation pending |
 | `review` | Hidden | No | CI passed, awaiting IBM reviewer approval |
-| `approved` | Public | Yes | Merged to main, visible in storefront |
+| `approved` | Public | Yes | Merged to main, visible in the Public Catalog |
 | `deprecated` | Visible with warning | Discouraged | End-of-life signalled, successor available |
 | `retired` | Hidden | No | Removed from active catalog, retained for audit |
 
 ---
 
-## Contribution Flow & Lifecycle
+## Contribution flow & lifecycle
 
-### Asset Lifecycle States
+### Asset lifecycle states
 
 ```
 Draft → Review → Approved → Deprecated → Retired
@@ -145,9 +144,9 @@ PR       for                              for audit
          review
 ```
 
-### Three-Stage Partner Contribution
+### Three-stage partner contribution
 
-**Stage 1 — Join: submit your Company Profile**
+**Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
 
 **Stage 2 — List: propose a component**
@@ -157,4 +156,3 @@ Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → val
 New version? Add a new `<version>/` folder via PR. Deprecating? Update `lifecycleStatus: deprecated`. Withdrawing? Set `lifecycleStatus: retired`. All changes via PR — never direct push to main.
 
 > **CI validation runs automatically on every PR** — schema correctness, required fields, taxonomy vocabulary, secrets scan, broken reference check. Human IBM review only after CI passes.
-
