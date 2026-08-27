@@ -1,0 +1,53 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: ServiceProfile
+metadata:
+  companyRef: "companies/ibm"
+  name: "IBM Expert Labs - IBM Sovereign Core Adoption Assessment"
+  shortDescription: "Assess your current sovereignty posture and create a practical roadmap for controlling data, operations, technology, applications, and AI within the required jurisdictional boundaries."
+  fullDescription: "IBM Expert Labs works collaboratively with business and technology stakeholders to capture the current environment, identify and prioritize sovereignty risks and operational dependencies, and align regulatory, infrastructure, workload, and AI requirements with IBM Sovereign Core capabilities. The assessment focuses on challenges such as vendor lock-in, data residency, operational control, regulatory compliance, and AI governance, helping organizations prioritize initiatives that reduce risk and improve control. The engagement produces a target sovereign architecture, a risk and compliance roadmap, and a phased adoption strategy designed to accelerate the implementation of IBM Sovereign Core. Clients gain a clear understanding of their current sovereignty posture, recommended remediation actions, and a practical plan for operationalizing sovereign services, continuous compliance, and governed AI within their required jurisdictional boundaries."
+  sovereignCoreRelevance: "Provides structured assessment and roadmapping expertise to help organizations identify sovereignty gaps, align with IBM Sovereign Core capabilities, and prioritize regulatory, infrastructure, and AI governance initiatives within their jurisdictional boundaries."
+  industries: ["government", "bfsi", "healthcare", "energy", "telco"]
+  intendedUsers: ["Business stakeholders", "Technology stakeholders", "Compliance officers", "Risk managers", "Enterprise architects"]
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  serviceType: "AuditAndCompliance"
+  additionalServiceTypes:
+    - "SecurityConsulting"
+    - "SystemIntegration"
+  sovereignty:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+    staffClearanceLevel: "IBM Expert Labs staff subject to IBM's global security and background check policies; country-specific staffing available upon request"
+  certifications:
+    - framework: "FedRAMP-High"
+      status: "Active"
+    - framework: "ISO-27001"
+      status: "Active"
+    - framework: "SOC2"
+      status: "Active"
+    - framework: "BSI-C5"
+      status: "Active"
+  capabilities:
+    consulting:
+      engagementType: "Assessment"
+      deliverables:
+        - "Target sovereign architecture"
+        - "Risk and compliance roadmap"
+        - "Phased adoption strategy for IBM Sovereign Core"
+      focusAreas:
+        - "Vendor lock-in"
+        - "Data residency"
+        - "Operational control"
+        - "Regulatory compliance"
+        - "AI governance"
+      contacts:
+        - name: "Apostolos Dailianas"
+          email: "apostolos.dailianas3@ibm.com"
+        - name: "Saumil Patel"
+          email: "saumilpp@us.ibm.com"
+        - name: "Alecia Ramsay"
+          email: "aleciarm@us.ibm.com"
+  links:
+    productPageUrl: "https://www.ibm.com/products/expertlabs"
