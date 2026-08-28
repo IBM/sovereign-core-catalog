@@ -1,1 +1,1 @@
-docs/sovereign-store.md
+docs/sovereign-catalog.md
