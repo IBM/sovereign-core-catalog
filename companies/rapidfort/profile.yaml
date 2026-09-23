@@ -1,0 +1,16 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "rapidfort"
+  displayName: "RapidFort, Inc."
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+    registrationNumber: "US-RAPIDFORT-3919011"
+  contact:
+    website: "https://www.rapidfort.com"
+    partnerEmail: "sovereign@rapidfort.com"
+  certifications:
+    - framework: "SOC2"
+      status: "Active"
