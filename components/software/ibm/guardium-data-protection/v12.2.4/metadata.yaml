@@ -11,7 +11,7 @@ metadata:
   industries: ["bfsi", "government", "healthcare", "energy”, “manufacturing”, “regulated industries”]
   intendedUsers:
     [“CISO”, “Security Analyst”, “Data architects", "Compliance officers", "Database administrators"]
-  version: "12.2.3”
+  version: "12.2.4”
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
   availabilityState: "available_central_it"
