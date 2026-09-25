@@ -11,7 +11,7 @@ metadata:
   industries: ["government", "bfsi", "healthcare", "energy", "telco"]
   intendedUsers:
     ["SOC analysts", "Security engineers", "Incident responders", "Compliance officers"]
-  version: "7.5.0"
+  version: "7.6.0"
   lifecycleStatus: "approved"
   storefrontVisibility: "public"
   availabilityState: "available_central_it"
@@ -36,8 +36,8 @@ spec:
     readOnlyRootFilesystem: true
     kmsIntegration: true
   deployment:
-    type: "Operator"
-    repository: "oci://icr.io/cpopen/ibm-qradar-operator-bundle:7.5.0"
+    type: "Helm"
+    repository: "oci://icr.io/cpopen/charts/ibm-qradar:7.6.0"
   links:
     docsUrl: "https://www.ibm.com/docs/en/qsip/7.5"
     productPageUrl: "https://www.ibm.com/products/qradar-siem"
