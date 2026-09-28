@@ -1,0 +1,43 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/ibm"
+  vendor: "International Business Machines Corporation"
+  product: "IBM Guardium Data Protection"
+  shortDescription: “IBM Guardian Data Protection Monitors and protects sensitive data across databases, data warehouses, file systems, mainframes, and cloud data stores. Enables real-time activity monitoring, threat detection, and compliance reporting to support sovereign operations and regulatory requirements."
+  fullDescription: "IBM Guardium Data Protection complements IBM Sovereign Core by extending sovereign security and governance to the sensitive data layer. Within its environment, IBM Guardium Data Protection provides continuous monitoring and protection for structured and unstructured data across heterogeneous databases, data warehouses, big-data platforms, cloud environments, and file systems. It gives security teams granular visibility into database transactions and sensitive-data activity, including activity performed by privileged users and access occurring indirectly through enterprise applications. Guardium can automatically locate databases, discover and classify sensitive information, assess database vulnerabilities and configuration flaws, monitor database changes, and enforce policies for sensitive-data access and privileged-user actions. Guardium also centralizes audit information from large numbers of heterogeneous systems and databases in a secure audit repository. Its compliance workflow capabilities automate audit activities such as report creation and distribution, as well as the capture of comments and signatures. This combination of detailed activity monitoring, policy enforcement, centralized audit records, and automated reporting can provide data-focused evidence that supports the broader governance and continuous-compliance objectives of a Sovereign Core environment. Together, the capabilities create complementary layers of control. IBM Sovereign Core establishes the sovereign operational foundation, customer authority, infrastructure services, service catalog, and compliance-governance model. Guardium adds visibility and control over how sensitive data is discovered, accessed, changed, and audited across supported data environments."
+  sovereignCoreRelevance: "Strengthens sovereign operations with sensitive-data discovery, continuous activity monitoring, threat detection, policy enforcement, and centralized compliance auditing across heterogeneous data environments."
+  category: "data"
+  industries: ["bfsi", "government", "healthcare", "energy”, “manufacturing”, “regulated industries”]
+  intendedUsers:
+    [“CISO”, “Security Analyst”, “Data architects", "Compliance officers", "Database administrators"]
+  version: "12.2.4”
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  openSource:
+    enabled: false
+    license: "IBM International Program License Agreement"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  architecture:
+    format: "VM"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce", "ReadWriteMany"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "privileged"
+    requiresClusterAdmin: true
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "https://github.com/IBM/gdp-sovereign-core"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/gdp/12.x?topic=overview-guardium"
+    productPageUrl: “https://www.ibm.com/products/guardium-data-protection”
