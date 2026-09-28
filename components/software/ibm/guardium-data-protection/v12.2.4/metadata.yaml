@@ -37,7 +37,7 @@ spec:
     kmsIntegration: false
   deployment:
     type: "Helm"
-    repository: "https://github.ibm.com/Guardium/gdp-sovereign-core"
+    repository: "https://github.com/IBM/gdp-sovereign-core"
   links:
     docsUrl: "https://www.ibm.com/docs/en/gdp/12.x?topic=overview-guardium"
     productPageUrl: “https://www.ibm.com/products/guardium-data-protection”
