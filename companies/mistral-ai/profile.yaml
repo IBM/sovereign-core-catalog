@@ -5,8 +5,8 @@ metadata:
   displayName: "Mistral AI"
 spec:
   jurisdiction:
-    corporateHQ: "EU/France"
-    ultimateParentCompanyHQ: "EU/France"
+    corporateHQ: "France"
+    ultimateParentCompanyHQ: "France"
   contact:
     website: "https://mistral.ai/"
   certifications:

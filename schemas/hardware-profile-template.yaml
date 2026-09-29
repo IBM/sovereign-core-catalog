@@ -1,0 +1,158 @@
+# ============================================================
+# HARDWARE PROFILE TEMPLATE
+# File location: components/hardware/<your-company-slug>/<product-slug>/profile.yaml
+# Schema:        schemas/hardware-profile-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised; reviewers may request it
+#   [OPTIONAL]    Include only when applicable
+#
+# DIRECTORY NAMING
+#   - <slug>         : your company slug (must match companies/ folder)
+#   - <product-slug> : lowercase, hyphen-separated product identifier
+#   Hardware profiles have NO version directory — one profile.yaml per product.
+#   Example path: components/hardware/acme-corp/acme-server-x100/profile.yaml
+#
+# PREREQUISITES
+#   Your company profile must be merged into main before this
+#   PR can be reviewed. See companies/<slug>/profile.yaml.
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: HardwareProfile
+
+# ------------------------------------------------------------
+# METADATA SECTION
+# Storefront identity, discoverability, and lifecycle fields.
+# ------------------------------------------------------------
+metadata:
+  # [MANDATORY] Path to your merged company profile
+  # Pattern: companies/<your-company-slug>
+  companyRef: "companies/<your-company-slug>"
+
+  # [MANDATORY] Legal entity name of the hardware vendor
+  # Should match metadata.displayName in your company profile
+  vendor: "<Legal Entity Name>"
+
+  # [MANDATORY] Product display name shown on the storefront
+  product: "<Product Name>"
+
+  # [MANDATORY] 1–2 sentence summary shown on storefront cards and carousels
+  shortDescription: "<Short, punchy summary of what the hardware does and for whom.>"
+
+  # [MANDATORY] Full product description for the detail view
+  # Cover: capabilities, form factor, integration, use cases, sovereign validation status
+  fullDescription: "<Detailed description covering specifications, deployment model,
+    validated software stack, integrations, and sovereign use cases.>"
+
+  # [MANDATORY] Why this hardware is relevant in sovereign or regulated environments
+  # Focus on: air-gap compatibility, supply chain attestation, confidential computing,
+  #           absence of external dependencies at runtime
+  sovereignCoreRelevance: "<Explanation of why this hardware is relevant to sovereign
+    or regulated infrastructure customers.>"
+
+  # [MANDATORY] Hardware category
+  # Allowed values (choose ONE):
+  #   GPU | CPU | Storage | Networking | Server
+  category: "<category>"
+
+  # [MANDATORY] Target industry segments (list ALL that apply)
+  # Allowed values:
+  #   government | bfsi | healthcare | telco | energy | sovereign_ai | vmware_modernization
+  industries:
+    - "<industry>"
+    # - "<industry>"
+
+  # [MANDATORY] Primary user roles or personas who will use this hardware
+  # Free-text strings — common examples:
+  #   "AI engineers", "Platform engineers", "Infrastructure teams", "Data scientists"
+  intendedUsers:
+    - "<Role>"
+    # - "<Role>"
+
+  # [MANDATORY] Semantic availability state for storefront display and fulfilment handling
+  # Allowed values (choose ONE):
+  #   available_central_it       — procurable via central IT
+  #   byop_ready                 — customer sources hardware independently; sovereign-validated
+  #   technical_assets_available — validation assets exist; procurement is direct with vendor
+  #   discoverable_only          — listing only; customers must contact vendor directly
+  availabilityState: "<availabilityState>"
+
+  # [MANDATORY] Current lifecycle state of this catalog entry
+  # Allowed values: draft | review | approved | deprecated | retired
+  # Use "draft" when submitting — IBM reviewers promote to "approved" on merge.
+  lifecycleStatus: "draft"
+
+  # [MANDATORY] Controls whether this entry appears in the public storefront
+  # Allowed values: public | unlisted | private
+  storefrontVisibility: "public"
+
+# ------------------------------------------------------------
+# SPEC SECTION
+# Jurisdiction, hardware capabilities, and K8s integration.
+# ------------------------------------------------------------
+spec:
+  # ----------------------------------------------------------
+  # JURISDICTION (mandatory block)
+  # ----------------------------------------------------------
+  jurisdiction:
+    # [MANDATORY] Country/region where the hardware vendor is headquartered
+    # Format examples: "USA", "UK", "Japan", "South Korea"
+    hq: "<Country/Region>"
+
+    # [RECOMMENDED] Supply chain transparency statement
+    # Describe export control classification, country of manufacture, or ITAR status
+    # supplyChainAttestation: "Manufactured in <Country>; subject to <export regime> controls."
+
+  # ----------------------------------------------------------
+  # CAPABILITIES (mandatory block — add any hardware-specific fields freely)
+  # The schema allows additional properties here; include what is relevant.
+  # ----------------------------------------------------------
+  capabilities:
+    # [OPTIONAL] Memory specification
+    # memory: "192GB HBM3"
+
+    # [OPTIONAL] Form factor (e.g. PCIe, SXM, U.2, 2U server)
+    # formFactor: "PCIe"
+
+    # [OPTIONAL] Cooling requirement
+    # cooling: "Air-cooled (passive heatsink)"
+
+    # [OPTIONAL] Confidential computing support
+    # confidentialComputing:
+    #   supported: true
+    #   technology: "AMD SEV-SNP"   # or "Intel TDX", "ARM CCA", etc.
+
+    # [OPTIONAL] Any other hardware-specific capability fields (free-form)
+    # gpuArchitecture: "gfx950"
+    # tflopsFloat16: 1300
+
+  # ----------------------------------------------------------
+  # KUBERNETES INTEGRATION (optional block — remove if not applicable)
+  # Include when the hardware has a validated K8s device plugin or operator.
+  # The schema allows additional properties here.
+  # ----------------------------------------------------------
+  # k8sIntegration:
+  #   # [OPTIONAL] OCI URI for the Kubernetes device plugin image
+  #   devicePluginOci: "oci://registry.vendor.com/plugins/device-plugin:v1.0.0"
+  #
+  #   # [OPTIONAL] Kubernetes device resource name
+  #   deviceResource: "vendor.com/gpu"
+  #
+  #   # [OPTIONAL] Any additional K8s integration fields (free-form)
+  #   kmmRequired: false
+
+  # ----------------------------------------------------------
+  # LINKS (optional block — remove entirely if not applicable)
+  # ----------------------------------------------------------
+  # links:
+  #   # [MANDATORY within this block] Canonical public product page URL
+  #   productPageUrl: "https://www.vendor.com/products/my-hardware"
+  #
+  #   # [OPTIONAL] Public documentation or datasheet URL
+  #   docsUrl: "https://docs.vendor.com/my-hardware"

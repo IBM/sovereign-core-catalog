@@ -46,7 +46,7 @@ metadata:
   displayName: "<Legal entity name>"             # required
 spec:
   jurisdiction:
-    corporateHQ: "<Country/Region>"              # required — e.g. "France/EU", "Germany/EU", "USA"
+    corporateHQ: "<Country/Region>"              # required — one of: "USA" | "UK" | "France" | "Germany" | "India" | "Canada" | "Australia" | "Japan"
     ultimateParentCompanyHQ: "<Country/Region>"  # required — set same as corporateHQ if independent
     registrationNumber: "<National reg. number>" # optional but strongly recommended
   contact:

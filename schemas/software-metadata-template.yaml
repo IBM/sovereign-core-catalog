@@ -1,0 +1,212 @@
+# ============================================================
+# SOFTWARE COMPONENT METADATA TEMPLATE
+# File location: components/software/<slug>/<product>/<version>/metadata.yaml
+# Schema:        schemas/software-listing-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised; reviewers may request it
+#   [OPTIONAL]    Include only when applicable
+#
+# PREREQUISITES
+#   Your company profile must be merged into main before this
+#   PR can be reviewed. See companies/<slug>/profile.yaml.
+#
+# DIRECTORY NAMING
+#   - <slug>    : your company slug (must match companies/ folder)
+#   - <product> : lowercase, hyphen-separated product name
+#   - <version> : semantic version directory, e.g. v1.2.3
+#   Example path: components/software/acme-corp/my-app/v2.0.1/metadata.yaml
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: SoftwareListing
+
+# ------------------------------------------------------------
+# METADATA SECTION
+# Storefront identity, discoverability, and lifecycle fields.
+# ------------------------------------------------------------
+metadata:
+  # [MANDATORY] Path to your merged company profile
+  # Pattern: companies/<your-company-slug>
+  companyRef: "companies/<your-company-slug>"
+
+  # [MANDATORY] Legal entity name of the software vendor
+  # Should match metadata.displayName in your company profile
+  vendor: "<Legal Entity Name>"
+
+  # [MANDATORY] Product display name shown on the storefront
+  product: "<Product Name>"
+
+  # [MANDATORY] Semantic version — must match the version directory name (without the 'v' prefix)
+  # Example: "2.0.1" for directory v2.0.1/
+  version: "<MAJOR.MINOR.PATCH>"
+
+  # [MANDATORY] 1–2 sentence summary shown on storefront cards and carousels
+  shortDescription: "<Short, punchy summary of what the product does and for whom.>"
+
+  # [MANDATORY] Full product description for the detail view
+  # Cover: capabilities, deployment model, security posture, integrations, use cases, benefits
+  fullDescription: "<Detailed product description covering capabilities, deployment,
+    security, integrations, and primary use cases.>"
+
+  # [MANDATORY] Why this product is relevant in sovereign or regulated environments
+  # Focus on: data residency, air-gap support, compliance, supply-chain transparency
+  sovereignCoreRelevance: "<Explanation of why this offering is relevant to sovereign
+    or regulated infrastructure customers.>"
+
+  # [MANDATORY] Primary storefront category
+  # Allowed values (choose ONE):
+  #   ai | data | security | observability | application_platform | automation | infrastructure
+  category: "<category>"
+
+  # [MANDATORY] Target industry segments (list ALL that apply)
+  # Allowed values:
+  #   government | bfsi | healthcare | telco | energy | sovereign_ai | vmware_modernization
+  industries:
+    - "<industry>"
+    # - "<industry>"
+
+  # [MANDATORY] Primary user roles or personas who will use this product
+  # Free-text strings — common examples:
+  #   "Data scientists", "Platform engineers", "Compliance officers",
+  #   "Security architects", "Data architects", "AI engineers"
+  intendedUsers:
+    - "<Role>"
+    # - "<Role>"
+
+  # [MANDATORY] Semantic availability state for storefront display and fulfilment handling
+  # Allowed values (choose ONE):
+  #   available_central_it    — can be provisioned by central IT on behalf of customers
+  #   byop_ready              — customer brings their own platform; product is ready to deploy
+  #   technical_assets_available — deployment assets exist but no automated provisioning
+  #   discoverable_only       — listing only; customers must contact vendor directly
+  availabilityState: "<availabilityState>"
+
+  # [MANDATORY] Current lifecycle state of this catalog entry
+  # Allowed values: draft | review | approved | deprecated | retired
+  # Use "draft" when submitting — IBM reviewers promote to "approved" on merge.
+  lifecycleStatus: "draft"
+
+  # [MANDATORY] Controls whether this entry appears in the public storefront
+  # Allowed values:
+  #   public    — visible to all customers
+  #   unlisted  — accessible by direct link only
+  #   private   — hidden from all customers
+  storefrontVisibility: "public"
+
+# ------------------------------------------------------------
+# SPEC SECTION
+# Technical architecture, security posture, and deployment.
+# ------------------------------------------------------------
+spec:
+  # ----------------------------------------------------------
+  # JURISDICTION (mandatory block)
+  # ----------------------------------------------------------
+  jurisdiction:
+    # [MANDATORY] Country/region where the product vendor is headquartered
+    # Allowed values: "USA" | "UK" | "France" | "Germany" | "India" | "Canada" | "Australia" | "Japan"
+    hq: "<Country/Region>"
+
+    # [OPTIONAL] Country/region of ultimate parent company
+    # ultimateParentCompanyHQ: "<Country/Region>"
+
+  # ----------------------------------------------------------
+  # ARCHITECTURE (mandatory block)
+  # ----------------------------------------------------------
+  architecture:
+    # [MANDATORY] Target deployment platform
+    # Allowed values: Kubernetes | VM | BareMetal
+    format: "<format>"
+
+    # [MANDATORY] Whether the software can run with zero internet connectivity
+    # Set false if external network access is required, then list endpoints below
+    airgapReady: <true|false>
+
+    # [OPTIONAL] Explicit allowlist of external domains required at runtime
+    # Use an empty array [] for fully air-gapped software
+    # dependencyEndpoints:
+    #   - "updates.vendor.com"
+    #   - "licence.vendor.com"
+
+    # [OPTIONAL] Persistent storage requirements
+    # storage:
+    #   # Allowed csiAccessModes values: ReadWriteOnce | ReadWriteMany | ReadOnlyMany
+    #   csiAccessModes:
+    #     - "ReadWriteOnce"
+    #   volumeSnapshotSupport: false
+
+    # [OPTIONAL] Tested Kubernetes and OpenShift version ranges
+    # kubernetesCompatibility:
+    #   minKubernetesVersionTested: "1.27"
+    #   maxKubernetesVersionTested: "1.30"
+    #   minOcpVersionTested: "4.13"
+
+  # ----------------------------------------------------------
+  # SECURITY (mandatory block)
+  # ----------------------------------------------------------
+  security:
+    # [MANDATORY] Kubernetes Pod Security Standard level applied to workload pods
+    # Allowed values: restricted | baseline | privileged
+    # Use "restricted" wherever possible — it is the most secure posture.
+    podSecurityStandard: "<restricted|baseline|privileged>"
+
+    # [OPTIONAL] Whether the software requires cluster-admin RBAC to install
+    # requiresClusterAdmin: false
+
+    # [OPTIONAL] Whether containers enforce a read-only root filesystem
+    # readOnlyRootFilesystem: true
+
+    # [OPTIONAL] Whether the software integrates with an external KMS/HSM
+    # kmsIntegration: false
+
+  # ----------------------------------------------------------
+  # DEPLOYMENT (mandatory block)
+  # ----------------------------------------------------------
+  deployment:
+    # [MANDATORY] Delivery mechanism for the software
+    # Allowed values: Helm | Operator | Kustomize | Manifest
+    type: "<type>"
+
+    # [MANDATORY] OCI registry URI for the deployment artifact
+    # This is YOUR external registry — artifacts are not hosted in this repo.
+    # Format: oci://<registry>/<path>:<tag>
+    # Example: "oci://registry.example.com/charts/my-app:2.0.1"
+    repository: "oci://<your-registry>/<path>:<version-tag>"
+
+  # ----------------------------------------------------------
+  # LINKS (optional block — remove entirely if not applicable)
+  # ----------------------------------------------------------
+  # links:
+  #   # [MANDATORY within this block] Canonical public product page URL
+  #   productPageUrl: "https://www.example.com/products/my-app"
+  #
+  #   # [OPTIONAL] Public documentation URL
+  #   docsUrl: "https://docs.example.com/my-app"
+
+  # ----------------------------------------------------------
+  # OPEN SOURCE (optional block — remove entirely if proprietary)
+  # ----------------------------------------------------------
+  # openSource:
+  #   # [MANDATORY within this block] Whether distributed under an open-source licence
+  #   enabled: true
+  #
+  #   # [MANDATORY within this block] SPDX licence identifier or proprietary licence name
+  #   # Examples: "Apache-2.0", "MIT", "GPL-3.0-only", "Acme Commercial License"
+  #   license: "Apache-2.0"
+  #
+  #   # [OPTIONAL] URL of the upstream open-source project repository
+  #   upstreamProject: "https://github.com/upstream-org/project"
+  #
+  #   # [OPTIONAL] Upstream version this build is based on
+  #   upstreamVersion: "2.0.0"
+  #
+  #   # [OPTIONAL] Summary of modifications made to the upstream project
+  #   modifications: "Added sovereign-specific configuration defaults and FIPS build flags."
+  #
+  #   # [OPTIONAL] Whether source is publicly accessible (even if not OSI-approved)
+  #   sourceAvailable: true

@@ -89,6 +89,7 @@
           "properties": {
             "hq": {
               "type": "string",
+              "enum": ["USA", "UK", "France", "Germany", "India", "Canada", "Australia", "Japan"],
               "description": "Country/region where the vendor is headquartered."
             },
             "supplyChainAttestation": {

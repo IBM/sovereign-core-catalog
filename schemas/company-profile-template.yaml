@@ -1,0 +1,76 @@
+# ============================================================
+# COMPANY PROFILE TEMPLATE
+# File location: companies/<your-company-slug>/profile.yaml
+# Schema:        schemas/company-profile-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised; reviewers may request it
+#   [OPTIONAL]    Include only when applicable
+#
+# SLUG RULES
+#   - Lowercase letters, digits, and hyphens only
+#   - Examples: acme-corp, my-org-eu
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: CompanyProfile
+
+metadata:
+  # [MANDATORY] URL-safe unique identifier — must match the folder name under companies/
+  slug: "<your-company-slug>"
+
+  # [MANDATORY] Full legal name of the organisation
+  displayName: "<Legal Entity Name>"
+
+  # [OPTIONAL] URL pointing to your company logo image
+  # logo: "https://www.example.com/assets/logo.png"
+
+  # [OPTIONAL] Short description of the organisation shown on the storefront
+  # aboutDescription: "One-sentence summary of what your organisation does."
+
+  # [OPTIONAL] Classification label (e.g. ISV, SI, OEM, GSI)
+  # classification: "ISV"
+
+spec:
+  jurisdiction:
+    # [MANDATORY] Country/region where the company is legally headquartered
+    # Used by customers to evaluate foreign extraterritorial law exposure
+    # (e.g. US CLOUD Act, UK IPA).
+    # Allowed values: "USA" | "UK" | "France" | "Germany" | "India" | "Canada" | "Australia" | "Japan"
+    corporateHQ: "<Country/Region>"
+
+    # [RECOMMENDED] Country/region of the topmost owner in the corporate tree
+    # If your company is independent, repeat the same value as corporateHQ
+    # ultimateParentCompanyHQ: "<Country/Region>"
+
+    # [RECOMMENDED] Official national company registration or VAT number
+    # Format examples: "UK-12345678", "US-AMD-0000002488", "FR-SIRET-12345678901234"
+    # registrationNumber: "<Registration Number>"
+
+  contact:
+    # [MANDATORY] Company public website URL (must begin with https://)
+    website: "https://www.example.com"
+
+    # [RECOMMENDED] Contact email for IBM Sovereign Catalog partnership enquiries
+    # partnerEmail: "sovereign@example.com"
+
+  # [OPTIONAL] List of certifications held by your organisation
+  # Remove this block entirely if you have no certifications to declare.
+  # Each entry requires both 'framework' and 'status'.
+  #
+  # Allowed status values: Active | In Progress | Expired | Pending
+  # Common framework values: ISO-27001, SOC2, BSI-C5, SecNumCloud,
+  #                           Gaia-X-Label-Level-3, FedRAMP, IRAP
+  certifications: []
+  # Example entries (uncomment and populate as needed):
+  #   - framework: "ISO-27001"
+  #     status: "Active"
+  #   - framework: "SOC2"
+  #     status: "Active"
+  #   - framework: "SecNumCloud"
+  #     status: "In Progress"

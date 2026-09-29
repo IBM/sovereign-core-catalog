@@ -53,10 +53,12 @@
           "properties": {
             "corporateHQ": {
               "type": "string",
+              "enum": ["USA", "UK", "France", "Germany", "India", "Canada", "Australia", "Japan"],
               "description": "Country/region where the company is legally headquartered."
             },
             "ultimateParentCompanyHQ": {
               "type": "string",
+              "enum": ["USA", "UK", "France", "Germany", "India", "Canada", "Australia", "Japan"],
               "description": "Country/region of the ultimate parent company (for ownership transparency)."
             },
             "registrationNumber": {

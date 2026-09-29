@@ -47,8 +47,8 @@ When reviewing a component, pay particular attention to the following fields. Th
 
 ```yaml
 jurisdiction:
-  corporateHQ: "France/EU"
-  ultimateParentCompanyHQ: "France/EU"
+  corporateHQ: "France"
+  ultimateParentCompanyHQ: "France"
 ```
 
 **Why it matters:** If the ultimate parent company is headquartered in a country with extraterritorial reach over data (e.g., the United States under the CLOUD Act, or the United Kingdom under the IPA), that company may be legally compelled to produce your data regardless of where it is physically stored. Review both fields, not just `corporateHQ`.

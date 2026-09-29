@@ -1,0 +1,180 @@
+# ============================================================
+# SERVICE PROFILE TEMPLATE
+# File location: components/services/<your-company-slug>/<service-slug>/metadata.yaml
+# Schema:        schemas/service-profile-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised; reviewers may request it
+#   [OPTIONAL]    Include only when applicable
+#
+# USE THIS TEMPLATE FOR
+#   Non-product offerings such as: managed hosting, system integration,
+#   security consulting, compliance auditing, training, and MSP operations.
+#   For deployable software products use software-metadata-template.yaml instead.
+#
+# DIRECTORY NAMING
+#   - <slug>         : your company slug (must match companies/ folder)
+#   - <service-slug> : lowercase, hyphen-separated service identifier
+#   Service profiles have NO version directory.
+#   Example path: components/services/acme-corp/acme-sovereign-hosting/metadata.yaml
+#
+# PREREQUISITES
+#   Your company profile must be merged into main before this
+#   PR can be reviewed. See companies/<slug>/profile.yaml.
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: ServiceProfile
+
+# ------------------------------------------------------------
+# METADATA SECTION
+# Storefront identity, discoverability, and lifecycle fields.
+# ------------------------------------------------------------
+metadata:
+  # [MANDATORY] Path to your merged company profile
+  # Pattern: companies/<your-company-slug>
+  companyRef: "companies/<your-company-slug>"
+
+  # [MANDATORY] Display name of the service offering
+  # This is not a 'vendor' field — it is the name of the specific service
+  name: "<Service Offering Display Name>"
+
+  # [MANDATORY] 1–2 sentence summary shown on storefront cards and carousels
+  shortDescription: "<Short summary of what the service does and for whom.>"
+
+  # [MANDATORY] Full service description for the detail view
+  # Cover: scope of service, deliverables, engagement model, sovereign
+  #        capabilities, supported geographies, and client outcomes
+  fullDescription: "<Detailed description covering service scope, deliverables,
+    engagement model, sovereign capabilities, and client outcomes.>"
+
+  # [MANDATORY] Why this service is relevant in sovereign or regulated environments
+  # Focus on: personnel jurisdiction, no foreign access to client environments,
+  #           compliance expertise, air-gapped operations capability
+  sovereignCoreRelevance: "<Explanation of why this service is relevant to sovereign
+    or regulated customers.>"
+
+  # [MANDATORY] Target industry segments (list ALL that apply)
+  # Allowed values:
+  #   government | bfsi | healthcare | telco | energy | sovereign_ai | vmware_modernization
+  industries:
+    - "<industry>"
+    # - "<industry>"
+
+  # [MANDATORY] Primary user roles or personas who will engage with this service
+  # Free-text strings — common examples:
+  #   "Platform teams", "Compliance officers", "Enterprise architects",
+  #   "Infrastructure teams", "Technology stakeholders", "Security teams"
+  intendedUsers:
+    - "<Role>"
+    # - "<Role>"
+
+  # [MANDATORY] Semantic availability state for storefront display and fulfilment handling
+  # Allowed values (choose ONE):
+  #   available_central_it       — engageable via central IT procurement
+  #   byop_ready                 — partner operates within customer-provided environment
+  #   technical_assets_available — reference materials available; engagement is direct
+  #   discoverable_only          — listing only; customers must contact partner directly
+  availabilityState: "<availabilityState>"
+
+  # [MANDATORY] Current lifecycle state of this catalog entry
+  # Allowed values: draft | review | approved | deprecated | retired
+  # Use "draft" when submitting — IBM reviewers promote to "approved" on merge.
+  lifecycleStatus: "draft"
+
+  # [MANDATORY] Controls whether this entry appears in the public storefront
+  # Allowed values: public | unlisted | private
+  storefrontVisibility: "public"
+
+# ------------------------------------------------------------
+# SPEC SECTION
+# Service type, sovereignty, certifications, and capabilities.
+# ------------------------------------------------------------
+spec:
+  # ----------------------------------------------------------
+  # SERVICE TYPE (mandatory)
+  # ----------------------------------------------------------
+  # [MANDATORY] Primary category of service offered
+  # Allowed values (choose ONE):
+  #   Hosting                — managed infrastructure or cloud hosting
+  #   AuditAndCompliance     — security audits, compliance assessments, certifications
+  #   SystemIntegration      — implementation, deployment, and integration services
+  #   ManagedOperations      — ongoing managed operations, NOC/SOC, day-2 support
+  #   SecurityConsulting     — security architecture, advisory, and consulting
+  #   TrainingAndEnablement  — training programmes, workshops, enablement
+  serviceType: "<serviceType>"
+
+  # [OPTIONAL] Additional service categories also offered by this partner
+  # Use the same allowed values as serviceType above
+  # additionalServiceTypes:
+  #   - "<serviceType>"
+  #   - "<serviceType>"
+
+  # ----------------------------------------------------------
+  # SOVEREIGNTY (mandatory block)
+  # ----------------------------------------------------------
+  sovereignty:
+    # [MANDATORY] Country/region where the service-delivering entity is headquartered
+    # Allowed values: "USA" | "UK" | "France" | "Germany" | "India" | "Canada" | "Australia" | "Japan"
+    corporateHQ: "<Country/Region>"
+
+    # [RECOMMENDED] Country/region of the ultimate parent company
+    # If independent, repeat the same value as corporateHQ
+    # ultimateParentCompanyHQ: "<Country/Region>"
+
+    # [RECOMMENDED] Security clearance level required for staff who access client environments
+    # Describe policy, not an individual clearance level
+    # staffClearanceLevel: "All personnel subject to <Company> background screening policy;
+    #   national-security-cleared staff available on request for <Country> engagements."
+
+  # ----------------------------------------------------------
+  # CERTIFICATIONS (optional block — remove entirely if none apply)
+  # ----------------------------------------------------------
+  # Allowed status values: Active | In Progress | Expired | Pending
+  # Common framework values: ISO-27001, SOC2, BSI-C5, SecNumCloud, FedRAMP,
+  #                           FedRAMP-High, IRAP, Gaia-X-Label-Level-3
+  # certifications:
+  #   - framework: "ISO-27001"
+  #     status: "Active"
+  #   - framework: "BSI-C5"
+  #     status: "Active"
+
+  # ----------------------------------------------------------
+  # CAPABILITIES (optional block — remove entirely if not applicable)
+  # The schema allows additional properties; include what describes your service.
+  # Structure your capabilities under a meaningful key (e.g. consulting, hosting).
+  # ----------------------------------------------------------
+  # capabilities:
+  #   consulting:                         # rename this key to match your service type
+  #     engagementType: "Implementation"  # e.g. Advisory, Implementation, Assessment
+  #     deliverables:
+  #       - "<Deliverable 1>"
+  #       - "<Deliverable 2>"
+  #     focusAreas:
+  #       - "<Focus area 1>"
+  #       - "<Focus area 2>"
+  #     contacts:
+  #       - name: "<Contact Name>"
+  #         email: "<contact@company.com>"
+  #     support:
+  #       general: "<Geography>"          # e.g. "WW" (worldwide), "EMEA", "EU"
+  #       sovereign: "<Geography>"        # geography where sovereign-specific support is available
+  #
+  #   hosting:                            # include this sub-block if serviceType is Hosting
+  #     providesBareMetal: true
+  #     airGappedReady: true
+
+  # ----------------------------------------------------------
+  # LINKS (optional block — remove entirely if not applicable)
+  # ----------------------------------------------------------
+  # links:
+  #   # [MANDATORY within this block] Canonical public service page URL
+  #   productPageUrl: "https://www.vendor.com/services/my-service"
+  #
+  #   # [OPTIONAL] Public documentation, datasheet, or brochure URL
+  #   docsUrl: "https://www.vendor.com/docs/my-service"

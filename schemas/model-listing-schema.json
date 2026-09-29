@@ -117,10 +117,12 @@
           "properties": {
             "hq": {
               "type": "string",
+              "enum": ["USA", "UK", "France", "Germany", "India", "Canada", "Australia", "Japan"],
               "description": "Country/region where the model vendor is headquartered."
             },
             "ultimateParentCompanyHQ": {
               "type": "string",
+              "enum": ["USA", "UK", "France", "Germany", "India", "Canada", "Australia", "Japan"],
               "description": "Country/region of the ultimate parent company."
             }
           },

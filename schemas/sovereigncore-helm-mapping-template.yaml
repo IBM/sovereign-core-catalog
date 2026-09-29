@@ -1,0 +1,66 @@
+# ============================================================
+# SOVEREIGN CORE HELM MAPPING TEMPLATE
+# File location: components/software/<company-slug>/<product>/sovereigncore_ext/helm/values-mapping.yaml
+# Schema:        schemas/sovereigncore-helm-mapping-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised for deployment integration
+#   [OPTIONAL]    Include only when applicable
+#
+# PURPOSE
+#   This file maps Sovereign Core platform values into an upstream
+#   Helm chart or operator. It is an optional deployment-acceleration
+#   extension for a SoftwareListing; it is not a full Helm chart.
+#
+# PREREQUISITES
+#   The parent SoftwareListing and CompanyProfile must already exist.
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: SovereignCoreHelmMapping
+
+metadata:
+  # [MANDATORY] Parent software product folder, not a version directory
+  # Pattern: components/software/<company-slug>/<product-slug>
+  softwareRef: "components/software/<company-slug>/<product-slug>"
+
+  # [MANDATORY] Canonical company profile path
+  # Pattern: companies/<company-slug>
+  companyRef: "companies/<company-slug>"
+
+spec:
+  chart:
+    # [MANDATORY] OCI URI of the upstream Helm chart or operator artifact
+    # Example: oci://registry.example.com/charts/my-product
+    repository: "oci://<your-registry>/<chart-path>"
+
+    # [MANDATORY] Chart version being mapped
+    version: "<chart-version>"
+
+  # [MANDATORY] Map Helm chart values to Sovereign Core platform expressions.
+  # Each key is a value path in the chart; each value is a platform template
+  # expression supplied by Sovereign Core at deployment time.
+  # Examples:
+  #   global.storageClass: "{{ .SovereignCore.StorageClass }}"
+  #   global.tlsSecretName: "{{ .SovereignCore.TLSSecretName }}"
+  platformValueMappings:
+    <chart.value.path>: "{{ .SovereignCore.<PlatformValue> }}"
+    # <another.chart.value.path>: "{{ .SovereignCore.<AnotherPlatformValue> }}"
+
+  # [OPTIONAL] Node labels that constrain workloads to sovereign node pools.
+  # Remove this block if no node scheduling constraint is required.
+  # nodeSelector:
+  #   sovereign-core/node-pool: "<node-pool>"
+
+  # [OPTIONAL] Kubernetes tolerations for sovereign node taints.
+  # Remove this block if no tolerations are required.
+  # tolerations:
+  #   - key: "sovereign-core/workload-class"
+  #     operator: "Equal"
+  #     value: "<workload-class>"
+  #     effect: "NoSchedule"

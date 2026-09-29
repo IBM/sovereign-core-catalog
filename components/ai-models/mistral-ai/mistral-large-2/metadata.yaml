@@ -3,27 +3,37 @@ kind: ModelListing
 metadata:
   companyRef: "companies/mistral-ai"
   vendor: "Mistral AI"
-  product: "Mistral Large 2" 
+  product: "Mistral Large 2"
   shortDescription: "Enterprise-grade open-weight and proprietary large language models designed for secure, in-boundary AI deployments. Mistral enables organizations to build and scale trusted AI solutions while maintaining sovereignty, governance, and operational control."
   fullDescription: "Enterprise-grade open-weight and proprietary large language models designed for secure, in-boundary AI deployments. Mistral enables organizations to build and scale trusted AI solutions while maintaining sovereignty, governance, and operational control."
   sovereignCoreRelevance: "Mistral AI and IBM Sovereign Core help organizations accelerate sovereign AI adoption by combining advanced AI capabilities with sovereign-by-design operations. Together, they enable AI workloads to run within controlled environments while preserving data residency, compliance requirements, infrastructure independence, and operational governance."
   category: "text_generation"
-  industries: ["government", "bfsi", "healthcare", "energy", "telco", "sovereign_ai"]
-  intendedUsers: ["Business administrators", "Finance teams", "IT managers", "Operations teams", "Technology stakeholders", "AI administrators", "Enterprise architects"]
+  industries:
+    ["government", "bfsi", "healthcare", "energy", "telco", "sovereign_ai"]
+  intendedUsers:
+    [
+      "Business administrators",
+      "Finance teams",
+      "IT managers",
+      "Operations teams",
+      "Technology stakeholders",
+      "AI administrators",
+      "Enterprise architects",
+    ]
   version: "2"
-  availabilityState: "technical_assets_available" 
-  lifecycleStatus: "approved" 
+  availabilityState: "technical_assets_available"
+  lifecycleStatus: "approved"
   storefrontVisibility: "public"
 spec:
   openSource:
     enabled: false
     license: "Proprietary"
   jurisdiction:
-    hq: "EU/France"
+    hq: "France"
     ultimateParentCompanyHQ: "EU/France"
   architecture:
     format: "Safetensors"
-    airgapReady: true 
+    airgapReady: true
   deployment:
     weightsRepository: "https://mistral.ai/"
     servingEngine: "vLLM"

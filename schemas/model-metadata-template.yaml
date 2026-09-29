@@ -1,0 +1,184 @@
+# ============================================================
+# AI MODEL METADATA TEMPLATE
+# File location: components/ai-models/<your-company-slug>/<model-slug>/metadata.yaml
+# Schema:        schemas/model-listing-schema.json
+#
+# FIELD CLASSIFICATION KEY
+#   [FIXED]       Copy exactly as shown — do not change
+#   [MANDATORY]   Must be present — CI will reject without it
+#   [RECOMMENDED] Strongly advised; reviewers may request it
+#   [OPTIONAL]    Include only when applicable
+#
+# DIRECTORY NAMING
+#   - <slug>       : your company slug (must match companies/ folder)
+#   - <model-slug> : lowercase, hyphen-separated model identifier
+#   AI model listings have NO version sub-directory — one metadata.yaml per model.
+#   Example path: components/ai-models/mistral-ai/mistral-7b-instruct/metadata.yaml
+#
+# PREREQUISITES
+#   Your company profile must be merged into main before this
+#   PR can be reviewed. See companies/<slug>/profile.yaml.
+# ============================================================
+
+# [FIXED] API version — do not change
+apiVersion: sovereign-catalog.io/v1alpha1
+
+# [FIXED] Resource kind — do not change
+kind: ModelListing
+
+# ------------------------------------------------------------
+# METADATA SECTION
+# Storefront identity, discoverability, and lifecycle fields.
+# ------------------------------------------------------------
+metadata:
+  # [MANDATORY] Path to your merged company profile
+  # Pattern: companies/<your-company-slug>
+  companyRef: "companies/<your-company-slug>"
+
+  # [MANDATORY] Legal entity name of the model vendor/publisher
+  # Should match metadata.displayName in your company profile
+  vendor: "<Legal Entity Name>"
+
+  # [MANDATORY] Model display name shown on the storefront
+  product: "<Model Name>"
+
+  # [MANDATORY] Model version identifier
+  # This does not need to follow semver — use the vendor's own versioning scheme
+  # Examples: "3.1", "7B-Instruct-v0.2", "2024-04"
+  version: "<version>"
+
+  # [MANDATORY] 1–2 sentence summary shown on storefront cards and carousels
+  shortDescription: "<Short summary of model capability, architecture size, and target use case.>"
+
+  # [MANDATORY] Full model description for the detail view
+  # Cover: architecture, parameter count, training data, capabilities,
+  #        languages, context window, licence, and intended use cases
+  fullDescription: "<Detailed description covering model architecture, training approach,
+    capabilities, supported languages, context window size, licence, and primary use cases.>"
+
+  # [MANDATORY] Why this model is relevant in sovereign or regulated environments
+  # Focus on: weights hosted in sovereign OCI registry, no external inference endpoint,
+  #           licence allows sovereign deployment, EU/national AI Act considerations
+  sovereignCoreRelevance: "<Explanation of why this model is relevant to sovereign
+    or regulated AI infrastructure customers.>"
+
+  # [MANDATORY] Primary model capability category
+  # Allowed values (choose ONE):
+  #   text_generation | embeddings | vision | speech | multimodal | code_generation
+  category: "<category>"
+
+  # [MANDATORY] Target industry segments (list ALL that apply)
+  # Allowed values:
+  #   government | bfsi | healthcare | telco | energy | sovereign_ai | vmware_modernization
+  industries:
+    - "<industry>"
+    # - "<industry>"
+
+  # [MANDATORY] Primary user roles or personas who will use this model
+  # Free-text strings — common examples:
+  #   "Data scientists", "AI engineers", "Compliance officers",
+  #   "Researchers", "Platform engineers", "Application developers"
+  intendedUsers:
+    - "<Role>"
+    # - "<Role>"
+
+  # [MANDATORY] Semantic availability state for storefront display and fulfilment handling
+  # Allowed values (choose ONE):
+  #   available_central_it       — deployable via central IT on behalf of customers
+  #   byop_ready                 — customer brings their own platform; model is ready to serve
+  #   technical_assets_available — weights/assets available; no automated provisioning
+  #   discoverable_only          — listing only; customers must contact vendor directly
+  availabilityState: "<availabilityState>"
+
+  # [MANDATORY] Current lifecycle state of this catalog entry
+  # Allowed values: draft | review | approved | deprecated | retired
+  # Use "draft" when submitting — IBM reviewers promote to "approved" on merge.
+  lifecycleStatus: "draft"
+
+  # [MANDATORY] Controls whether this entry appears in the public storefront
+  # Allowed values: public | unlisted | private
+  storefrontVisibility: "public"
+
+# ------------------------------------------------------------
+# SPEC SECTION
+# Licence, jurisdiction, model architecture, and deployment.
+# ------------------------------------------------------------
+spec:
+  # ----------------------------------------------------------
+  # OPEN SOURCE (mandatory block for all model listings)
+  # ----------------------------------------------------------
+  openSource:
+    # [MANDATORY] Whether the model is distributed under an open-source or open-weight licence
+    enabled: <true|false>
+
+    # [MANDATORY] SPDX licence identifier or proprietary/research licence name
+    # Open-source examples: "Apache-2.0", "MIT", "Llama-3-Community-License"
+    # Proprietary example:  "Mistral AI Research License"
+    license: "<licence-identifier>"
+
+    # [OPTIONAL] URL of the upstream project, model card, or HuggingFace page
+    # upstreamProject: "https://huggingface.co/<org>/<model>"
+
+    # [OPTIONAL] Whether model weights are publicly accessible (even if not OSI-approved)
+    # sourceAvailable: true
+
+  # ----------------------------------------------------------
+  # JURISDICTION (mandatory block)
+  # ----------------------------------------------------------
+  jurisdiction:
+    # [MANDATORY] Country/region where the model vendor/publisher is headquartered
+    # Allowed values: "USA" | "UK" | "France" | "Germany" | "India" | "Canada" | "Australia" | "Japan"
+    hq: "<Country/Region>"
+
+    # [OPTIONAL] Country/region of the ultimate parent company
+    # ultimateParentCompanyHQ: "<Country/Region>"
+
+  # ----------------------------------------------------------
+  # ARCHITECTURE (mandatory block)
+  # ----------------------------------------------------------
+  architecture:
+    # [MANDATORY] Model weight serialisation format
+    # Allowed values: Safetensors | GGUF | ONNX | PyTorch | TensorFlow
+    format: "<format>"
+
+    # [OPTIONAL] Whether the model can be deployed with zero internet connectivity
+    airgapReady: <true|false>
+
+    # [OPTIONAL] Maximum context window size in tokens
+    # contextWindow: 131072
+
+    # [OPTIONAL] Hardware requirements for inference
+    # hardwareRequirements:
+    #   # Minimum VRAM required for inference (integer, GB)
+    #   minimumVramGB: 16
+    #
+    #   # Reference path to a recommended hardware profile in this catalog
+    #   # Example: "components/hardware/amd/instinct-mi350p"
+    #   recommendedAccelerator: "components/hardware/<slug>/<product-slug>"
+
+  # ----------------------------------------------------------
+  # DEPLOYMENT (mandatory block)
+  # ----------------------------------------------------------
+  deployment:
+    # [MANDATORY] URI for downloading model weights
+    # Supported URI schemes:
+    #   oci://  — weights in an OCI-compliant registry (preferred for air-gapped deployments)
+    #   hf://   — HuggingFace model hub (requires internet; not suitable for air-gapped)
+    # Examples:
+    #   "oci://registry.vendor.com/models/my-model:v1.0"
+    #   "hf://vendor-org/my-model"
+    weightsRepository: "<uri>"
+
+    # [MANDATORY] Inference serving engine used to serve this model
+    # Common examples: "vLLM", "TGI", "Triton", "Ollama", "KServe"
+    servingEngine: "<serving-engine>"
+
+  # ----------------------------------------------------------
+  # LINKS (optional block — remove entirely if not applicable)
+  # ----------------------------------------------------------
+  # links:
+  #   # [MANDATORY within this block] Canonical public model page URL
+  #   productPageUrl: "https://www.vendor.com/models/my-model"
+  #
+  #   # [OPTIONAL] Public model card, documentation, or research paper URL
+  #   docsUrl: "https://huggingface.co/<org>/<model>"
