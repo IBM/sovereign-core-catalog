@@ -1,0 +1,8 @@
+# Minimal test values for helm template validation
+qradar:
+  dnsPrimary: "8.8.8.8"
+  dnsSecondary: "8.8.4.4"
+  adminPassword: "TestAdm1nP@ss!"
+  rootPassword: "TestR00tP@ss!"
+
+plan: small

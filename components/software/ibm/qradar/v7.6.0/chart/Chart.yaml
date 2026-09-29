@@ -1,0 +1,15 @@
+apiVersion: v2
+name: qradar
+description: IBM QRadar SIEM 7.6.0 on OpenShift Virtualization (standalone and HA)
+type: application
+version: 1.0.0
+appVersion: "7.6.0"
+keywords:
+  - qradar
+  - siem
+  - kubevirt
+  - ha
+  - standalone
+maintainers:
+  - name: IBM Threat Management
+home: https://github.ibm.com/ibm-threat-management/ocp-qradar
