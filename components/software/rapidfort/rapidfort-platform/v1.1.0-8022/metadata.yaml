@@ -1,0 +1,42 @@
+
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/rapidfort"
+  vendor: "RapidFort, Inc."
+  product: "RapidFort Platform"
+  shortDescription: "RapidFort is a software supply chain security platform designed to eliminate vulnerabilities and provide full visibility into the software organizations ship."
+  fullDescription: "RapidFort is a software supply chain security platform designed to eliminate vulnerabilities and provide full visibility into the software organizations ship. The platform combines curated near-zero-CVE images, runtime-based attack surface reduction, and automated SBOM, RBOM, and compliance reporting in a single solution. It helps security and engineering teams eliminate CVEs, meet regulatory requirements, and ship secure software with confidence. RapidFort integrates with existing development workflows and deploys in the cloud, on-premises, or in air-gapped environments."
+  sovereignCoreRelevance: "Deploys on-premises and in air-gapped environments to analyze and harden containerized workloads, producing SBOM, RBOM, and compliance evidence with no data leaving the customer environment."
+  category: "security"
+  industries: ["government", "bfsi", "healthcare", "sovereign_ai"]
+  intendedUsers: ["DevSecOps engineers", "Application security teams", "Platform engineers", "Software developers", "Cloud operations teams", "Security and compliance teams"]
+  version: "1.1.0-8022"
+  lifecycleStatus: "draft"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  openSource:
+    enabled: false
+    license: "RapidFort Terms Of Use"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "United States"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: false
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: true
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://quay.io/rapidfort/external/platform:1.1.0-8022"
+  links:
+    docsUrl: "https://us01.rapidfort.com/docs"
+    productPageUrl: "https://www.rapidfort.com"
