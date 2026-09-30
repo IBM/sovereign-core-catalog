@@ -379,11 +379,3 @@ After provisioning:
 - [ ] Login succeeds with the configured `admin` credentials.
 - [ ] Credentials are stored securely.
 
----
-
-## 10. Reference
-
-The content in this guide was consolidated from the supplied end-user markdown draft and the supplied **Deploying IBM QRadar SIEM by using the IBM Sovereign Core Service Catalog** document.
-
-> **Version note for publication:** The two supplied source files contain a QRadar version discrepancy: the markdown draft refers to **QRadar SIEM 7.5.0**, while the supplied PDF documentation refers to **QRadar SIEM 7.6.0**. This consolidated guide follows the **7.6.0** version stated in the PDF. Verify the version displayed in the Service Catalog before publishing the guide for a specific environment.
-
