@@ -2,91 +2,100 @@
 
 ## End User Guide
 
-This guide explains how to provision and access an **IBM QRadar SIEM** instance through the **IBM Sovereign Core Service Catalog** (GitOps CSB Broker Web Interface).
+This guide explains how to provision and manage **IBM QRadar SIEM 7.6.0** by using the **IBM Sovereign Core Service Catalog (GitOps CSB Broker Web Interface)**.
 
-The Service Catalog provides self-service deployment of enterprise services onto OpenShift clusters using GitOps. QRadar SIEM is deployed on **OpenShift Virtualization using Helm charts**. The catalog provides both standalone and high-availability deployment plans.
+The IBM Sovereign Core Service Catalog provides self-service deployment of enterprise services onto OpenShift clusters through GitOps. QRadar SIEM is deployed on **OpenShift Virtualization by using Helm charts**.
 
-> **Service model:** The provided documentation describes the Sovereign Core Service Catalog as a **Tech Preview under a try-and-buy model**. Deployment is self-service and IBM Support is not included.
-
----
-
-## 1. Before You Begin
-
-Make sure you have the following information available:
-
-| Requirement | Details |
-|---|---|
-| Service Catalog access | Catalog URL and valid credentials |
-| Target cluster | Cluster name or identifier where QRadar will be deployed |
-| Primary DNS | IP address of a DNS resolver reachable by the QRadar VM(s) |
-| Secondary DNS | Optional secondary DNS resolver IP address |
-| Time zone | Standard timezone identifier, such as `UTC`, `America/New_York`, or `Europe/London` |
-| QRadar admin password | Password for the QRadar Web Console `admin` user |
-| QRadar root password | Password for the underlying VM operating system `root` user |
-
-### Important
-
-Keep the `admin_password` and `root_password` in a secure location. The provisioning documentation states that these passwords cannot later be retrieved from the UI in plain text.
+> **Service model:** The Service Catalog documentation describes this capability as a **Tech Preview available under a try-and-buy model**. Deployment is self-service and **IBM Support is not included**.
 
 ---
 
-## 2. Choose a Deployment Plan
+## 1. Overview
 
-Open the Service Catalog and locate the **QRadar SIEM (Helm)** service.
+QRadar SIEM is available through the Service Catalog in two deployment topologies:
 
-The service provides two deployment topologies:
+| Deployment topology | Available plans | Networking | VM topology | Typical use |
+|---|---|---|---|---|
+| **Standalone** | Tiny, Small, Medium, Large | DHCP | One Console VM | Development, sandbox, test, QA, staging, or standalone monitoring |
+| **High Availability (HA)** | Small HA, Medium HA, Large HA | Fixed `10.0.0.x` private synchronization network | Primary + Secondary VMs | Production and enterprise HA deployments |
 
-- **Standalone:** One QRadar Console VM using DHCP networking. Available plans are `Tiny`, `Small`, `Medium`, and `Large`.
-- **High Availability (HA):** A primary and secondary VM pair using a fixed `10.0.0.x` private synchronization network. Available plans are `Small HA`, `Medium HA`, and `Large HA`.
+The HA plans provide a primary and secondary VM pair connected through the private synchronization network for automatic failover.
 
-### Plan and Resource Reference
+### Plan selection
 
-| Category | Plan ID | Display Name | VM Count | vCPU / VM | Memory / VM | Root Disk / VM | Total Resources | Intended Use |
-|---|---|---|---:|---:|---:|---:|---|---|
-| Standalone | `tiny` | **Tiny** | 1 | 8 | 32 GB | 250 GB | 8 vCPU / 32 GB / 250 GB | Development, test, evaluation |
-| Standalone | `small` | **Small** | 1 | 16 | 64 GB | 250 GB | 16 vCPU / 64 GB / 250 GB | Functional testing / QA |
-| Standalone | `medium` | **Medium** | 1 | 24 | 96 GB | 250 GB | 24 vCPU / 96 GB / 250 GB | Staging / mid-tier ingestion |
-| Standalone | `large` | **Large** | 1 | 48 | 192 GB | 500 GB | 48 vCPU / 192 GB / 500 GB | High-throughput standalone |
-| High Availability | `small-ha` | **Small HA** | 2 | 16 | 64 GB | 250 GB | 32 vCPU / 128 GB / 500 GB | Small production HA |
-| High Availability | `medium-ha` | **Medium HA** | 2 | 24 | 96 GB | 250 GB | 48 vCPU / 192 GB / 500 GB | Enterprise production |
-| High Availability | `large-ha` | **Large HA** | 2 | 48 | 192 GB | 500 GB | 96 vCPU / 384 GB / 1000 GB | High-capacity enterprise HA |
+The Service Catalog provides the following plans:
 
-> **HA sizing baseline:** `Small HA` is the minimum validated HA plan. The supplied documentation states that smaller footprints do not provide sufficient memory headroom for DRBD replication and data synchronization under load.
-
-> **Additional storage:** Each VM automatically mounts a **30 GB installation-media DataVolume** backed by the cluster storage class `ocs-storagecluster-ceph-rbd`.
-
-### Deployment Guidelines
-
-The supplied documentation also notes:
-
-- The **Tiny** deployment has been validated with **5000 EPS**.
-- The deployment is **All-in-One (AIO) only**; **Managed Hosts are not supported**.
-- **App installation is not supported**.
+| Plan type | Plan | Target environment | Networking | Topology |
+|---|---|---|---|---|
+| Standalone | **Tiny** | Development / Sandbox | DHCP | 1 Console VM |
+| Standalone | **Small** | Test / QA | DHCP | 1 Console VM |
+| Standalone | **Medium** | Staging / Mid-tier | DHCP | 1 Console VM |
+| Standalone | **Large** | High-throughput standalone | DHCP | 1 Console VM |
+| High Availability | **Small HA** | Small Production | Fixed `10.0.0.x` sync | 2 VMs (Primary + Secondary) |
+| High Availability | **Medium HA** | Enterprise Production | Fixed `10.0.0.x` sync | 2 VMs (Primary + Secondary) |
+| High Availability | **Large HA** | High-capacity Enterprise HA | Fixed `10.0.0.x` sync | 2 VMs (Primary + Secondary) |
 
 ---
 
-## 3. Provision QRadar SIEM
+## 2. Prerequisites
+
+Before provisioning QRadar, make sure you have the following information:
+
+1. **Service Catalog access**
+   - Service Catalog URL.
+   - Credentials to access the catalog.
+
+2. **Target cluster information**
+   - OpenShift cluster name or identifier where QRadar will be deployed.
+
+3. **Network information**
+   - Primary DNS server IP address.
+   - Secondary DNS server IP address, when available.
+   - Required timezone, for example `UTC`, `America/New_York`, or `Europe/London`.
+
+4. **QRadar credentials**
+   - Password for the QRadar Web Console `admin` user.
+   - Password for the underlying operating system `root` user.
+
+> **Credential handling:** Save the `admin_password` and `root_password` securely. The documentation states that these passwords cannot later be retrieved in plain text from the Service Catalog UI.
+
+---
+
+## 3. Provisioning Procedure
 
 ### Step 1: Open the Service Catalog
 
-1. Open a supported web browser.
-2. Navigate to the **IBM Sovereign Core Service Catalog** web portal.
+1. Open a browser.
+2. Navigate to the IBM Sovereign Core Service Catalog web portal.
 3. In the top navigation, open **Available Services**.
 
-### Step 2: Open QRadar SIEM
+The catalog URL is environment-specific. An example format is:
 
-1. Locate **QRadar SIEM (Helm)**.
+```text
+https://byop-catalog-app-byop.apps.<cluster-domain>/
+```
+
+### Step 2: Select the QRadar Service and Plan
+
+1. Locate the **QRadar SIEM (Helm)** service card.
 2. Review the available plans.
-3. Select the required plan, such as **Tiny** for a standalone deployment or **Small HA** for an HA deployment.
+3. Select the plan that matches your deployment requirement.
 4. The **Provision Service** dialog opens.
 
-### Step 3: Enter Provisioning Details
+The service supports:
 
-Complete the following fields.
+- Single-console standalone deployments.
+- Two-node HA deployments consisting of a primary and secondary VM.
+
+For HA deployments, the primary and secondary VMs use a fixed `10.0.0.x` private network for synchronization.
+
+### Step 3: Enter Provisioning Parameters
+
+In the **Provision Service** dialog, provide the following:
 
 #### Instance ID
 
-Enter a unique name for the QRadar deployment.
+Enter a unique name for the service instance.
 
 Examples:
 
@@ -99,7 +108,7 @@ Use lowercase alphanumeric characters and hyphens (`-`).
 
 #### Target Cluster
 
-Select the OpenShift cluster from the **Target Cluster** dropdown.
+Select the target OpenShift cluster from the **Target Cluster** dropdown.
 
 Example:
 
@@ -109,7 +118,7 @@ in-cluster (Hub)
 
 #### Parameters (JSON)
 
-Select **Fill Example** and replace the example values with your environment-specific settings.
+Click **Fill Example** and replace the example values with values for your environment.
 
 ```json
 {
@@ -124,34 +133,36 @@ Select **Fill Example** and replace the example values with your environment-spe
 }
 ```
 
-### Parameter Reference
+### Parameter reference
 
 | Parameter | Type | Required | Description | Example |
 |---|---|---|---|---|
-| `qradar.admin_password` | String | Yes | QRadar Web Console password for the `admin` user. Use upper/lowercase letters, numbers, and symbols. | `"SecureAdm1nP@ssw0rd!"` |
-| `qradar.root_password` | String | Yes | Operating system `root` password for the underlying QRadar VM. | `"VerySecureR00tP@ssw0rd!"` |
-| `qradar.dns_primary` | String | Yes | Primary DNS resolver IP address reachable by the VM. | `"8.8.8.8"` or `"10.x.x.x"` |
-| `qradar.dns_secondary` | String | Optional | Secondary DNS resolver IP address. | `"8.8.4.4"` or `"10.x.x.y"` |
+| `qradar.admin_password` | String | Yes | Password for the QRadar Web Console `admin` user. Use a strong password containing uppercase/lowercase letters, numbers, and symbols. | `"SecureAdm1nP@ssw0rd"` |
+| `qradar.root_password` | String | Yes | Password for the operating system `root` user on the underlying VM. | `"VerySecureR00tP@ssw0rd!"` |
+| `qradar.dns_primary` | String | Yes | IP address of the primary DNS resolver reachable by the VM. | `"8.8.8.8"` or `"10.x.x.x"` |
+| `qradar.dns_secondary` | String | Optional | IP address of the secondary DNS resolver. | `"8.8.4.4"` or `"10.x.x.y"` |
 | `qradar.security_template` | String | Yes | QRadar security template profile. The documented default is `Enterprise`. | `"Enterprise"` |
-| `qradar.timezone` | String | Yes | Timezone identifier used for log event timestamps. | `"UTC"`, `"EST"`, `"America/New_York"` |
+| `qradar.timezone` | String | Yes | Standard timezone identifier for QRadar log event timestamps. | `"UTC"`, `"EST"`, `"America/New_York"` |
 
-### Step 4: Start Provisioning
+### Step 4: Provision the Service
 
-1. Review the instance ID, cluster, JSON parameters, and passwords.
-2. Verify that the DNS addresses are correct and reachable from the deployment environment.
+1. Review the instance ID, target cluster, JSON parameters, and credentials.
+2. Confirm that the DNS information is correct.
 3. Click **Provision**.
 
-The Service Catalog broker triggers the GitOps workflow that creates the QRadar VM or VM pair on OpenShift Virtualization.
+The catalog broker starts the GitOps workflow to deploy the QRadar VM or VM pair on OpenShift Virtualization.
 
 ---
 
 ## 4. Monitor the Deployment
 
-After provisioning starts, go to **Provisioned Instances** on the catalog dashboard.
+After provisioning starts:
 
-Locate the instance using the **Instance ID** you entered.
+1. Return to the main Service Catalog dashboard.
+2. Scroll to **Provisioned Instances**.
+3. Locate the instance by its **Instance ID**.
 
-Typical instance information includes:
+A provisioned instance displays information such as:
 
 ```text
 Instance: secops-qradar-prod
@@ -160,76 +171,85 @@ Plan:     small-ha
 Status:   SUCCEEDED
 ```
 
-### Status Indicators
+### Status indicators
 
 | Status | Meaning |
 |---|---|
 | `IN_PROGRESS` / `PROVISIONING` | VM disks are being imported or cloned and boot-stage scripts are running. |
 | `SUCCEEDED` | The QRadar deployment is fully configured and online. |
 
-### Available Actions
+### Instance actions
 
-**Check Status**  
-Use this action to inspect runtime status, the allocated IP address, and connection logs.
+**Check Status**
 
-**Delete**  
-Use this action to deprovision the VM or VM pair and clean up storage volumes when the instance is no longer required.
+Use **Check Status** to inspect:
+
+- Current runtime status.
+- Assigned IP address.
+- Connection logs.
+- OpenShift Route or Service endpoint, where available.
+
+**Delete**
+
+Use **Delete** to deprovision the VM or VMs and clean up the associated storage when the service instance is no longer required.
 
 ---
 
 ## 5. Access the QRadar Web Console
 
-Access QRadar after the catalog reports **`SUCCEEDED`**.
+Access QRadar after the instance reaches **`SUCCEEDED`**.
 
-1. Open the QRadar instance in **Provisioned Instances**.
+1. Open the instance under **Provisioned Instances**.
 2. Click **Check Status**.
-3. Obtain the assigned IP address or OpenShift Route/Service endpoint.
-4. Open the endpoint in a browser:
+3. Obtain the assigned IP address or the OpenShift Route/Service endpoint.
+4. Open the QRadar URL:
 
 ```text
 https://<QRADAR_IP_OR_HOSTNAME>/
 ```
 
-5. Accept the SSL certificate warning when the environment uses a self-signed or internal CA certificate.
+5. If the environment uses a self-signed or internal CA certificate, accept the SSL certificate prompt when required.
 6. Sign in with:
 
 ```text
 Username: admin
-Password: <the admin_password used during provisioning>
+Password: <the admin_password configured during provisioning>
 ```
 
 ---
 
-## 6. What Is and Is Not Supported
+## 6. Deployment Guidelines and Scope
 
-The supplied deployment documentation identifies the following scope:
+The supplied deployment documentation identifies the following guidelines and limitations.
 
-### Supported deployment model
+### Deployment validation
 
-- QRadar SIEM deployed through the Service Catalog on OpenShift Virtualization.
-- Standalone single-console VM deployments.
-- HA primary/secondary VM deployments.
-- All-in-One (AIO) QRadar deployment.
+- The deployment is validated on the **Tiny** plan with **5000 EPS**.
+- The deployment model is **All-in-One (AIO)**.
 
-### Not supported / not available through this deployment model
+### Unsupported capabilities
 
-- Managed Hosts.
-- QRadar App installation.
-- Customer-driven in-place upgrades from an older catalog version.
+- **Managed Hosts are not supported.**
+- **QRadar App installation is not supported.**
 
-### Version updates
+### Upgrades
 
-The supplied documentation states that customers cannot upgrade the deployed QRadar instance when a new version becomes available. IBM updates the Service Catalog with the latest QRadar version, and customers install the latest version available in the catalog.
+Customers cannot upgrade an existing deployment when a new QRadar version becomes available in the Service Catalog.
+
+Instead:
+
+1. IBM updates the catalog with the latest QRadar version.
+2. Customers can install the latest version that is available in the catalog.
 
 ---
 
 ## 7. Troubleshooting
 
-Most end users should first use **Check Status** in the Service Catalog. The following checks are useful when OpenShift or VM-level access is available to the platform administrator.
+The following diagnostic procedures are intended primarily for administrators who have access to the OpenShift cluster and QRadar VM.
 
-### Layer 1 — OpenShift and VM Level
+### Layer 1: OpenShift and VM-level checks
 
-Check VM, VMI, and DataVolume status:
+Check the VM, VMI, and DataVolume status:
 
 ```bash
 oc get vm,vmi,datavolume -n <namespace>
@@ -247,45 +267,45 @@ Open the VM serial console when the VM is unreachable:
 virtctl console <vm-name> -n <namespace>
 ```
 
-### Layer 2 — VM Boot and Installation
+### Layer 2: VM boot and installation checks
 
-Check cloud-init completion:
+Check whether cloud-init completed:
 
 ```bash
 ls /var/lib/cloud/instance/boot-finished
 ```
 
-Monitor the unattended installation log:
+Monitor the QRadar OpenShift installation log:
 
 ```bash
 tail -f /var/log/qradar-ocp-install.log
 ```
 
-Check the QRadar installation completion marker:
+Check for the QRadar installation completion marker:
 
 ```bash
 ls /var/log/qradar-ocp-install-complete
 ```
 
-### Layer 3 — QRadar Service Health
+### Layer 3: QRadar services and application health
 
-Check the core QRadar daemons:
+Check the core QRadar application daemons:
 
 ```bash
 systemctl status --no-pager hostcontext tomcat
 ```
 
-Check local web-console availability:
+Check web interface availability from the VM:
 
 ```bash
 curl -k -I https://localhost/console/
 ```
 
-An HTTP `302` response is expected by the supplied troubleshooting procedure.
+An **HTTP 302** response is expected.
 
-### Layer 4 — HA and DRBD
+### Layer 4: HA pairing and DRBD synchronization
 
-For HA deployments, check DRBD replication state:
+For HA deployments, verify DRBD replication state:
 
 ```bash
 drbdadm dstate store
@@ -297,13 +317,15 @@ The expected state is:
 UpToDate/UpToDate
 ```
 
-Check HA node role and state:
+Check the HA node role and cluster state:
 
 ```bash
 /opt/qradar/ha/bin/ha stateshow
 ```
 
-Check remote node health:
+Expected output includes an active or standby state, such as `active 1.0` or `standby`.
+
+Check the remote HA node:
 
 ```bash
 /opt/qradar/ha/bin/ha remote_state
@@ -311,46 +333,63 @@ Check remote node health:
 
 ---
 
-## 8. Diagnostic Script and Important Logs
+## 8. Diagnostics and Logs
 
-A built-in diagnostic script is available on the QRadar VM:
+### Built-in diagnostic script
+
+The QRadar deployment includes the following diagnostic utility:
 
 ```bash
 /usr/local/bin/qradar-ocp-status.sh
 ```
 
-Supported modes include:
+Available modes include:
 
 ```bash
+# Standard health report
+/usr/local/bin/qradar-ocp-status.sh
+
+# Machine-readable output
 /usr/local/bin/qradar-ocp-status.sh --json
+
+# HA-focused diagnosis
 /usr/local/bin/qradar-ocp-status.sh --failover
+
+# Standalone-focused checks
 /usr/local/bin/qradar-ocp-status.sh --standalone
 ```
 
-The supplied documentation describes these modes as follows:
+Use `--json` when a machine-readable snapshot is needed for automation or when attaching diagnostic information to a ticket.
 
-| Mode | Purpose |
+### Key log files
+
+| Purpose | Location |
 |---|---|
-| `--json` | Machine-readable health snapshot for automation or attaching to a support/ticket record. |
-| `--failover` | Focused HA diagnosis, including HA state, daemon crash loops, and JMS ports. |
-| `--standalone` | Checks tailored for a single-VM deployment and omits HA/DRBD checks. |
+| OpenShift provisioning and unattended installer | `/var/log/qradar-ocp-install.log` |
+| QRadar installer stage logs | `/var/log/setup-*/` |
+| HA wizard and pairing | `/var/log/setup-*/qradar_hasetup.log` |
+| Core platform and daemon logs | `/var/log/qradar.log` |
+| Hostcontext and Tomcat service logs | `journalctl -u hostcontext -u tomcat --no-pager` |
+| Cloud-init logs | `/var/log/cloud-init.log` |
+| System messages | `/var/log/messages` |
 
-### Key Log Files
+### OpenShift and GitOps diagnostics
 
-| Area | Location |
-|---|---|
-| OpenShift provisioning / unattended installer | `/var/log/qradar-ocp-install.log` |
-| QRadar installer stages | `/var/log/setup-*` |
-| HA pairing | `/var/log/setup-*/qradar_hasetup.log` |
-| QRadar core platform | `/var/log/qradar.log` |
-| Hostcontext / Tomcat services | `journalctl -u hostcontext -u tomcat --no-pager` |
-| cloud-init / system logs | `/var/log/cloud-init.log`, `/var/log/messages` |
-
-For OpenShift/GitOps diagnostics, the supplied documentation lists:
+Check ArgoCD application synchronization and resource health:
 
 ```bash
 oc get application qradar-<instance> -n argocd
+```
+
+Inspect KubeVirt VM status and events:
+
+```bash
 oc describe vm <vm-name> -n <namespace>
+```
+
+Inspect the ingress route and endpoints:
+
+```bash
 oc get route,endpoints -n <namespace>
 ```
 
@@ -358,24 +397,71 @@ oc get route,endpoints -n <namespace>
 
 ## 9. Quick Deployment Checklist
 
-Before clicking **Provision**:
+Use this checklist before and after provisioning.
 
-- [ ] Correct QRadar plan selected.
-- [ ] Unique lowercase instance ID entered.
-- [ ] Correct target OpenShift cluster selected.
-- [ ] Strong `admin_password` entered.
-- [ ] Strong `root_password` entered.
-- [ ] Primary DNS address entered.
-- [ ] Secondary DNS address entered if required.
-- [ ] Correct timezone selected.
-- [ ] Configuration reviewed before submission.
+### Before provisioning
 
-After provisioning:
+- [ ] Service Catalog URL and credentials available.
+- [ ] Target OpenShift cluster identified.
+- [ ] Primary DNS IP available.
+- [ ] Secondary DNS IP available, if applicable.
+- [ ] Timezone selected.
+- [ ] QRadar `admin` password prepared.
+- [ ] QRadar OS `root` password prepared.
+- [ ] Standalone or HA plan selected.
 
-- [ ] Instance appears under **Provisioned Instances**.
-- [ ] Status changes from `PROVISIONING` / `IN_PROGRESS` to `SUCCEEDED`.
-- [ ] **Check Status** returns the QRadar endpoint or IP address.
-- [ ] QRadar Web Console is reachable.
+### During provisioning
+
+- [ ] Unique Instance ID entered.
+- [ ] Correct target cluster selected.
+- [ ] JSON parameters validated.
+- [ ] **Provision** selected.
+
+### After provisioning
+
+- [ ] Instance reaches `SUCCEEDED`.
+- [ ] **Check Status** returns the endpoint/IP information.
+- [ ] QRadar Web Console is reachable over HTTPS.
 - [ ] Login succeeds with the configured `admin` credentials.
-- [ ] Credentials are stored securely.
+- [ ] Credentials are stored securely for future administrative access.
 
+---
+
+## 10. Summary
+
+The IBM Sovereign Core Service Catalog provides self-service deployment of **IBM QRadar SIEM 7.6.0** on OpenShift Virtualization through Helm and GitOps.
+
+The deployment workflow is:
+
+```text
+Available Services
+       |
+       v
+QRadar SIEM (Helm)
+       |
+       v
+Select Plan
+       |
+       v
+Enter Instance ID + Cluster + JSON Parameters
+       |
+       v
+Provision
+       |
+       v
+GitOps / OpenShift Virtualization Deployment
+       |
+       v
+Provisioned Instances
+       |
+       v
+SUCCEEDED
+       |
+       v
+Check Status
+       |
+       v
+Access QRadar Web Console
+```
+
+For deployment failures, use the Service Catalog **Check Status** action first. Platform administrators can then use the OpenShift, VM, QRadar service, HA/DRBD, diagnostic-script, and log checks described in this guide.
