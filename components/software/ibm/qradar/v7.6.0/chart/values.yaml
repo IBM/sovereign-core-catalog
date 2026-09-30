@@ -1,0 +1,88 @@
+# QRadar HA Helm Chart — Default Values
+#
+# These values are the authoritative defaults for all static configuration.
+# Per-instance overrides are supplied by the broker in instances/<name>/values.yaml
+# (or via -f values.yaml / --set when using helm install directly).
+#
+# Network addresses are FIXED across all instances — namespace isolation provides
+# per-instance separation. Do not change these unless you are changing the HA model.
+
+# ---------------------------------------------------------------------------
+# Deployment topology
+# ---------------------------------------------------------------------------
+# ha         — two-node HA pair (primary + secondary VM, fixed 10.0.0.x private net)
+# standalone — single console VM (DHCP networking, no secondary, no NAD)
+topology: ha
+
+# ---------------------------------------------------------------------------
+# Standalone-specific values (used only when topology=standalone)
+# ---------------------------------------------------------------------------
+standalone:
+  # Optional FQDN override. If blank, derived as <release-name>.<network.domainName>
+  hostname: ""
+
+# ---------------------------------------------------------------------------
+# Instance-specific values (set at provision time by broker or helm install -f)
+# ---------------------------------------------------------------------------
+qradar:
+  dnsPrimary: ""          # Required: primary DNS server IP
+  dnsSecondary: ""        # Required: secondary DNS server IP
+  adminPassword: ""       # Required: QRadar admin user password
+  rootPassword: ""        # Required: VM root user password
+  securityTemplate: Enterprise
+  timezone: UTC
+
+plan: medium              # tiny | small | medium | large
+
+# ---------------------------------------------------------------------------
+# Plan-based resource sizing
+# ---------------------------------------------------------------------------
+plans:
+  tiny:
+    cpuCores: 8
+    memoryGb: 32
+    storageGb: 250
+  small:
+    cpuCores: 16
+    memoryGb: 64
+    storageGb: 250
+  medium:
+    cpuCores: 24
+    memoryGb: 96
+    storageGb: 250
+  large:
+    cpuCores: 48
+    memoryGb: 192
+    storageGb: 500
+
+# ---------------------------------------------------------------------------
+# Fixed HA network addresses (do not change for normal deployments)
+# ---------------------------------------------------------------------------
+network:
+  virtualIp: "10.0.0.1"       # HA VIP — floating cluster address (configured during HA pairing)
+  primaryIp: "10.0.0.10"      # Primary fixed management IP during initial install
+  secondaryIp: "10.0.0.11"    # Secondary static IP
+  haPrefix: 24
+  netmask: "255.255.255.0"
+  domainName: "qradar.lab"
+  primaryHostname: "console.qradar.lab"
+  secondaryHostname: "standby.qradar.lab"
+
+# ---------------------------------------------------------------------------
+# Storage
+# ---------------------------------------------------------------------------
+storage:
+  storageClassName: ocs-storagecluster-ceph-rbd
+  isoStorageGb: 30
+  mediaNamespace: qradar-media
+  goldenImagePvc: rhel8-qradar-golden
+  isoPvc: qradar-installation-cdrom
+
+# ---------------------------------------------------------------------------
+# Readiness probe
+# ---------------------------------------------------------------------------
+readiness:
+  initialDelaySeconds: 30
+  periodSeconds: 20
+  failureThreshold: 2
+  successThreshold: 1
