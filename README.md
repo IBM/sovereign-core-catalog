@@ -4,7 +4,7 @@
 
 ## Table of contents
 
-1. [What is the IBM Sovereign Core public catalog?](#what-is-the-ibm-sovereign-core-public-catalog)
+1. [Introducing the Sovereign Core catalog](#introducing-the-sovereign-core-catalog)
 2. [The four integration levels](#the-four-integration-levels)
 3. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
 4. [Repository structure](#repository-structure)
@@ -13,20 +13,19 @@
 
 ---
 
-## What is the IBM Sovereign Core public catalog?
+## Introducing the Sovereign Core catalog
 
-A governed, Git-backed public catalog powering the Sovereign Core platform catalog. Partner listings have historically lived in spreadsheets and wikis — stale, unvalidated, and with no way to verify sovereignty claims programmatically. The Sovereign Core Catalog solves this with a public Git repository on **github.com/IBM** where all catalog entries are structured YAML validated by CI on every PR. Partners contribute via pull request, IBM reviews and merges, and the repo feeds both the Public Catalog UI and the deployment engine, providing a governed onboarding path for partners and ISVs.
+There are three catalog surfaces in Sovereign Core and understanding them is essential before you begin onboarding.
 
-> **Design principle:** The repo stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, no product code. All actual artifacts remain in vendor-owned OCI registries.
+1. **Public catalog** — the externally visible storefront at [www.ibm.com/products/sovereign-core/catalog/en](https://www.ibm.com/products/sovereign-core/catalog/en/)
+2. **Catalog Git repository** — the governed, public source of truth at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog)
+3. **Platform catalog** — the in-platform deployment engine inside every Sovereign Core deployment
 
-| Metric | Count |
-|---|---|
-| Component types | 4 |
-| Partner companies | 7 |
-| Catalog entries | 43 |
-| JSON schemas | 6 |
+The **public catalog** is where partners, ISVs, and IBM product teams publish their listings. It is backed by the public Git repository at github.com/IBM/sovereign-core-catalog. All entries are structured YAML validated by CI on every pull request. Partners contribute via PR, IBM reviews and merges, and the result is a governed, auditable record of every listed product.
 
-Browse the public catalog at [www.ibm.com/products/sovereign-core/catalog](https://www.ibm.com/products/sovereign-core/catalog)
+The **platform catalog** is the in-platform deployment engine available inside every deployed Sovereign Core environment. It consumes the same listings from the public catalog and makes them available to service providers and tenants for one-click provisioning. A listing in the public catalog automatically becomes available in the platform catalog once approved.
+
+> **Design principle:** The repository stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, no product code. All actual artifacts remain in vendor-owned OCI registries.
 
 ---
 
