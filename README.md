@@ -199,32 +199,19 @@ This section covers the technical integration steps for teams bringing a product
 
 ### Onboarding journey
 
-```
-Start
-  │
-  ▼
-Step 1 — Understand platform concepts and integration requirements
-  │
-  ▼
-Step 2 — Prepare company profile, product profile, and technical metadata
-  │
-  ▼
-Step 3 — Implement Sovereign Core integration
-  │
-  ├── Multi-tenant service ──► Step 3a: Multi-Tenant Integration
-  └── Single-tenant service ──► Step 3b: Single-Tenant Integration
-  │
-  ▼
-Step 4 — Meet the security bar (zero critical or high CVEs)
-  │
-  ▼
-Step 5 — Optional enhancements: Metering · IAM · Observability
-  │
-  ▼
-Step 6 — Submit pull request to the Public GitHub Repository
-  │
-  ▼
-Listed in store & available in catalog
+```mermaid
+flowchart TD
+    A([Start: IBM Software Team]) --> B[Step 1<br/>Understand key concepts<br/>and requirements]
+    B --> C[Step 2<br/>Prepare metadata &<br/>company / product profile]
+    C --> D[Step 3<br/>Implement Sovereign Core<br/>integration]
+    D --> E{What deployment<br/>model?}
+    E -- "Multi-tenant<br/>service" --> F[Step 3a<br/>Multi-Tenant Integration]
+    E -- "Single-tenant<br/>service" --> G[Step 3b<br/>Single-Tenant Integration]
+    F --> H[Step 4<br/>Meet security bar<br/>≥ zero critical CVEs]
+    G --> H
+    H --> I[Step 5<br/>Optional enhancements<br/>Metering · IAM · Observability]
+    I --> J[Step 6<br/>Submit PR to Public<br/>GitHub Repository]
+    J --> K([Listed in Store<br/>& available in Catalog])
 ```
 
 ### Submit your listing — GitHub pull request
