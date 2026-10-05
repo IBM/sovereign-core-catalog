@@ -214,6 +214,8 @@ flowchart TD
     J --> K([Listed in Store<br/>& available in Catalog])
 ```
 
+For more details on onboarding, reference the [Sovereign Core catalog onboarding guide](docs/onboarding-guide.md).
+
 ### Submit your listing — GitHub pull request
 
 To appear in the catalog, submit a pull request to the [Public GitHub Repository](https://github.com/IBM/sovereign-core-catalog). Your PR must include:
