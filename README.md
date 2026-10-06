@@ -247,14 +247,16 @@ flowchart TD
 ```
 [ ] 1. Understand platform concepts (public catalog, GitHub repo, platform catalog, BYOP broker)
 [ ] 2. Prepare company profile, product profile, and technical metadata
-[ ] 3a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
+[ ] 3. Choose your deployment model (single-tenant or multi-tenant)
+[ ] 4a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
     — OR —
-[ ] 3b. Multi-tenant: automate Tenant 0 installation + implement Service Broker
-[ ] 4. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
-[ ] 5. (Optional) Implement metering interface
-[ ] 6. (Optional) Integrate with Sovereign Core IAM
-[ ] 7. (Optional) Integrate with platform logging and metrics
-[ ] 8. Submit pull request to the public GitHub repository
+[ ] 4b. Multi-tenant: automate Tenant 0 installation + implement Service Broker
+[ ] 5. Choose broker implementation (OOTB broker or custom broker)
+[ ] 6. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
+[ ] 7. (Optional) Implement metering interface
+[ ] 8. (Optional) Integrate with Sovereign Core IAM
+[ ] 9. (Optional) Integrate with platform logging and metrics
+[ ] 10. Submit pull request to the public GitHub repository
 ```
 
 ### Step 3 — Choose your deployment model
@@ -267,10 +269,10 @@ Before implementing the integration, determine how your software serves multiple
 
 ### Step 3a — Single-tenant integration
 
-1. Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for bespoke provisioning logic.
-2. The broker deploys your software into the tenant-specific namespace using the customer's GitOps repository as the delivery mechanism.
+1. Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for special provisioning logic.
+2. The broker deploys your software into the tenant-specific cluster using the customer's GitOps repository as the delivery mechanism.
 
-**Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant namespace → tenant receives a dedicated instance.
+**Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant cluster → tenant receives a dedicated instance.
 
 ### Step 3b — Multi-tenant integration
 
@@ -284,12 +286,9 @@ Before implementing the integration, determine how your software serves multiple
 | Option | Best for | What it requires |
 |---|---|---|
 | **Out-of-the-box BYOP Broker** *(v1.2+)* | Single-tenant Helm workloads | No broker code — configure chart repo, chart name, and values schema |
-| **Open source reference broker** *(Catalogathon, v1.0/v1.1)* | Teams that need a starting point | Fork the reference implementation and adapt lifecycle methods |
 | **Custom broker** *(any release)* | Multi-tenant or complex provisioning | Implement the full OSB API from scratch |
 
 **Out-of-the-box BYOP Broker** — The fastest path for Helm-based single-tenant deployments. No broker code required. Additional workload types (e.g. Operator-based) are planned for upcoming releases.
-
-**Open source reference broker** — A working OSB API implementation covering `provision`, `deprovision`, `bind`, and `unbind`. Integrates with ArgoCD and the Sovereign Core GitOps delivery model. Available in the Catalogathon GitHub organisation.
 
 **Custom broker** — Full control over provisioning logic. Implement `/v2/catalog`, `/v2/service_instances`, and `/v2/service_bindings`. Required for multi-tenant services that need custom tenant lifecycle management.
 
@@ -301,10 +300,6 @@ Security is a mandatory gate — not optional.
 - All images must be sourced from a trusted registry (e.g. `registry.redhat.io`).
 - Follow IBM secure-by-default standards: no hardcoded secrets, non-root containers, TLS 1.2 or higher throughout.
 - Automated vulnerability scans must be integrated into your CI/CD pipeline before submission.
-
-### Step 4 — Secrets store
-
-BYOP products must provide and manage their own secrets store. They cannot use Sovereign Core's Vault instance.
 
 ### Steps 5, 6 & 7 — Optional enhancements
 
