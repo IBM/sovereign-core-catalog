@@ -31,7 +31,6 @@ Digital sovereignty is no longer a niche requirement. Governments, financial ins
    - [Three-stage partner contribution — Submitting a pull request (PR)](#three-stage-partner-contribution--submitting-a-pull-request-pr)
 7. [BYOP products onboarding](#byop-products-onboarding)
    - [Onboarding journey](#onboarding-journey)
-   - [Onboarding checklist](#onboarding-checklist)
    - [Step 3 — Choose your deployment model](#step-3--choose-your-deployment-model)
    - [Step 3a — Single-tenant integration](#step-3a--single-tenant-integration)
    - [Step 3b — Multi-tenant integration](#step-3b--multi-tenant-integration)
@@ -241,23 +240,6 @@ flowchart TD
     H --> I[Step 5: Optional enhancements]
     I --> J[Step 6: Submit PR]
     J --> K([Listed in catalog])
-```
-
-### Onboarding checklist
-
-```
-[ ] 1. Understand platform concepts (public catalog, GitHub repo, platform catalog, BYOP broker)
-[ ] 2. Prepare company profile, product profile, and technical metadata
-[ ] 3. Choose your deployment model (single-tenant or multi-tenant)
-[ ] 4a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
-    — OR —
-[ ] 4b. Multi-tenant: automate Tenant 0 installation + implement Service Broker
-[ ] 5. Choose broker implementation (OOTB broker or custom broker)
-[ ] 6. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
-[ ] 7. (Optional) Implement metering interface
-[ ] 8. (Optional) Integrate with Sovereign Core IAM
-[ ] 9. (Optional) Integrate with platform logging and metrics
-[ ] 10. Submit pull request to the public GitHub repository
 ```
 
 ### Step 3 — Choose your deployment model
