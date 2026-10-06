@@ -244,7 +244,7 @@ flowchart TD
 
 ### Submit your listing — GitHub pull request
 
-To appear in the catalog, submit a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog). For PR format and examples, refer to the [existing pull requests](https://github.com/IBM/sovereign-core-catalog/pulls) in the public repository as a template. Your PR must include:
+To appear in the catalog, submit a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog). For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository. Your PR must include:
 
 - **Company profile** — name, logo, contact details, description
 - **Software profile** — product name, version, category, description
