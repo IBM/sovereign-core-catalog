@@ -214,6 +214,21 @@ flowchart TD
     J --> K([Listed in Store<br/>& available in Catalog])
 ```
 
+### Onboarding checklist
+
+```
+[ ] 1. Understand platform concepts (public catalog, GitHub repo, platform catalog, BYOP broker)
+[ ] 2. Prepare company profile, product profile, and technical metadata
+[ ] 3a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
+    — OR —
+[ ] 3b. Multi-tenant: automate Tenant 0 installation + implement Service Broker
+[ ] 4. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
+[ ] 5. (Optional) Implement metering interface
+[ ] 6. (Optional) Integrate with Sovereign Core IAM
+[ ] 7. (Optional) Integrate with platform logging and metrics
+[ ] 8. Submit pull request to the public GitHub repository
+```
+
 ### Submit your listing — GitHub pull request
 
 To appear in the catalog, submit a pull request to the [Public GitHub Repository](https://github.com/IBM/sovereign-core-catalog). Your PR must include:
@@ -285,20 +300,5 @@ Not required for initial listing, but strongly recommended for a complete manage
 ### Coming soon
 
 **Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
-
-### Onboarding checklist
-
-```
-[ ] 1. Understand platform concepts (public catalog, GitHub repo, platform catalog, BYOP broker)
-[ ] 2. Prepare company profile, product profile, and technical metadata
-[ ] 3a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
-    — OR —
-[ ] 3b. Multi-tenant: automate Tenant 0 installation + implement Service Broker
-[ ] 4. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
-[ ] 5. (Optional) Implement metering interface
-[ ] 6. (Optional) Integrate with Sovereign Core IAM
-[ ] 7. (Optional) Integrate with platform logging and metrics
-[ ] 8. Submit pull request to the public GitHub repository
-```
 
 For more details on onboarding, reference the [Sovereign Core catalog onboarding guide](docs/onboarding-guide.md).
