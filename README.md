@@ -38,7 +38,8 @@ Digital sovereignty is no longer a niche requirement. Governments, financial ins
    - [Step 4 — Security requirements](#step-4--security-requirements)
    - [Steps 5, 6 & 7 — Optional enhancements](#steps-5-6--7--optional-enhancements)
    - [Step 8 — Submitting your pull request (PR)](#step-8--submitting-your-pull-request-pr)
-8. [Complete catalog guide](#complete-catalog-guide)
+8. [Roles and responsibilities (RACI)](#roles-and-responsibilities-raci)
+9. [Complete catalog guide](#complete-catalog-guide)
 
 ---
 
@@ -325,6 +326,20 @@ For steps on how to submit a PR, reference the [Three-stage partner contribution
 ### Coming soon
 
 **Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
+
+## Roles and responsibilities (RACI)
+
+Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
+
+| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
+|---|---|---|---|
+| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
+| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
+| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
+| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
+| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
+
+---
 
 ## Complete catalog guide
 
