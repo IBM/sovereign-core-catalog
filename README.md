@@ -169,7 +169,7 @@ PR       for                              for audit
          review
 ```
 
-### Three-stage partner contribution
+### Three-stage partner contribution — Submitting your pull request
 
 **Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
