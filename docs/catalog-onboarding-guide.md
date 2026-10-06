@@ -32,17 +32,13 @@ It is written for IBM product teams, managed service providers, ISVs, and busine
 
 ## Why the catalog exists
 
-IBM Sovereign Core is only as valuable as what runs on it. A platform without a growing, trustworthy set of services on top of it is an infrastructure story, not a solution story. The catalog is how that set grows in a way that keeps the sovereignty claim credible and verifiable.
-
-The catalog provides a repeatable, governed route for any product that runs on Sovereign Core. A team submits once, a pipeline validates standard requirements automatically, and a readiness review focuses only on exceptions. The result is a published claim backed by evidence — one that stays current as both the product and the platform evolve. This gives buyers a trustworthy, growing set of services on top of the platform, and gives product teams a defined, efficient path to market.
+IBM Sovereign Core is only as valuable as what runs on it. A platform without a growing, trustworthy set of services on top of it is an infrastructure story, not a solution story. The catalog is how that set grows in a way that keeps the sovereignty claim credible and verifiable — with every listing backed by evidence that stays current as both the product and the platform evolve.
 
 ---
 
 ## Who can onboard
 
-The catalog is open to business partners, ISVs, and IBM product teams. It covers software, blueprints, AI models served through the platform inference runtime, and services such as migration or compliance validation. If a product can run on CNCF-conformant Kubernetes (including OpenShift) without requiring changes to the Sovereign Core control plane, and if there is a team willing to own it after it ships, it is a candidate.
-
-A product that ships without an active owner for currency, vulnerability response, or compatibility with the next platform release will degrade the catalog faster than not having it at all. A short list of well-maintained entries is more valuable than a long list that no one trusts.
+Any product that can run on CNCF-conformant Kubernetes (including OpenShift) without requiring changes to the Sovereign Core control plane is a candidate — whether it is software, a blueprint, an AI model served through the platform inference runtime, or a service such as migration or compliance validation. The one non-negotiable requirement is an active owner: a team that will maintain currency, respond to vulnerabilities, and ensure compatibility with each new platform release. A short list of well-maintained entries is more valuable than a long list that no one trusts.
 
 ---
 
