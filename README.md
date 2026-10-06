@@ -171,6 +171,13 @@ PR       for                              for audit
 
 ### Three-stage partner contribution — Submitting your pull request
 
+To appear in the catalog, submit a pull request to the [Public GitHub Repository](https://github.com/IBM/sovereign-core-catalog). Your PR must include:
+
+- **Company profile** — name, logo, contact details, description
+- **Software profile** — product name, version, category, description
+- **Technical metadata** — air-gap support, supported architectures, resource requirements
+- **Sovereign Core integration artefacts** — see deployment model section below
+
 **Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
 
