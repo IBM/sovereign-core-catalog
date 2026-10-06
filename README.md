@@ -303,4 +303,4 @@ For steps on how to submit a PR, reference the [Three-stage partner contribution
 
 **Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
 
-For more details on onboarding, reference the [Sovereign Core catalog onboarding guide](docs/onboarding-guide.md).
+For more details on onboarding, reference the [Sovereign Core catalog onboarding guide](docs/catalog-onboarding-guide.md).
