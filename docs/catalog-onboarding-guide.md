@@ -233,7 +233,7 @@ graph LR
 
 ```mermaid
 flowchart TD
-    A([Start]) --> B[Step 1<br/>Understand key concepts<br/>and requirements]
+    A[Start] --> B[Step 1<br/>Understand key concepts<br/>and requirements]
     B --> C[Step 2<br/>Prepare metadata &<br/>company / product profile]
     C --> D[Step 3<br/>Implement Sovereign Core<br/>integration]
     D --> E{What deployment<br/>model?}
@@ -243,7 +243,7 @@ flowchart TD
     G --> H
     H --> I[Step 5<br/>Optional enhancements<br/>Metering · IAM · Observability]
     I --> J[Step 6<br/>Submit PR to Public<br/>GitHub Repository]
-    J --> K([Listed in catalog])
+    J --> K[Listed in catalog]
 ```
 
 ### Submit your listing — GitHub pull request
