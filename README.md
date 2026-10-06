@@ -169,7 +169,7 @@ PR       for                              for audit
          review
 ```
 
-### Three-stage partner contribution
+### Three-stage partner contribution — Submitting a pull request (PR)
 
 **Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
@@ -297,7 +297,7 @@ To appear in the catalog, submit a pull request to the Public GitHub Repository.
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artefacts** — see deployment model section below
 
-For steps on how to submit a PR, reference the [Three-stage partner contribution](#three-stage-partner-contribution) section.
+For steps on how to submit a PR, reference the [Three-stage partner contribution — Submitting a pull request (PR)](#three-stage-partner-contribution--submitting-a-pull-request-pr) section.
 
 ### Coming soon
 
