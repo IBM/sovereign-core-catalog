@@ -1,14 +1,18 @@
 # IBM Sovereign Core public catalog
 
-## Sovereign Core catalog business value
+## Why list your product on IBM Sovereign Core
 
-Digital sovereignty has moved from a compliance checkbox to a competitive requirement. Governments, financial institutions, healthcare organizations, and managed service providers are under growing pressure to prove that the software in their environments meets strict standards for data control, residency, and regulatory compliance. IBM Sovereign Core is the platform those buyers trust — and the catalog is how your product gets in front of them.
+Digital sovereignty is no longer a niche requirement. Governments, financial institutions, healthcare organizations, and managed service providers across the globe are under increasing pressure to demonstrate that the software running in their environments meets strict standards for data residency, operational control, compliance, and AI governance. IBM Sovereign Core was built to be the platform those buyers trust — and the catalog is how your product gets in front of them.
 
-**Get discovered where it counts.** The catalog is the primary surface where customers and managed service providers evaluate what runs inside their sovereign environment. A listing makes your product part of that conversation — backed by IBM, visible in the public storefront, and available for one-click provisioning inside every Sovereign Core deployment worldwide.
+**The market opportunity is real and growing.** IBM Sovereign Core is now generally available and already deployed across regulated industries in multiple regions, with partners including AMD, Cloudera, Mistral AI, Palo Alto Networks, MongoDB, and Deloitte. The catalog is the primary discovery surface for every customer and managed service provider evaluating what runs inside their sovereign environment. A listing puts your product directly in that evaluation process.
 
-**Turn compliance into a seller advantage.** Every listing comes with a permitted seller claim — "Validated on Sovereign Core," "Catalog compatible," "Integrated," or "Premium." These are the exact phrases IBM sellers and MSP teams use when responding to regulated tenders and sovereignty mandates. A catalog listing gives your product a verifiable, IBM-reviewed entry that your sales teams can reference in any sovereign opportunity.
+**A catalog listing is a seller claim, not just a listing.** Each integration level comes with a specific, permitted claim — "Validated on Sovereign Core," "Catalog compatible," "Integrated," or "Premium." These are the exact phrases IBM sellers, MSP sales teams, and procurement evaluators use when responding to regulated tenders and sovereignty mandates. Without a listing, your product cannot be referenced in those conversations with any backing. With one, your product has a verifiable, IBM-reviewed entry point into every Sovereign Core opportunity.
 
-**Start fast, grow at your own pace.** A basic listing can be achieved in approximately five business days. You do not need a full platform integration to get listed and your sellers unblocked. Enter at the level that matches your current readiness and deepen the integration as the opportunity grows.
+**You get reach without rebuilding.** The same listing simultaneously populates the public-facing catalog at ibm.com, the in-platform catalog available inside every Sovereign Core deployment worldwide, and the BYOP provisioning engine that MSPs use to offer your software as a managed service to their tenants. One PR, three surfaces, every deployment.
+
+**The bar is defined and the path is fast.** A Level 1 validation can be achieved in approximately five business days once intake inputs are complete. You do not need to complete a full platform integration to get your product listed and your sellers unblocked. The catalog is designed to let you enter at the right level for your current readiness and deepen the integration over time as the opportunity justifies it.
+
+**For MSPs, the catalog is a product catalog for your customers.** The platform catalog is a curated, centrally controlled service registry that your administrators govern and your tenants self-serve from. Onboarding your own software or a partner's software into the catalog means your customers get a repeatable, one-click provisioning experience — rather than a bespoke installation that no one can maintain at version three.
 
 ---
 
