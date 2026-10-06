@@ -4,13 +4,26 @@
 
 ## Table of contents
 
-1. [Introducing the Sovereign Core catalog](#introducing-the-sovereign-core-catalog)
-2. [The four integration levels](#the-four-integration-levels)
-3. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
-4. [Repository structure](#repository-structure)
-5. [Asset lifecycle states](#asset-lifecycle-states)
-6. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
-7. [BYOP products onboarding](#byop-products-onboarding)
+1. [Sovereign Core catalog business value](#sovereign-core-catalog-business-value)
+2. [Introducing the Sovereign Core catalog](#introducing-the-sovereign-core-catalog)
+3. [The four integration levels](#the-four-integration-levels)
+4. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
+5. [Repository structure](#repository-structure)
+6. [Asset lifecycle states](#asset-lifecycle-states)
+7. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
+8. [BYOP products onboarding](#byop-products-onboarding)
+
+---
+
+## Sovereign Core catalog business value
+
+Digital sovereignty has moved from a compliance checkbox to a competitive requirement. Governments, financial institutions, healthcare organizations, and managed service providers are under growing pressure to prove that the software in their environments meets strict standards for data control, residency, and regulatory compliance. IBM Sovereign Core is the platform those buyers trust — and the catalog is how your product gets in front of them.
+
+**Get discovered where it counts.** The catalog is the primary surface where customers and managed service providers evaluate what runs inside their sovereign environment. A listing makes your product part of that conversation — backed by IBM, visible in the public storefront, and available for one-click provisioning inside every Sovereign Core deployment worldwide.
+
+**Turn compliance into a seller advantage.** Every listing comes with a permitted seller claim — "Validated on Sovereign Core," "Catalog compatible," "Integrated," or "Premium." These are the exact phrases IBM sellers and MSP teams use when responding to regulated tenders and sovereignty mandates. A catalog listing gives your product a verifiable, IBM-reviewed entry that your sales teams can reference in any sovereign opportunity.
+
+**Start fast, grow at your own pace.** A basic listing can be achieved in approximately five business days. You do not need a full platform integration to get listed and your sellers unblocked. Enter at the level that matches your current readiness and deepen the integration as the opportunity grows.
 
 ---
 
