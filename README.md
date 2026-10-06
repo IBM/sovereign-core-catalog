@@ -30,13 +30,16 @@ Digital sovereignty is no longer a niche requirement. Governments, financial ins
 6. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
    - [Three-stage partner contribution — Submitting a pull request (PR)](#three-stage-partner-contribution--submitting-a-pull-request-pr)
 7. [BYOP products onboarding](#byop-products-onboarding)
+   - [Platform building blocks](#platform-building-blocks)
    - [Onboarding journey](#onboarding-journey)
-   - [Step 3 — Choose your deployment model](#step-3--choose-your-deployment-model)
-   - [Step 3a — Single-tenant integration](#step-3a--single-tenant-integration)
-   - [Step 3b — Multi-tenant integration](#step-3b--multi-tenant-integration)
+   - [Step 1 — Choose your deployment model](#step-1--choose-your-deployment-model)
+   - [Step 2a — Single-tenant integration](#step-2a--single-tenant-integration)
+   - [Step 2b — Multi-tenant integration](#step-2b--multi-tenant-integration)
+   - [Step 3 — Broker implementation options](#step-3--broker-implementation-options)
    - [Step 4 — Security requirements](#step-4--security-requirements)
    - [Steps 5, 6 & 7 — Optional enhancements](#steps-5-6--7--optional-enhancements)
    - [Step 8 — Submitting your pull request (PR)](#step-8--submitting-your-pull-request-pr)
+   - [Coming soon](#coming-soon)
 8. [Roles and responsibilities (RACI)](#roles-and-responsibilities-raci)
 9. [Complete catalog guide](#complete-catalog-guide)
 
@@ -242,7 +245,7 @@ flowchart TD
     J --> K([Listed in catalog])
 ```
 
-### Step 3 — Choose your deployment model
+### Step 1 — Choose your deployment model
 
 Before implementing the integration, determine how your software serves multiple customers:
 
@@ -250,14 +253,14 @@ Before implementing the integration, determine how your software serves multiple
 
 **Multi-tenant service** — Your software is installed once into "Tenant 0" resources. Each customer tenant maps to a logical instance within that shared installation. This model requires a Service Broker implementation.
 
-### Step 3a — Single-tenant integration
+### Step 2a — Single-tenant integration
 
 1. Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for special provisioning logic.
 2. The broker deploys your software into the tenant-specific cluster using the customer's GitOps repository as the delivery mechanism.
 
 **Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant cluster → tenant receives a dedicated instance.
 
-### Step 3b — Multi-tenant integration
+### Step 2b — Multi-tenant integration
 
 1. **Automate installation to Tenant 0** — Use the BYOP process to deploy the shared service infrastructure. Strongly recommended for operational consistency.
 2. **Implement a Service Broker** — The broker is called each time a service provider provisions a new tenant. It creates the tenant-to-instance mapping within your software. Follow the Open Service Broker API specification.
