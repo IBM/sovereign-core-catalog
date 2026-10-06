@@ -213,14 +213,38 @@ This section covers the technical integration steps for teams bringing a product
 | **Sovereign Core platform catalog** | An in-platform catalog inside each Sovereign Core deployment. MSP and Central IT administrators use it to curate which services are available to their tenants. |
 | **BYOP broker & provisioning** | The "Bring Your Own Product" broker, backed by ArgoCD and a customer-supplied GitOps repository. This is how MSPs operationalize software and offer it as a managed service to tenants. |
 
+```mermaid
+graph LR
+    subgraph Discovery["🌐 Discovery Layer"]
+        GH["Public GitHub Repo<br/>(master data source)"]
+        PublicCatalog["Public catalog<br/>(website)"]
+    end
+
+    subgraph Platform["🏢 Sovereign Core Platform"]
+        Catalog["Sovereign Core Catalog<br/>(per deployment)"]
+        BYOP["BYOP Broker<br/>(ArgoCD / GitOps)"]
+    end
+
+    GH -- "feeds" --> Catalog
+    Catalog -- "triggers" --> BYOP
+```
+
 ### Onboarding journey
 
-1. **Understand platform concepts and integration requirements** — Review the public catalog, GitHub repository, platform catalog, and BYOP broker before you begin.
-2. **Prepare your profiles and technical metadata** — Complete your company profile, product profile, and technical metadata (air-gap support, architectures, resource requirements).
-3. **Implement Sovereign Core integration** — Follow the single-tenant path (BYOP broker) or the multi-tenant path (platform tenant installation + Service Broker). See the sections below for full details.
-4. **Meet the security bar** — Resolve all critical and high CVEs, use trusted registries, and integrate automated vulnerability scanning into your CI/CD pipeline.
-5. **Add optional enhancements (recommended)** — Implement metering, IAM integration, and logging/metrics for a complete managed-service experience.
-6. **Submit your pull request** — Open a PR to the public GitHub repository. IBM reviews and merges; your listing goes live in the public catalog and in-platform catalog.
+```mermaid
+flowchart TD
+    A([Start]) --> B[Step 1<br/>Understand key concepts<br/>and requirements]
+    B --> C[Step 2<br/>Prepare metadata &<br/>company / product profile]
+    C --> D[Step 3<br/>Implement Sovereign Core<br/>integration]
+    D --> E{What deployment<br/>model?}
+    E -- "Multi-tenant<br/>service" --> F[Step 3a<br/>Multi-Tenant Integration]
+    E -- "Single-tenant<br/>service" --> G[Step 3b<br/>Single-Tenant Integration]
+    F --> H[Step 4<br/>Meet security bar<br/>≥ zero critical CVEs]
+    G --> H
+    H --> I[Step 5<br/>Optional enhancements<br/>Metering · IAM · Observability]
+    I --> J[Step 6<br/>Submit PR to Public<br/>GitHub Repository]
+    J --> K([Listed in catalog])
+```
 
 ### Submit your listing — GitHub pull request
 
@@ -235,6 +259,13 @@ To appear in the catalog, submit a pull request to the public GitHub repository 
 
 Before implementing the integration, determine how your software serves multiple customers. Even if your application supports a multi-tenant model, the recommended deployment approach is ultimately up to you as the software provider — consider your architecture, operational complexity, and customer requirements when choosing.
 
+```mermaid
+flowchart LR
+    Q{"How does your software<br/>serve multiple tenants?"}
+    Q -- "One shared installation<br/>serves all tenants" --> MT["Multi-Tenant Service<br/>Installed once in Tenant 0<br/>space; each customer maps<br/>to a logical tenant/instance"]
+    Q -- "A dedicated installation<br/>per tenant" --> ST["Single-Tenant Service<br/>Deployed into each<br/>tenant's own cluster"]
+```
+
 **Single-tenant service** — A dedicated, isolated copy of your software is deployed per tenant into that tenant's own Kubernetes cluster.
 
 **Multi-tenant service** — Your software is installed once into "platform tenant" resources. Each customer tenant maps to a logical instance within that shared installation. This model requires a Service Broker implementation.
@@ -244,16 +275,53 @@ Before implementing the integration, determine how your software serves multiple
 - Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for special provisioning logic.
 - The broker deploys your software into the tenant-specific cluster using the customer's GitOps repository as the delivery mechanism.
 
-**Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant cluster → tenant receives a dedicated instance in their own cluster.
+```mermaid
+sequenceDiagram
+    participant MSP as MSP Administrator
+    participant Catalog as Sovereign Core Catalog
+    participant BYOP as BYOP Broker (ArgoCD)
+    participant TenantNS as Tenant Cluster
+
+    MSP->>Catalog: Enable service for Tenant X
+    Catalog->>BYOP: Trigger provisioning
+    BYOP->>TenantNS: Deploy software via GitOps
+    TenantNS-->>BYOP: Deployment complete
+    BYOP-->>MSP: Tenant X has a dedicated instance
+```
 
 ### Step 3b — Multi-tenant integration
 
 - **Automate installation to platform tenant** — Use the BYOP process to deploy the shared service infrastructure. Strongly recommended for operational consistency.
 - **Implement a Service Broker** — The broker is called each time a service provider provisions a new tenant. It creates the tenant-to-instance mapping within your software. Follow the Open Service Broker API specification.
 
-**Provisioning flow:** MSP enables service for a tenant → Sovereign Core Catalog triggers BYOP broker → broker calls `POST /v2/service_instances/{id}` → service broker creates tenant mapping → tenant has access.
+```mermaid
+sequenceDiagram
+    participant MSP as Service Provider Administrator
+    participant Catalog as Sovereign Core Catalog
+    participant BYOP as BYOP Broker (ArgoCD)
+    participant SB as Your Service Broker
+    participant SW as Your Software<br/>(Tenant 0)
+
+    MSP->>Catalog: Enable service for a tenant
+    Catalog->>BYOP: Trigger provisioning
+    BYOP->>SB: POST /v2/service_instances/{id}
+    SB->>SW: Create tenant/instance mapping
+    SW-->>SB: 201 Created
+    SB-->>BYOP: Provisioning complete
+    BYOP-->>MSP: Tenant has access
+```
 
 ### Step 3 — Broker implementation options
+
+```mermaid
+flowchart TD
+    B{Which broker<br/>approach?}
+    B -->|Helm-based<br/>single-tenant| OotB["Out-of-the-box BYOP Broker<br/>(available v1.2+)"]
+    B -->|Full control<br/>of provisioning| Custom["Custom Broker<br/>(any release)"]
+
+    OotB --> Note1["Zero broker code to write.<br/>Point it at your Helm chart<br/>and configure parameters."]
+    Custom --> Note2["Implement the OSB API<br/>from scratch. Full control<br/>over every provisioning step."]
+```
 
 | Option | Best for | What it requires |
 |---|---|---|
