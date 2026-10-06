@@ -169,14 +169,7 @@ PR       for                              for audit
          review
 ```
 
-### Three-stage partner contribution — Submitting your pull request (PR)
-
-To appear in the catalog, submit a pull request to the Public GitHub Repository. Your PR must include:
-
-- **Company profile** — name, logo, contact details, description
-- **Software profile** — product name, version, category, description
-- **Technical metadata** — air-gap support, supported architectures, resource requirements
-- **Sovereign Core integration artefacts** — see deployment model section below
+### Three-stage partner contribution
 
 **Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
@@ -294,6 +287,15 @@ Not required for initial listing, but strongly recommended for a complete manage
 | **Metering interface** | Enables usage-based billing and chargeback reporting for MSPs and their tenants. |
 | **Sovereign Core IAM integration** | Single sign-on and RBAC via the platform identity provider — no separate user directory needed. |
 | **Logging & metrics** | Integrates your service with the platform's log aggregation and metrics stack for unified MSP monitoring. |
+
+### Step 8 — Submitting your pull request (PR)
+
+To appear in the catalog, submit a pull request to the Public GitHub Repository. Your PR must include:
+
+- **Company profile** — name, logo, contact details, description
+- **Software profile** — product name, version, category, description
+- **Technical metadata** — air-gap support, supported architectures, resource requirements
+- **Sovereign Core integration artefacts** — see deployment model section below
 
 ### Coming soon
 
