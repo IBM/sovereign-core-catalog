@@ -297,6 +297,8 @@ To appear in the catalog, submit a pull request to the Public GitHub Repository.
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artefacts** — see deployment model section below
 
+For steps on how to submit a PR, reference the [Three-stage partner contribution](#three-stage-partner-contribution) section.
+
 ### Coming soon
 
 **Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
