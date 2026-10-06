@@ -16,11 +16,25 @@ Digital sovereignty has moved from a compliance checkbox to a competitive requir
 
 1. [Introducing the Sovereign Core catalog](#introducing-the-sovereign-core-catalog)
 2. [The four integration levels](#the-four-integration-levels)
+   - [Level 1 — Validated](#level-1--validated)
+   - [Level 2 — BYOP (Bring Your Own Product)](#level-2--byop-bring-your-own-product)
+   - [Level 3 — Integrated](#level-3--integrated)
+   - [Level 4 — Premium](#level-4--premium)
 3. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
 4. [Repository structure](#repository-structure)
 5. [Asset lifecycle states](#asset-lifecycle-states)
 6. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
+   - [Three-stage partner contribution — Submitting a pull request (PR)](#three-stage-partner-contribution--submitting-a-pull-request-pr)
 7. [BYOP products onboarding](#byop-products-onboarding)
+   - [Onboarding journey](#onboarding-journey)
+   - [Onboarding checklist](#onboarding-checklist)
+   - [Step 3 — Choose your deployment model](#step-3--choose-your-deployment-model)
+   - [Step 3a — Single-tenant integration](#step-3a--single-tenant-integration)
+   - [Step 3b — Multi-tenant integration](#step-3b--multi-tenant-integration)
+   - [Step 4 — Security requirements](#step-4--security-requirements)
+   - [Steps 5, 6 & 7 — Optional enhancements](#steps-5-6--7--optional-enhancements)
+   - [Step 8 — Submitting your pull request (PR)](#step-8--submitting-your-pull-request-pr)
+8. [Complete catalog guide](#complete-catalog-guide)
 
 ---
 
