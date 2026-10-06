@@ -236,15 +236,6 @@ flowchart TD
 [ ] 8. Submit pull request to the public GitHub repository
 ```
 
-### Submit your listing — GitHub pull request
-
-To appear in the catalog, submit a pull request to the [Public GitHub Repository](https://github.com/IBM/sovereign-core-catalog). Your PR must include:
-
-- **Company profile** — name, logo, contact details, description
-- **Software profile** — product name, version, category, description
-- **Technical metadata** — air-gap support, supported architectures, resource requirements
-- **Sovereign Core integration artefacts** — see deployment model section below
-
 ### Choose your deployment model
 
 Before implementing the integration, determine how your software serves multiple customers:
