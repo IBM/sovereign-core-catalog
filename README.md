@@ -23,7 +23,7 @@ Digital sovereignty is no longer a niche requirement. Governments, financial ins
 3. [The 5 pillars of sovereign attributes](#the-5-pillars-of-sovereign-attributes)
 4. [Repository structure](#repository-structure)
 5. [Asset lifecycle states](#asset-lifecycle-states)
-6. [Contribution flow & lifecycle](#contribution-flow--lifecycle)
+6. [Contribution flow & lifecycle — Submitting a pull request (PR)](#contribution-flow--lifecycle--submitting-a-pull-request-pr)
 7. [BYOP products onboarding](#byop-products-onboarding)
 8. [Roles and responsibilities (RACI)](#roles-and-responsibilities-raci)
 9. [Complete catalog guide](#complete-catalog-guide)
@@ -118,9 +118,9 @@ Every catalog entry carries a `lifecycleStatus` field that controls visibility a
 
 ---
 
-## Contribution flow & lifecycle
+## Contribution flow & lifecycle — Submitting a pull request (PR)
 
-### Three-stage partner contribution — Submitting a pull request (PR)
+### Three-stage partner contribution
 
 **Stage 1 — Join: submit your company profile**
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
