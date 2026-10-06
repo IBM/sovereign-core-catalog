@@ -169,7 +169,7 @@ PR       for                              for audit
          review
 ```
 
-### Three-stage partner contribution — Submitting your pull request
+### Three-stage partner contribution — Submitting your pull request (PR)
 
 To appear in the catalog, submit a pull request to the [Public GitHub Repository](https://github.com/IBM/sovereign-core-catalog). Your PR must include:
 
