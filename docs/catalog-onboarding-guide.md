@@ -6,7 +6,7 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 
 ## Table of contents
 
-1. [What this guide is and who it is for](#what-this-guide-is-and-who-it-is-for)
+1. [About this guide](#about-this-guide)
 2. [Why the catalog exists](#why-the-catalog-exists)
 3. [Who can onboard](#who-can-onboard)
 4. [Introducing the Sovereign Core catalog](#introducing-the-sovereign-core-catalog)
@@ -22,11 +22,11 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 
 ---
 
-## What this guide is and who it is for
+## About this guide
 
-This guide explains how a product, service, model, or blueprint gets into the IBM Sovereign Core catalog — what the different levels of integration mean, what is required at each stage, and what a team commits to once listed.
+The IBM Sovereign Core catalog is the governed route for any product, service, AI model, or blueprint that runs on the platform. This guide covers everything a team needs to know before and during onboarding: how the four integration levels are structured and what each one requires, how to navigate the onboarding process from initial conversation through to publication, what the platform validates automatically and what requires human review, and what ongoing obligations come with a published listing.
 
-It is for product teams evaluating whether and how to onboard to the catalog.
+It is written for IBM product teams, managed service providers, ISVs, and business partners — anyone evaluating whether to list, preparing to submit, or looking to understand what they are committing to.
 
 ---
 
