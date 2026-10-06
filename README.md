@@ -236,7 +236,7 @@ flowchart TD
 [ ] 8. Submit pull request to the public GitHub repository
 ```
 
-### Choose your deployment model
+### Step 3 — Choose your deployment model
 
 Before implementing the integration, determine how your software serves multiple customers:
 
@@ -244,21 +244,21 @@ Before implementing the integration, determine how your software serves multiple
 
 **Multi-tenant service** — Your software is installed once into "Tenant 0" resources. Each customer tenant maps to a logical instance within that shared installation. This model requires a Service Broker implementation.
 
-### Single-tenant integration
+### Step 3a — Single-tenant integration
 
 1. Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for bespoke provisioning logic.
 2. The broker deploys your software into the tenant-specific namespace using the customer's GitOps repository as the delivery mechanism.
 
 **Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant namespace → tenant receives a dedicated instance.
 
-### Multi-tenant integration
+### Step 3b — Multi-tenant integration
 
 1. **Automate installation to Tenant 0** — Use the BYOP process to deploy the shared service infrastructure. Strongly recommended for operational consistency.
 2. **Implement a Service Broker** — The broker is called each time a service provider provisions a new tenant. It creates the tenant-to-instance mapping within your software. Follow the Open Service Broker API specification.
 
 **Provisioning flow:** MSP enables service for a tenant → Sovereign Core Catalog triggers BYOP broker → broker calls `POST /v2/service_instances/{id}` → service broker creates tenant mapping → tenant has access.
 
-### Broker implementation options
+### Step 3 — Broker implementation options
 
 | Option | Best for | What it requires |
 |---|---|---|
@@ -272,7 +272,7 @@ Before implementing the integration, determine how your software serves multiple
 
 **Custom broker** — Full control over provisioning logic. Implement `/v2/catalog`, `/v2/service_instances`, and `/v2/service_bindings`. Required for multi-tenant services that need custom tenant lifecycle management.
 
-### Security requirements
+### Step 4 — Security requirements
 
 Security is a mandatory gate — not optional.
 
@@ -281,11 +281,11 @@ Security is a mandatory gate — not optional.
 - Follow IBM secure-by-default standards: no hardcoded secrets, non-root containers, TLS 1.2 or higher throughout.
 - Automated vulnerability scans must be integrated into your CI/CD pipeline before submission.
 
-### Secrets store
+### Step 4 — Secrets store
 
 BYOP products must provide and manage their own secrets store. They cannot use Sovereign Core's Vault instance.
 
-### Optional enhancements
+### Steps 5, 6 & 7 — Optional enhancements
 
 Not required for initial listing, but strongly recommended for a complete managed-service experience:
 
