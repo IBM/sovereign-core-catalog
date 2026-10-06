@@ -1,4 +1,4 @@
-# IBM Sovereign Core — Catalog onboarding guide
+﻿# IBM Sovereign Core — Catalog onboarding guide
 
 For business partners, ISVs, and IBM product teams. IBM product teams should also refer to the internal addendum for additional guidelines specific to IBM offerings.
 
@@ -224,7 +224,7 @@ This section covers the technical integration steps for teams bringing a product
 
 ### Submit your listing — GitHub pull request
 
-To appear in the catalog, submit a pull request to the public GitHub repository at github.com/IBM/sovereign-core-catalog. Your PR must include:
+To appear in the catalog, submit a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog). For PR format and examples, refer to the [existing pull requests](https://github.com/IBM/sovereign-core-catalog/pulls) in the public repository as a template. Your PR must include:
 
 - **Company profile** — name, logo, contact details, description
 - **Software profile** — product name, version, category, description
@@ -233,15 +233,15 @@ To appear in the catalog, submit a pull request to the public GitHub repository 
 
 ### Step 3 — Choose your deployment model
 
-Before implementing the integration, determine how your software serves multiple customers:
+Before implementing the integration, determine how your software serves multiple customers. Even if your application supports a multi-tenant model, the recommended deployment approach is ultimately up to you as the software provider — consider your architecture, operational complexity, and customer requirements when choosing.
 
-**Single-tenant service** — A dedicated, isolated copy of your software is deployed per tenant into that tenant's own Kubernetes namespace or cluster. This is the simpler model and the recommended starting point for most products.
+**Single-tenant service** — A dedicated, isolated copy of your software is deployed per tenant into that tenant's own Kubernetes cluster.
 
 **Multi-tenant service** — Your software is installed once into "platform tenant" resources. Each customer tenant maps to a logical instance within that shared installation. This model requires a Service Broker implementation.
 
 ### Step 3a — Single-tenant integration
 
-- Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for bespoke provisioning logic.
+- Use the platform-supplied BYOP broker (preferred for standard Helm-based workloads) or implement a custom broker for special provisioning logic.
 - The broker deploys your software into the tenant-specific cluster using the customer's GitOps repository as the delivery mechanism.
 
 **Provisioning flow:** MSP enables service for Tenant X → Sovereign Core Catalog triggers BYOP broker → broker deploys software via GitOps into tenant cluster → tenant receives a dedicated instance in their own cluster.
@@ -257,13 +257,10 @@ Before implementing the integration, determine how your software serves multiple
 
 | Option | Best for | What it requires |
 |---|---|---|
-| **Prebuilt BYOP Broker** *(v1.2+)* | Single-tenant Helm workloads | No broker code — configure chart repo, chart name, and values schema |
-| **Open source reference broker** *(Catalogathon, v1.0/v1.1)* | Teams that need a starting point | Fork the reference implementation and adapt lifecycle methods |
+| **Out-of-the-box BYOP Broker** *(v1.2+)* | Single-tenant Helm workloads | No broker code — configure chart repo, chart name, and values schema |
 | **Custom broker** *(any release)* | Multi-tenant or complex provisioning | Implement the full OSB API from scratch |
 
-**Prebuilt BYOP Broker** — The fastest path for Helm-based single-tenant deployments. No broker code required. Additional workload types (e.g. Operator-based) are planned for upcoming releases.
-
-**Open source reference broker** — A working OSB API implementation covering `provision`, `deprovision`, `bind`, and `unbind`. Integrates with ArgoCD and the Sovereign Core GitOps delivery model. Available in the Catalogathon GitHub organisation.
+**Out-of-the-box BYOP Broker** — The fastest path for Helm-based single-tenant deployments. No broker code required. Additional workload types (e.g. Operator-based) are planned for upcoming releases.
 
 **Custom broker** — Full control over provisioning logic. Implement `/v2/catalog`, `/v2/service_instances`, and `/v2/service_bindings`. Required for multi-tenant services that need custom tenant lifecycle management.
 
@@ -275,10 +272,6 @@ Security is a mandatory gate — not optional.
 - All images must be sourced from a trusted registry (e.g. `registry.redhat.io`).
 - Follow IBM secure-by-default standards: no hardcoded secrets, non-root containers, TLS 1.2 or higher throughout.
 - Automated vulnerability scans must be integrated into your CI/CD pipeline before submission.
-
-### Step 4 — Secrets store
-
-BYOP products must provide and manage their own secrets store. They cannot use Sovereign Core's Vault instance.
 
 ### Steps 5, 6 & 7 — Optional enhancements
 
@@ -294,19 +287,17 @@ Not required for initial listing, but required for Level 3 (Integrated) and stro
 
 **Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
 
-### Onboarding checklist
+### Roles and responsibilities (RACI)
 
-```
-☐ 1. Understand platform concepts (public catalog, GitHub repo, platform catalog, BYOP broker)
-☐ 2. Prepare company profile, product profile, and technical metadata
-☐ 3a. Single-tenant: configure or implement BYOP broker for per-tenant deployment
-☐ 3b. Multi-tenant: automate platform tenant installation + implement Service Broker
-☐ 4. Pass security review (zero critical/high CVEs, trusted images, no hardcoded secrets)
-☐ 5. (Optional) Implement metering interface
-☐ 6. (Optional) Integrate with Sovereign Core IAM
-☐ 7. (Optional) Integrate with platform logging and metrics
-☐ 8. Submit pull request to the public GitHub repository
-```
+Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
+
+| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
+|---|---|---|---|
+| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
+| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
+| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
+| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
+| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
 
 ---
 
@@ -351,3 +342,4 @@ To start an onboarding conversation or ask a question about catalog listing, rea
 - **Public GitHub repository:** [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog)
 
 The team runs a biweekly readiness review. New onboarding requests submitted before the Friday prior to a review date will be considered for that cycle.
+
