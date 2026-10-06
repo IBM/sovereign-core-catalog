@@ -208,17 +208,17 @@ This section covers the technical integration steps for teams bringing a product
 
 ```mermaid
 flowchart TD
-    A([Start: IBM Software Team]) --> B[Step 1<br/>Understand key concepts<br/>and requirements]
-    B --> C[Step 2<br/>Prepare metadata &<br/>company / product profile]
-    C --> D[Step 3<br/>Implement Sovereign Core<br/>integration]
-    D --> E{What deployment<br/>model?}
-    E -- "Multi-tenant<br/>service" --> F[Step 3a<br/>Multi-Tenant Integration]
-    E -- "Single-tenant<br/>service" --> G[Step 3b<br/>Single-Tenant Integration]
-    F --> H[Step 4<br/>Meet security bar<br/>≥ zero critical CVEs]
+    A([Start]) --> B[Step 1: Understand concepts]
+    B --> C[Step 2: Prepare metadata & profiles]
+    C --> D[Step 3: Implement integration]
+    D --> E{Deployment model?}
+    E -- "Multi-tenant" --> F[Step 3a: Multi-Tenant]
+    E -- "Single-tenant" --> G[Step 3b: Single-Tenant]
+    F --> H[Step 4: Meet security bar]
     G --> H
-    H --> I[Step 5<br/>Optional enhancements<br/>Metering · IAM · Observability]
-    I --> J[Step 6<br/>Submit PR to Public<br/>GitHub Repository]
-    J --> K([Listed in Store<br/>& available in Catalog])
+    H --> I[Step 5: Optional enhancements]
+    I --> J[Step 6: Submit PR]
+    J --> K([Listed in catalog])
 ```
 
 ### Onboarding checklist
