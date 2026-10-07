@@ -1,0 +1,43 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "PostgreSQL Global Development Group"
+  product: "PostgreSQL (s390x)"
+  shortDescription: "The world's most advanced open-source object-relational database, packaged for IBM Z and LinuxONE (s390x) using the official s390x/postgres image with enforced node scheduling."
+  fullDescription: "PostgreSQL is a powerful, open-source object-relational database system backed by over 35 years of active development, earning a strong reputation for reliability, feature robustness, and performance. This catalog entry targets IBM Z and LinuxONE (s390x) infrastructure specifically — it uses the official s390x/postgres Docker image published by the Docker Official Images programme and enforces nodeSelector: kubernetes.io/arch: s390x to guarantee pod placement on IBM Z nodes in heterogeneous clusters. The deployment is a custom Helm chart using a StatefulSet with a ReadWriteOnce PersistentVolumeClaim, a headless Service, a Secret for credentials, and a ConfigMap for database configuration. Health checks use pg_isready, which is bundled in the official image and requires no additional tooling. This entry is architecturally identical to the x86 postgres entry in behaviour and API but is image-pinned to the s390x variant and restricted in scheduling. It is intended for sovereign deployments running on IBM Z hardware where workload isolation by architecture is a hard requirement. The chart exposes all standard PostgreSQL environment variables (POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB) via Kubernetes Secrets and ConfigMaps, with connection strings and JDBC URLs stored in the same Secret for easy consumption by workloads. The chart version tracks the appVersion (PostgreSQL 17.11) and will be updated alongside PostgreSQL minor releases."
+  sovereignCoreRelevance: "Provides a fully air-gapped, permissively licensed relational database with row-level security for IBM Z / LinuxONE environments, enforcing s390x-only scheduling and requiring no external licensing dependencies."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Database administrators", "Application developers", "Data engineers", "Platform engineers"]
+  version: "17.11"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  openSource:
+    enabled: true
+    license: "PostgreSQL"
+    upstreamProject: "https://github.com/postgres/postgres"
+    upstreamVersion: "17.11"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "components/software/open-source/postgres-s390x/chart"
+  links:
+    docsUrl: "https://www.postgresql.org/docs/17/"
+    productPageUrl: "https://www.postgresql.org"

@@ -1,0 +1,135 @@
+{{- $instanceName := default .Release.Name .Values.instance.name -}}
+{{- $serviceName := printf "postgres-s390x-%s" $instanceName -}}
+{{- $statefulSetName := printf "postgres-s390x-%s" $instanceName -}}
+{{- $secretName := printf "postgres-s390x-%s" $instanceName -}}
+{{- $configMapName := printf "postgres-s390x-%s" $instanceName -}}
+{{- $namespace := default .Release.Namespace .Values.namespaceOverride -}}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $statefulSetName }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ .Values.commonLabels.app | quote }}
+    service-type: {{ index .Values.commonLabels "service-type" | quote }}
+    instance: {{ $instanceName | quote }}
+    managed-by: byop-broker
+    environment: {{ .Values.instance.environment | quote }}
+    {{- range $key, $value := .Values.commonLabels }}
+    {{- if and (ne $key "app") (ne $key "service-type") }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+    byop.ibm.com/service-type: "postgres-s390x"
+    byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  serviceName: {{ $serviceName }}
+  replicas: {{ .Values.statefulset.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.commonLabels.app | quote }}
+      instance: {{ $instanceName | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.commonLabels.app | quote }}
+        instance: {{ $instanceName | quote }}
+        service-type: {{ index .Values.commonLabels "service-type" | quote }}
+        managed-by: byop-broker
+        environment: {{ .Values.instance.environment | quote }}
+        {{- range $key, $value := .Values.commonLabels }}
+        {{- if and (ne $key "app") (ne $key "service-type") }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+        byop.ibm.com/service-type: "postgres-s390x"
+        byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+        {{- with .Values.commonAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range . }}
+        - name: {{ . | quote }}
+        {{- end }}
+      {{- end }}
+      # Ensure the pod is scheduled only on IBM Z / LinuxONE (s390x) nodes
+      nodeSelector:
+        kubernetes.io/arch: s390x
+      containers:
+        - name: {{ .Values.container.name }}
+          image: "{{ if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+              name: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: superuser-password
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ $configMapName }}
+                  key: database
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: password
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
+          readinessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  pg_isready -h 127.0.0.1 -U $POSTGRES_USER -d $POSTGRES_DB
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+          livenessProbe:
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  pg_isready -h 127.0.0.1 -U $POSTGRES_USER
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+          {{- with .Values.container.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+  {{- if .Values.persistence.enabled }}
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes:
+          {{- toYaml .Values.persistence.accessModes | nindent 10 }}
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
+  {{- end }}
+
+# Made with Bob
