@@ -73,10 +73,18 @@ network:
 # ---------------------------------------------------------------------------
 storage:
   storageClassName: ocs-storagecluster-ceph-rbd
-  isoStorageGb: 30
-  mediaNamespace: qradar-media
-  goldenImagePvc: rhel8-qradar-golden
-  isoPvc: qradar-installation-cdrom
+  # dockerconfigjson secret — used by virt-launcher to pull containerDisk images.
+  # Created by this chart when quayPullSecretB64 is set, or pre-created out-of-band.
+  imagePullSecret: quay-pull-secret
+  # Opaque secret (accessKeyId / secretKey) — used by CDI importer to pull DataVolume
+  # registry source images. CDI does not understand dockerconfigjson format.
+  # Created by this chart when quayUsername and quayPassword are set.
+  cdiPullSecret: quay-cdi-secret
+  goldenDisk:
+    image: "registry-quay-quay-enterprise.apps.devit88.sc.fyreservices.com/quayadmin/rhel8-qradar-golden:8.10"
+    size: "250Gi"
+  installationIso:
+    image: "registry-quay-quay-enterprise.apps.devit88.sc.fyreservices.com/quayadmin/qradar-installation-cdrom:latest"
 
 # ---------------------------------------------------------------------------
 # Readiness probe
