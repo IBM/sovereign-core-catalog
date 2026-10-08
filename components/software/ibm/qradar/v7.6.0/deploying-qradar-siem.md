@@ -39,6 +39,64 @@ The Service Catalog provides the following plans:
 
 ## 2. Prerequisites
 
+### 2a. Platform administrator — one-time cluster setup
+
+> **Who performs this step:** A cluster administrator, not the end user. This step is required **once per cluster** before any QRadar instance can be provisioned. If your cluster administrator confirms these secrets are already in place, skip to [Section 2b](#2b-end-user-information).
+
+QRadar VM images are stored in a private container registry (Quay). Two secrets must exist in the `qradar-media` namespace so that:
+
+- The **CDI importer** can pull the golden disk image to create the VM root volume (`quay-cdi-secret`).
+- The **KubeVirt virt-launcher** pod can pull the installation ISO image at VM startup (`quay-pull-secret`).
+
+These secrets are **never stored in Git**. They must be created directly on the cluster using the following commands:
+
+```bash
+# Set your environment variables
+REGISTRY="<quay-registry-host>"   # e.g. registry-quay-quay-enterprise.apps.<cluster-domain>
+QUAY_USER="<quay-username>"
+QUAY_PASS="<quay-password>"
+
+# Ensure the qradar-media namespace exists
+oc create namespace qradar-media --dry-run=client -o yaml | oc apply -f -
+
+# Secret 1: quay-pull-secret
+# Used by the KubeVirt virt-launcher pod to pull the QRadar installation ISO containerDisk image.
+oc create secret docker-registry quay-pull-secret \
+  --docker-server="${REGISTRY}" \
+  --docker-username="${QUAY_USER}" \
+  --docker-password="${QUAY_PASS}" \
+  -n qradar-media
+
+# Secret 2: quay-cdi-secret
+# Used by the CDI importer pod to pull the golden disk image into a DataVolume (block PVC).
+# Note: CDI requires an Opaque secret with accessKeyId and secretKey keys — it does NOT
+# read kubernetes.io/dockerconfigjson format.
+oc create secret generic quay-cdi-secret \
+  --from-literal=accessKeyId="${QUAY_USER}" \
+  --from-literal=secretKey="${QUAY_PASS}" \
+  -n qradar-media
+```
+
+**Verify the secrets were created:**
+
+```bash
+oc get secret quay-pull-secret quay-cdi-secret -n qradar-media
+```
+
+Expected output:
+
+```text
+NAME               TYPE                             DATA   AGE
+quay-pull-secret   kubernetes.io/dockerconfigjson   1      10s
+quay-cdi-secret    Opaque                           2      8s
+```
+
+> **How it works at provision time:** When a user provisions a QRadar instance, the Helm chart runs a Kubernetes Job (`quay-secret-copy`) as an ArgoCD sync hook. This Job copies both secrets from `qradar-media` into the new instance namespace automatically — no manual action is required per instance.
+
+---
+
+### 2b. End user information
+
 Before provisioning QRadar, make sure you have the following information:
 
 1. **Service Catalog access**
@@ -57,7 +115,7 @@ Before provisioning QRadar, make sure you have the following information:
    - Password for the QRadar Web Console `admin` user.
    - Password for the underlying operating system `root` user.
 
-> **Credential handling:** Save the `admin_password` and `root_password` securely. The documentation states that these passwords cannot later be retrieved in plain text from the Service Catalog UI.
+> **Credential handling:** Save the `admin_password` and `root_password` securely. These passwords cannot be retrieved in plain text from the Service Catalog UI after provisioning.
 
 ---
 
@@ -247,6 +305,32 @@ Instead:
 
 The following diagnostic procedures are intended primarily for administrators who have access to the OpenShift cluster and QRadar VM.
 
+### Layer 0: VM stuck in Provisioning — registry pull secrets
+
+If a VM remains in `Provisioning` state and never starts, check for missing or incorrectly formatted pull secrets first:
+
+```bash
+# Check DataVolume phase and events
+oc get datavolume -n <namespace>
+oc get events -n <namespace> --sort-by='.lastTimestamp' | grep -i "secret\|accessKey\|pull\|failed"
+```
+
+**Common errors and fixes:**
+
+| Error message | Cause | Fix |
+|---|---|---|
+| `couldn't find key accessKeyId in Secret …/quay-pull-secret` | `quay-pull-secret` is a `dockerconfigjson` secret — CDI expects `quay-cdi-secret` (Opaque) | Create `quay-cdi-secret` in `qradar-media` per [Section 2a](#2a-platform-administrator--one-time-cluster-setup) |
+| `secret "quay-cdi-secret" not found` | The `quay-cdi-secret` was not created in `qradar-media` before provisioning | Create both secrets in `qradar-media` per [Section 2a](#2a-platform-administrator--one-time-cluster-setup) |
+| `manifest unknown` | Image tag does not exist in the registry | Verify the golden disk and ISO images are pushed and tagged correctly in Quay |
+
+After creating missing secrets, delete stuck importer pods to trigger an immediate retry:
+
+```bash
+oc delete pod -n <namespace> --all
+```
+
+---
+
 ### Layer 1: OpenShift and VM-level checks
 
 Check the VM, VMI, and DataVolume status:
@@ -401,6 +485,12 @@ Use this checklist before and after provisioning.
 
 ### Before provisioning
 
+**Platform administrator (once per cluster):**
+- [ ] `qradar-media` namespace exists on the target cluster.
+- [ ] `quay-pull-secret` (`kubernetes.io/dockerconfigjson`) created in `qradar-media`.
+- [ ] `quay-cdi-secret` (`Opaque`, keys: `accessKeyId` + `secretKey`) created in `qradar-media`.
+
+**End user:**
 - [ ] Service Catalog URL and credentials available.
 - [ ] Target OpenShift cluster identified.
 - [ ] Primary DNS IP available.
