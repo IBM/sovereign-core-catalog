@@ -191,33 +191,38 @@ oc get sc
 
 | Option | StorageClass name | Typical environment |
 |--------|-------------------|---------------------|
-| **A** | `ocs-storagecluster-ceph-rbd` *(chart default)* | IBM-deployed clusters with OpenShift Data Foundation (ODF/OCS) |
+| **A** | `ocs-storagecluster-ceph-rbd` | IBM-deployed clusters with OpenShift Data Foundation (ODF/OCS) |
 | **B** | `ceph-rbd-platform` | Fyre, demo, and some partner-deployed clusters |
-| **C** | `""` *(empty — uses cluster default)* | Single-node, dev, or custom clusters with a defined default StorageClass |
+| **C** ✅ **Chart default** | `""` *(empty — uses cluster default)* | Any cluster with a defined default StorageClass |
 
 #### Setting the StorageClass in the instance values
 
 Add or update the `storage.storageClassName` field in `instances/qradar/<instance-name>/values.yaml` in the GitOps repository:
 
 ```yaml
-# Option A — ODF/OCS (IBM default)
-storage:
-  storageClassName: ocs-storagecluster-ceph-rbd
-
-# Option B — Platform Ceph RBD (Fyre / demo clusters)
-# storage:
-#   storageClassName: ceph-rbd-platform
-
-# Option C — Use the cluster default StorageClass
+# Option C — Chart default: use the cluster default StorageClass (no override needed)
 # storage:
 #   storageClassName: ""
+
+# Option A — ODF/OCS (explicit override for IBM-deployed clusters)
+# storage:
+#   storageClassName: ocs-storagecluster-ceph-rbd
+
+# Option B — Platform Ceph RBD (explicit override for Fyre / demo clusters)
+# storage:
+#   storageClassName: ceph-rbd-platform
 ```
 
 After editing, commit and push to the GitOps repository. ArgoCD picks up the change on the next sync. If the DataVolume is already stuck in `Pending`, delete it to force re-creation:
 
 ```bash
+# Standalone instances
 oc delete datavolume qradar-primary-rootdisk -n <instance-namespace>
 oc delete pvc qradar-primary-rootdisk -n <instance-namespace>
+
+# HA instances — delete both primary and secondary
+oc delete datavolume qradar-primary-rootdisk qradar-secondary-rootdisk -n <instance-namespace>
+oc delete pvc qradar-primary-rootdisk qradar-secondary-rootdisk -n <instance-namespace>
 ```
 
 ---
@@ -514,12 +519,54 @@ git add instances/qradar/<instance-name>/values.yaml
 git commit -m "fix: set storageClassName for <instance-name>"
 git push
 
-# 3. Delete the stuck DataVolume and PVC so CDI re-provisions with the new class
+# 3. Delete the stuck DataVolume(s) and PVC(s) so CDI re-provisions with the new class
+# Standalone
 oc delete datavolume qradar-primary-rootdisk -n <instance-namespace>
 oc delete pvc qradar-primary-rootdisk -n <instance-namespace>
+
+# HA — delete both
+oc delete datavolume qradar-primary-rootdisk qradar-secondary-rootdisk -n <instance-namespace>
+oc delete pvc qradar-primary-rootdisk qradar-secondary-rootdisk -n <instance-namespace>
 ```
 
 ArgoCD re-creates the VM and DataVolume on the next sync using the correct StorageClass.
+
+---
+
+### Layer 0: HA VM stuck in `ErrorUnschedulable` — single-node cluster
+
+For HA deployments, the Helm chart enforces a `requiredDuringSchedulingIgnoredDuringExecution` pod anti-affinity rule so that the primary and secondary VMs always land on **separate worker nodes**. On a single-node cluster (or a cluster where all nodes are already occupied), the second VM cannot be scheduled and stays in `ErrorUnschedulable`.
+
+**Diagnose:**
+
+```bash
+oc get vm,vmi -n <instance-namespace>
+# Look for: STATUS=ErrorUnschedulable on one VM
+
+oc describe vmi qradar-primary -n <instance-namespace> | grep -A3 'Unschedulable'
+# Expected message:
+# 0/1 nodes are available: 1 node(s) didn't match pod anti-affinity rules.
+```
+
+**Resolution options:**
+
+| Option | When to use |
+|--------|-------------|
+| **Add a worker node** ✅ Recommended for production | The cluster genuinely needs a second node for HA |
+| **Accept co-location** — force-delete the stuck VMI | Lab/demo only — both VMs run on the same node, anti-affinity is `IgnoredDuringExecution` so running VMs are not evicted |
+
+**Lab/demo workaround — force the VMI to reschedule:**
+
+```bash
+# Force-delete the stuck VMI pod so KubeVirt recreates it fresh
+# (the running secondary VMI must also be bounced so its old required-affinity
+#  pod is replaced before the primary attempts scheduling again)
+oc delete vmi qradar-secondary -n <instance-namespace>
+# Wait for secondary to come back Running, then:
+oc delete pod -n <instance-namespace> -l kubevirt.io/domain=qradar-primary --force --grace-period=0
+```
+
+> ⚠️ **Production note:** The anti-affinity rule is intentional. Both VMs on the same node defeats the purpose of HA — a node failure would take down both primary and secondary simultaneously. Always provision HA plans on clusters with at least two worker nodes.
 
 ---
 
