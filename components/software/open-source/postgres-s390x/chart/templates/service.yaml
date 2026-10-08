@@ -34,4 +34,4 @@ spec:
     instance: {{ $instanceName | quote }}
   clusterIP: {{ .Values.service.clusterIP }}
 
-# Made with Bob
+
