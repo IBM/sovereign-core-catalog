@@ -27,7 +27,9 @@ spec:
         resources:
           requests:
             storage: {{ .Values.storage.goldenDisk.size }}
+        {{- if .Values.storage.storageClassName }}
         storageClassName: {{ .Values.storage.storageClassName }}
+        {{- end }}
   template:
     metadata:
       labels:

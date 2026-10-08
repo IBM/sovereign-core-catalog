@@ -85,7 +85,7 @@ storage:
   #   Option C — Standard/default storage class (single-node, dev, or custom clusters)
   #     storageClassName: ""   # leave empty to use the cluster default StorageClass
   #
-  storageClassName: ocs-storagecluster-ceph-rbd
+  storageClassName: ""   # empty = use the cluster default StorageClass
   # dockerconfigjson secret — used by virt-launcher to pull containerDisk images.
   # Created by this chart when quayPullSecretB64 is set, or pre-created out-of-band.
   imagePullSecret: quay-pull-secret
