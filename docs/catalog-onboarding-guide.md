@@ -376,20 +376,6 @@ Two-step model: company identity first, component listing second.
 
 ---
 
-### Roles and responsibilities (RACI)
-
-Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
-
-| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
-|---|---|---|---|
-| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
-| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
-| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
-| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
-| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
-
----
-
 ## Asset lifecycle states
 
 Every catalog entry carries a `lifecycleStatus` field that controls visibility and deployment eligibility. State transitions are enforced by the CI pipeline — a PR cannot be approved directly without first passing through `review`.
@@ -401,6 +387,20 @@ Every catalog entry carries a `lifecycleStatus` field that controls visibility a
 | `approved` | Public | Yes | Merged to main, visible in the public catalog |
 | `deprecated` | Visible with warning | Discouraged | End-of-life signalled; successor available |
 | `retired` | Hidden | No | Removed from active catalog; retained for audit |
+
+---
+
+### Roles and responsibilities (RACI)
+
+Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
+
+| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
+|---|---|---|---|
+| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
+| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
+| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
+| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
+| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
 
 ---
 
