@@ -86,10 +86,15 @@ This file is a `SovereignCoreHelmMapping` that maps platform-provided values int
 ### 4. Validate locally
 
 ```bash
-./scripts/validate-local.sh
+make lint
 ```
 
-This runs a structural smoke test across all YAML files in `components/` and `companies/`. Fix any reported errors before opening a PR.
+This runs all local checks: structural schema validation across `components/` and `companies/`, plus import contract validation for catalog items. Fix any reported errors before opening a PR. To run the checks individually:
+
+```bash
+make validate-local   # listing metadata (v*/metadata.yaml, profile.yaml)
+make lint-catalog     # catalog import contract (catalog/catalog.yaml, schema.json)
+```
 
 ### 5. Open a pull request
 

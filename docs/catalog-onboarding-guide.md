@@ -353,7 +353,7 @@ Submitting a pull request to the public GitHub repository at [github.com/IBM/sov
 
 For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository.
 
-**Step 1 — Join:** Fork the repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open a PR titled `[Company Join] Your Company Name`. This must be merged before any component PR will pass CI.
+**Step 1 — Join:** Fork the repo → create `companies/<your-slug>/profile.yaml` → run `make lint` → open a PR titled `[Company Join] Your Company Name`. This must be merged before any component PR will pass CI.
 
 **Step 2 — List:** Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → validate locally → open a PR titled `[New Listing] Software: Your Company — Product Name v1.0`. CI validates schema automatically.
 

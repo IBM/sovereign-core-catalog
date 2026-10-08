@@ -20,10 +20,10 @@ Use this process to correct a field, add a newly obtained certification, update 
 
 2. Edit the relevant `metadata.yaml` or `profile.yaml` in-place.
 
-3. Run the local validation script:
+3. Run the local validation:
 
    ```bash
-   ./scripts/validate-local.sh
+   make lint
    ```
 
 4. Open a PR against `main` with the title format:
