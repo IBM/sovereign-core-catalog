@@ -171,7 +171,58 @@ oc delete job quay-secret-copy -n <instance-namespace>
 
 ---
 
-### 2c. End user information
+### 2c. Platform administrator — configure the StorageClass
+
+> **Who performs this step:** A cluster administrator. This step is required **once per cluster** before the first QRadar instance is provisioned. An incorrect StorageClass causes the DataVolume PVC to remain `Pending` indefinitely.
+
+QRadar VM root disks are provisioned as PersistentVolumeClaims by the CDI importer. The StorageClass must support **ReadWriteOnce (RWO) block storage**.
+
+#### Finding the correct StorageClass
+
+```bash
+# List all StorageClasses on your cluster
+oc get sc
+
+# Identify the default (marked with "(default)")
+# or look for a RWO block-capable class
+```
+
+#### Common StorageClass values
+
+| Option | StorageClass name | Typical environment |
+|--------|-------------------|---------------------|
+| **A** | `ocs-storagecluster-ceph-rbd` *(chart default)* | IBM-deployed clusters with OpenShift Data Foundation (ODF/OCS) |
+| **B** | `ceph-rbd-platform` | Fyre, demo, and some partner-deployed clusters |
+| **C** | `""` *(empty — uses cluster default)* | Single-node, dev, or custom clusters with a defined default StorageClass |
+
+#### Setting the StorageClass in the instance values
+
+Add or update the `storage.storageClassName` field in `instances/qradar/<instance-name>/values.yaml` in the GitOps repository:
+
+```yaml
+# Option A — ODF/OCS (IBM default)
+storage:
+  storageClassName: ocs-storagecluster-ceph-rbd
+
+# Option B — Platform Ceph RBD (Fyre / demo clusters)
+# storage:
+#   storageClassName: ceph-rbd-platform
+
+# Option C — Use the cluster default StorageClass
+# storage:
+#   storageClassName: ""
+```
+
+After editing, commit and push to the GitOps repository. ArgoCD picks up the change on the next sync. If the DataVolume is already stuck in `Pending`, delete it to force re-creation:
+
+```bash
+oc delete datavolume qradar-primary-rootdisk -n <instance-namespace>
+oc delete pvc qradar-primary-rootdisk -n <instance-namespace>
+```
+
+---
+
+### 2d. End user information
 
 Before provisioning QRadar, make sure you have the following information:
 
@@ -430,6 +481,48 @@ ArgoCD detects the push and automatically re-syncs. The Job is recreated with th
 
 ---
 
+### Layer 0: DataVolume stuck in Pending — StorageClass not found
+
+If the DataVolume remains in `Pending` with no importer pod starting, check whether the configured StorageClass exists on the cluster:
+
+```bash
+# Check DataVolume phase and events
+oc get datavolume -n <instance-namespace>
+oc get events -n <instance-namespace> --sort-by='.lastTimestamp' | grep -i 'storageclass\|pending\|pvc'
+
+# List available StorageClasses on the cluster
+oc get sc
+```
+
+**Common error and fix:**
+
+| Error message | Cause | Fix |
+|---|---|---|
+| `storageclass.storage.k8s.io "<name>" not found` | The `storageClassName` in the instance `values.yaml` does not exist on this cluster | Set `storage.storageClassName` to a valid class per [Section 2c](#2c-platform-administrator--configure-the-storageclass) |
+
+**Fix — update the instance `values.yaml` and delete the stuck resources:**
+
+```bash
+# 1. Edit instances/qradar/<instance-name>/values.yaml
+#    and set the correct storageClassName, for example:
+#
+#    storage:
+#      storageClassName: ceph-rbd-platform
+
+# 2. Commit and push
+git add instances/qradar/<instance-name>/values.yaml
+git commit -m "fix: set storageClassName for <instance-name>"
+git push
+
+# 3. Delete the stuck DataVolume and PVC so CDI re-provisions with the new class
+oc delete datavolume qradar-primary-rootdisk -n <instance-namespace>
+oc delete pvc qradar-primary-rootdisk -n <instance-namespace>
+```
+
+ArgoCD re-creates the VM and DataVolume on the next sync using the correct StorageClass.
+
+---
+
 ### Layer 0: VM stuck in Provisioning — registry pull secrets
 
 If a VM remains in `Provisioning` state and never starts, check for missing or incorrectly formatted pull secrets first:
@@ -615,6 +708,7 @@ Use this checklist before and after provisioning.
 - [ ] `quay-pull-secret` (`kubernetes.io/dockerconfigjson`) created in `qradar-media`.
 - [ ] `quay-cdi-secret` (`Opaque`, keys: `accessKeyId` + `secretKey`) created in `qradar-media`.
 - [ ] `toolImage.repository` in instance `values.yaml` set to an image reachable from this cluster (see [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job)).
+- [ ] `storage.storageClassName` in instance `values.yaml` set to a valid RWO block StorageClass on this cluster (see [Section 2c](#2c-platform-administrator--configure-the-storageclass)).
 
 **End user:**
 - [ ] Service Catalog URL and credentials available.

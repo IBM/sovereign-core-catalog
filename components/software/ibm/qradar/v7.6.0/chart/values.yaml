@@ -72,6 +72,19 @@ network:
 # Storage
 # ---------------------------------------------------------------------------
 storage:
+  # StorageClass for VM root-disk PVCs created by CDI.
+  # Run `oc get sc` to list available storage classes on your cluster.
+  # Set to the name of a RWO-capable block storage class.
+  #
+  #   Option A — OpenShift Data Foundation (ODF/OCS) — most IBM-deployed clusters
+  #     storageClassName: ocs-storagecluster-ceph-rbd
+  #
+  #   Option B — Platform Ceph RBD — used on some clusters (e.g. Fyre/demo environments)
+  #     storageClassName: ceph-rbd-platform
+  #
+  #   Option C — Standard/default storage class (single-node, dev, or custom clusters)
+  #     storageClassName: ""   # leave empty to use the cluster default StorageClass
+  #
   storageClassName: ocs-storagecluster-ceph-rbd
   # dockerconfigjson secret — used by virt-launcher to pull containerDisk images.
   # Created by this chart when quayPullSecretB64 is set, or pre-created out-of-band.
