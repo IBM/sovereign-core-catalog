@@ -95,7 +95,83 @@ quay-cdi-secret    Opaque                           2      8s
 
 ---
 
-### 2b. End user information
+### 2b. Platform administrator — configure the tool image for the secret-copy Job
+
+> **Who performs this step:** A cluster administrator. This step is required **once per cluster** and must be completed before the first QRadar instance is provisioned. It ensures the `quay-secret-copy` Job can start successfully on that cluster.
+
+The Helm chart uses a small container image to run `oc` commands inside the `quay-secret-copy` Job. The image to use depends on what container registries are accessible from your cluster. An incorrect image causes the Job to fail with `ImagePullBackOff`, which blocks the entire ArgoCD sync.
+
+#### Choosing the correct tool image
+
+| Option | Image | When to use | Auth required |
+|--------|-------|-------------|---------------|
+| **A** | `registry.redhat.io/openshift4/ose-cli:latest` | Cluster has a global Red Hat pull secret | Yes — Red Hat subscription |
+| **B** | `image-registry.openshift-image-registry.svc:5000/openshift/cli:latest` | Cluster has the internal OpenShift image registry deployed | No — uses in-cluster SA token |
+| **C** ✅ **Recommended** | `quay.io/openshift/origin-cli:latest` | Cluster has outbound access to `quay.io` (most clusters) | No |
+| **D** | `<your-mirror>/openshift4/ose-cli:latest` | Fully air-gapped — no access to `registry.redhat.io` or `quay.io` | Yes — set `toolImage.pullSecret` |
+
+**To verify which option applies to your cluster:**
+
+```bash
+# Option A — check for a Red Hat pull secret
+oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' \
+  | base64 -d | python3 -m json.tool | grep 'registry.redhat.io'
+
+# Option B — check whether the internal registry is deployed and running
+oc get configs.imageregistry.operator.openshift.io cluster \
+  -o jsonpath='{.spec.managementState}'
+# Expected output: Managed  (if "Removed", Option B is unavailable)
+
+# Option C — check outbound access to quay.io
+curl -sk https://quay.io/v2/ | head -c 50
+# Expected output: true  (if unreachable, use Option D)
+```
+
+#### Setting the tool image in the instance values
+
+The tool image is configured in the instance `values.yaml` file under `instances/qradar/<instance-name>/values.yaml` in the GitOps repository. Add or update the `toolImage` block to match your cluster:
+
+```yaml
+# Option C — recommended (quay.io, no auth required)
+toolImage:
+  repository: quay.io/openshift/origin-cli
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: ""
+
+# Option B — internal OpenShift registry (requires ManagementState: Managed)
+# toolImage:
+#   repository: image-registry.openshift-image-registry.svc:5000/openshift/cli
+#   tag: latest
+#   pullPolicy: IfNotPresent
+#   pullSecret: ""
+
+# Option A — Red Hat registry (requires global pull secret)
+# toolImage:
+#   repository: registry.redhat.io/openshift4/ose-cli
+#   tag: latest
+#   pullPolicy: IfNotPresent
+#   pullSecret: ""
+
+# Option D — private/mirrored registry (set pullSecret to existing Secret name)
+# toolImage:
+#   repository: my-mirror.example.com/openshift4/ose-cli
+#   tag: latest
+#   pullPolicy: IfNotPresent
+#   pullSecret: "my-mirror-pull-secret"
+```
+
+> **`pullSecret`** must be the **name** of a pre-existing `kubernetes.io/dockerconfigjson` Secret in the instance namespace. Credentials are never stored directly in `values.yaml`.
+
+After editing the instance `values.yaml`, commit and push the change to the GitOps repository. ArgoCD picks up the change on the next sync cycle. Delete the stuck Job (if any) to force an immediate re-run:
+
+```bash
+oc delete job quay-secret-copy -n <instance-namespace>
+```
+
+---
+
+### 2c. End user information
 
 Before provisioning QRadar, make sure you have the following information:
 
@@ -305,6 +381,55 @@ Instead:
 
 The following diagnostic procedures are intended primarily for administrators who have access to the OpenShift cluster and QRadar VM.
 
+### Layer 0: Sync blocked — secret-copy Job fails with ImagePullBackOff
+
+Before any DataVolume import begins, the `quay-secret-copy` ArgoCD sync hook Job must complete successfully. If it stays in `ImagePullBackOff`, the entire sync is blocked and no secrets are copied into the instance namespace.
+
+**Diagnose:**
+
+```bash
+# Check the Job and pod status
+oc get job quay-secret-copy -n <instance-namespace>
+oc get pods -n <instance-namespace> -l job-name=quay-secret-copy
+
+# See the exact pull error
+oc describe pod -n <instance-namespace> -l job-name=quay-secret-copy | grep -A5 'Events:'
+```
+
+**Common causes and fixes:**
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `unauthorized: Please login to the Red Hat Registry` | Cluster has no Red Hat pull secret | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
+| `no such host: image-registry.openshift-image-registry.svc` | Internal image registry is not deployed (`ManagementState: Removed`) | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
+| `ImagePullBackOff` on a private mirror | `toolImage.pullSecret` is missing or wrong | Create the pull secret in the instance namespace and set `toolImage.pullSecret` to its name |
+
+**Fix — update the instance `values.yaml` and force a re-sync:**
+
+```bash
+# 1. Edit instances/qradar/<instance-name>/values.yaml in the GitOps repo
+#    and set toolImage.repository to the correct image for your cluster.
+#    Example for Option C (recommended):
+#
+#    toolImage:
+#      repository: quay.io/openshift/origin-cli
+#      tag: latest
+#      pullPolicy: IfNotPresent
+#      pullSecret: ""
+
+# 2. Commit and push the change
+git add instances/qradar/<instance-name>/values.yaml
+git commit -m "fix: set toolImage for <instance-name>"
+git push
+
+# 3. Delete the stuck Job so ArgoCD re-runs the hook with the new image
+oc delete job quay-secret-copy -n <instance-namespace>
+```
+
+ArgoCD detects the push and automatically re-syncs. The Job is recreated with the new image.
+
+---
+
 ### Layer 0: VM stuck in Provisioning — registry pull secrets
 
 If a VM remains in `Provisioning` state and never starts, check for missing or incorrectly formatted pull secrets first:
@@ -489,6 +614,7 @@ Use this checklist before and after provisioning.
 - [ ] `qradar-media` namespace exists on the target cluster.
 - [ ] `quay-pull-secret` (`kubernetes.io/dockerconfigjson`) created in `qradar-media`.
 - [ ] `quay-cdi-secret` (`Opaque`, keys: `accessKeyId` + `secretKey`) created in `qradar-media`.
+- [ ] `toolImage.repository` in instance `values.yaml` set to an image reachable from this cluster (see [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job)).
 
 **End user:**
 - [ ] Service Catalog URL and credentials available.

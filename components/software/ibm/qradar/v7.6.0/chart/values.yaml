@@ -87,6 +87,47 @@ storage:
     image: "registry-quay-quay-enterprise.apps.devit88.sc.fyreservices.com/quayadmin/qradar-installation-cdrom:latest"
 
 # ---------------------------------------------------------------------------
+# Tool image for the secret-copy sync hook Job
+# ---------------------------------------------------------------------------
+# This Job needs a container with `oc` (or `kubectl`) + `python3` to copy
+# the Quay pull secrets from the qradar-media namespace into the instance
+# namespace at deploy time.
+#
+# Choose the option that matches your cluster environment:
+#
+#   Option A — Red Hat connected cluster (requires registry.redhat.io pull secret)
+#   ❌ Will fail if the cluster has no Red Hat subscription or global pull secret.
+#     repository: registry.redhat.io/openshift4/ose-cli
+#     tag: latest
+#
+#   Option B — Internal OpenShift image registry (air-gapped, no external access needed)
+#   ❌ Will fail if the cluster's internal registry is not deployed (ManagementState: Removed).
+#   ✅ Works on most standard OpenShift installs — the 'cli' ImageStream ships in every cluster.
+#     repository: image-registry.openshift-image-registry.svc:5000/openshift/cli
+#     tag: latest
+#
+#   Option C — Public quay.io (no authentication required) ✅ RECOMMENDED for new clusters
+#   ✅ Works on any cluster with outbound internet access to quay.io.
+#   ✅ No pull secret required.  Includes both `oc` and `python3`.
+#     repository: quay.io/openshift/origin-cli
+#     tag: latest
+#
+#   Option D — Mirrored / private registry
+#   Use when quay.io is not reachable (fully air-gapped) and you have a local mirror.
+#   Set pullSecret to the name of a pre-existing kubernetes.io/dockerconfigjson Secret
+#   in the release namespace — credentials are NEVER placed directly in values.yaml.
+#     repository: my-mirror.example.com/openshift4/ose-cli
+#     tag: latest
+#     pullSecret: my-mirror-pull-secret
+#
+# pullSecret is OPTIONAL — omit (or leave "") for Options A, B, and C.
+toolImage:
+  repository: quay.io/openshift/origin-cli
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecret: ""   # optional: name of an existing imagePullSecret in the release namespace
+
+# ---------------------------------------------------------------------------
 # Readiness probe
 # ---------------------------------------------------------------------------
 readiness:
