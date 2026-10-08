@@ -26,7 +26,8 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
     - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
 11. [Repository structure](#repository-structure)
 12. [Asset lifecycle states](#asset-lifecycle-states)
-13. [Get in touch](#get-in-touch)
+13. [Coming soon](#coming-soon)
+14. [Get in touch](#get-in-touch)
 
 ---
 
@@ -367,10 +368,6 @@ Your PR must include:
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artifacts** — see deployment model sections above
 
-### Coming soon
-
-**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
-
 ### Roles and responsibilities (RACI)
 
 Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
@@ -404,6 +401,12 @@ Every catalog entry carries a `lifecycleStatus` field that controls visibility a
 | `approved` | Public | Yes | Merged to main, visible in the public catalog |
 | `deprecated` | Visible with warning | Discouraged | End-of-life signalled; successor available |
 | `retired` | Hidden | No | Removed from active catalog; retained for audit |
+
+---
+
+## Coming soon
+
+**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
 
 ---
 
