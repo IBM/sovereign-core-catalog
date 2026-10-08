@@ -16,10 +16,12 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 8. [How to start — the onboarding stages](#how-to-start--the-onboarding-stages)
 9. [What the team commits to](#what-the-team-commits-to)
 10. [BYOP products onboarding](#byop-products-onboarding)
-    - [Step 1 — Understand key concepts](#platform-building-blocks)
-    - [Step 2 — Prepare metadata](#onboarding-journey)
-    - [Step 3 — Choose your deployment model](#step-3--choose-your-deployment-model)
-    - [Step 4 — Security requirements](#step-4--security-requirements)
+    - [Step 1 — Understand key concepts](#step-1--understand-key-concepts)
+    - [Step 2 — Prepare metadata and company profile](#step-2--prepare-metadata-and-company-profile)
+    - [Step 3 — Implement the Sovereign Core integration](#step-3--implement-the-sovereign-core-integration)
+      - [Step 3a — Single-tenant integration](#step-3a--single-tenant-integration)
+      - [Step 3b — Multi-tenant integration](#step-3b--multi-tenant-integration)
+    - [Step 4 — Meet the security bar](#step-4--meet-the-security-bar)
     - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
     - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
 11. [Repository structure](#repository-structure)
@@ -206,7 +208,7 @@ A catalog listing is not a one-time activity. The obligations that come with it 
 
 This section covers the technical integration steps for teams bringing a product to the catalog via the BYOP (Bring Your Own Product) mechanism. It applies to both IBM product teams and external partners targeting Level 2 or higher.
 
-### Platform building blocks
+### Step 1 — Understand key concepts
 
 | Concept | What it is |
 |---|---|
@@ -231,7 +233,7 @@ graph LR
     Catalog -- "triggers" --> BYOP
 ```
 
-### Onboarding journey
+### Step 2 — Prepare metadata and company profile
 
 ```mermaid
 flowchart TD
@@ -248,7 +250,7 @@ flowchart TD
     J --> K[Listed in catalog]
 ```
 
-### Step 3 — Choose your deployment model
+### Step 3 — Implement the Sovereign Core integration
 
 Before implementing the integration, determine how your software serves multiple customers. Even if your application supports a multi-tenant model, the recommended deployment approach is ultimately up to you as the software provider — consider your architecture, operational complexity, and customer requirements when choosing.
 
@@ -325,7 +327,7 @@ flowchart TD
 
 **Custom broker** — Full control over provisioning logic. Implement `/v2/catalog`, `/v2/service_instances`, and `/v2/service_bindings`. Required for multi-tenant services that need custom tenant lifecycle management.
 
-### Step 4 — Security requirements
+### Step 4 — Meet the security bar
 
 Security is a mandatory gate — not optional.
 
