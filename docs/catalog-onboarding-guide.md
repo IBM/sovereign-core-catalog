@@ -16,10 +16,15 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 8. [How to start — the onboarding stages](#how-to-start--the-onboarding-stages)
 9. [What the team commits to](#what-the-team-commits-to)
 10. [BYOP products onboarding](#byop-products-onboarding)
-11. [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
-12. [Repository structure](#repository-structure)
-13. [Asset lifecycle states](#asset-lifecycle-states)
-14. [Get in touch](#get-in-touch)
+    - [Step 1 — Understand key concepts](#platform-building-blocks)
+    - [Step 2 — Prepare metadata](#onboarding-journey)
+    - [Step 3 — Choose your deployment model](#step-3--choose-your-deployment-model)
+    - [Step 4 — Security requirements](#step-4--security-requirements)
+    - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
+    - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
+11. [Repository structure](#repository-structure)
+12. [Asset lifecycle states](#asset-lifecycle-states)
+13. [Get in touch](#get-in-touch)
 
 ---
 
@@ -329,7 +334,7 @@ Security is a mandatory gate — not optional.
 - Follow IBM secure-by-default standards: no hardcoded secrets, non-root containers, TLS 1.2 or higher throughout.
 - Automated vulnerability scans must be integrated into your CI/CD pipeline before submission.
 
-### Steps 5, 6 & 7 — Optional enhancements
+### Step 5 — Optional enhancements
 
 Not required for initial listing, but required for Level 3 (Integrated) and strongly recommended for a complete managed-service experience:
 
