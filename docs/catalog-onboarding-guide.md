@@ -346,25 +346,7 @@ Not required for initial listing, but required for Level 3 (Integrated) and stro
 | **Sovereign Core IAM integration** | Single sign-on and RBAC via the platform identity provider — no separate user directory needed. |
 | **Logging & metrics** | Integrates your service with the platform's log aggregation and metrics stack for unified MSP monitoring. |
 
-### Coming soon
-
-**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
-
-### Roles and responsibilities (RACI)
-
-Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
-
-| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
-|---|---|---|---|
-| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
-| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
-| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
-| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
-| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
-
----
-
-## Step 6 — Submit your pull request (PR)
+### Step 6 — Submit your pull request (PR)
 
 Submitting a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog) is how your product becomes listed in the catalog. This is a mandatory step — not optional. All catalog changes, new listings, updates, and removals go through a PR. There is no other path to publication.
 
@@ -384,6 +366,22 @@ Your PR must include:
 - **Software profile** — product name, version, category, description
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artifacts** — see deployment model sections above
+
+### Coming soon
+
+**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
+
+### Roles and responsibilities (RACI)
+
+Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
+
+| Responsibility | BYOP software provider | IBM Sovereign Core team | Sovereign Core customer |
+|---|---|---|---|
+| Design, define, and implement software integration with Sovereign Core | ✅ Responsible | Supportive | — |
+| Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
+| Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
+| Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
+| Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
 
 ---
 
