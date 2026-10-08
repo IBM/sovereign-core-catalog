@@ -1,4 +1,4 @@
-﻿# IBM Sovereign Core — Catalog onboarding guide
+# IBM Sovereign Core — Catalog onboarding guide
 
 For business partners, ISVs, and IBM product teams. IBM product teams should also refer to the internal addendum for additional guidelines specific to IBM offerings.
 
@@ -16,9 +16,10 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 8. [How to start — the onboarding stages](#how-to-start--the-onboarding-stages)
 9. [What the team commits to](#what-the-team-commits-to)
 10. [BYOP products onboarding](#byop-products-onboarding)
-11. [Repository structure](#repository-structure)
-12. [Asset lifecycle states](#asset-lifecycle-states)
-13. [Get in touch](#get-in-touch)
+11. [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
+12. [Repository structure](#repository-structure)
+13. [Asset lifecycle states](#asset-lifecycle-states)
+14. [Get in touch](#get-in-touch)
 
 ---
 
@@ -242,15 +243,6 @@ flowchart TD
     J --> K[Listed in catalog]
 ```
 
-### Submit your listing — GitHub pull request
-
-To appear in the catalog, submit a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog). For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository. Your PR must include:
-
-- **Company profile** — name, logo, contact details, description
-- **Software profile** — product name, version, category, description
-- **Technical metadata** — air-gap support, supported architectures, resource requirements
-- **Sovereign Core integration artifacts** — see deployment model section below
-
 ### Step 3 — Choose your deployment model
 
 Before implementing the integration, determine how your software serves multiple customers. Even if your application supports a multi-tenant model, the recommended deployment approach is ultimately up to you as the software provider — consider your architecture, operational complexity, and customer requirements when choosing.
@@ -365,13 +357,11 @@ Understanding who is responsible for each aspect of the onboarding and ongoing o
 
 ---
 
-## Repository structure
+## Step 6 — Submit your pull request (PR)
 
-Two-step model: company identity first, component listing second.
+Submitting a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog) is how your product becomes listed in the catalog. This is a mandatory step — not optional. All catalog changes, new listings, updates, and removals go through a PR. There is no other path to publication.
 
-> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
-
-### Contribution lifecycle
+For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository.
 
 **Step 1 — Join:** Fork the repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open a PR titled `[Company Join] Your Company Name`. This must be merged before any component PR will pass CI.
 
@@ -380,6 +370,21 @@ Two-step model: company identity first, component listing second.
 **Step 3 — Maintain:** New version? Add a new `<version>/` folder via PR. Deprecating? Update `lifecycleStatus: deprecated`. Withdrawing? Set `lifecycleStatus: retired`. All changes go via PR — never a direct push to main.
 
 > **CI validation runs automatically on every PR:** schema correctness, required fields, taxonomy vocabulary, secrets scan, and broken reference checks. Human IBM review takes place only after CI passes.
+
+Your PR must include:
+
+- **Company profile** — name, logo, contact details, description
+- **Software profile** — product name, version, category, description
+- **Technical metadata** — air-gap support, supported architectures, resource requirements
+- **Sovereign Core integration artifacts** — see deployment model sections above
+
+---
+
+## Repository structure
+
+Two-step model: company identity first, component listing second.
+
+> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
 
 ---
 
