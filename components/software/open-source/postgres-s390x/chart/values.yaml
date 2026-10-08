@@ -23,7 +23,20 @@ image:
   tag: "17.11"
   pullPolicy: IfNotPresent
 
+# imagePullSecrets — list of secret names already present in the namespace.
+# The broker populates this from image_pull_secret_name.
+# If dockerhubPullSecret.create=true, the chart also creates the secret itself.
 imagePullSecrets: []
+
+# Optionally let the chart create a Docker Hub pull secret in the namespace.
+# Set create=true and supply credentials when deploying outside the broker.
+dockerhubPullSecret:
+  create: false
+  secretName: "dockerhub-pull-secret"
+  dockerServer: "docker.io"
+  dockerUsername: ""
+  dockerPassword: ""
+  dockerEmail: ""
 
 service:
   port: 5432
@@ -47,6 +60,8 @@ persistence:
   accessModes:
     - ReadWriteOnce
   size: 1Gi
+  # storageClass: ""   # e.g. ocs-storagecluster-ceph-rbd
+  storageClass: ""
 
 container:
   name: postgres

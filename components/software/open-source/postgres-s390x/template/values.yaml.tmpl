@@ -17,12 +17,22 @@ instance:
   environment: {{ environment }}
   clusterName: "{{ cluster_name }}"
 
+# imagePullSecrets — broker passes the name of the pre-created pull secret.
+# The secret itself must already exist in the target namespace (created by the
+# platform admin or by a separate bootstrapping step).
 imagePullSecrets:
-{% if image_pull_secret_name %}
+{% if spec.image_pull_secret_name %}
+  - name: {{ spec.image_pull_secret_name | yaml_safe }}
+{% elif image_pull_secret_name %}
   - name: {{ image_pull_secret_name }}
 {% else %}
   []
 {% endif %}
+
+# dockerhubPullSecret — chart-managed secret creation is disabled in broker
+# deployments; the secret is expected to pre-exist (see image_pull_secret_name).
+dockerhubPullSecret:
+  create: false
 
 image:
   registry: ""
@@ -39,5 +49,5 @@ auth:
   password: {{ spec.database_password | yaml_safe }}
 
 persistence:
-  size: {{ storage_size }}
-  # storageClass: "ceph-rbd-platform"
+  size: {{ spec.storage_size | default(storage_size) | yaml_safe }}
+  storageClass: {{ spec.storage_class | default("") | yaml_safe }}

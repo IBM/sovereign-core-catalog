@@ -55,15 +55,34 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- $pullSecrets := .Values.imagePullSecrets | default list }}
+      {{- if .Values.dockerhubPullSecret.create }}
+        {{- $pullSecrets = append $pullSecrets .Values.dockerhubPullSecret.secretName }}
+      {{- end }}
+      {{- if $pullSecrets }}
       imagePullSecrets:
-        {{- range . }}
+        {{- range $pullSecrets }}
         - name: {{ . | quote }}
         {{- end }}
       {{- end }}
       # Ensure the pod is scheduled only on IBM Z / LinuxONE (s390x) nodes
       nodeSelector:
         kubernetes.io/arch: s390x
+      # fsGroup 999 = postgres GID in the official image.
+      # OpenShift chowns the mounted volume to this GID so initdb can write.
+      securityContext:
+        fsGroup: 999
+      initContainers:
+        - name: fix-permissions
+          image: "{{ if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sh", "-c", "chown -R 999:999 /var/lib/postgresql/data || true"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: pgdata
       containers:
         - name: {{ .Values.container.name }}
           image: "{{ if .Values.image.registry }}{{ .Values.image.registry }}/{{ end }}{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -127,6 +146,9 @@ spec:
       spec:
         accessModes:
           {{- toYaml .Values.persistence.accessModes | nindent 10 }}
+        {{- if .Values.persistence.storageClass }}
+        storageClassName: {{ .Values.persistence.storageClass | quote }}
+        {{- end }}
         resources:
           requests:
             storage: {{ .Values.persistence.size }}

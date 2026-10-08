@@ -55,6 +55,31 @@
         "length": 32,
         "include": "alphanumeric-symbols"
       }
+    },
+    "image_pull_secret_name": {
+      "type": "string",
+      "description": "Name of a pre-existing Kubernetes imagePullSecret in the target namespace used to pull the s390x/postgres image from Docker Hub. Required when the cluster cannot pull anonymously (e.g. Docker Hub rate limits).",
+      "minLength": 1,
+      "maxLength": 253,
+      "examples": ["dockerhub-pull-secret"]
+    },
+    "storage_class": {
+      "type": "string",
+      "description": "Kubernetes StorageClass name for the PostgreSQL data PersistentVolumeClaim. Must support ReadWriteOnce access mode.",
+      "minLength": 1,
+      "maxLength": 253,
+      "examples": [
+        "ocs-storagecluster-ceph-rbd",
+        "managed-nfs-storage",
+        "ibmc-block-gold"
+      ]
+    },
+    "storage_size": {
+      "type": "string",
+      "description": "Size of the PostgreSQL data PersistentVolumeClaim (Kubernetes quantity format).",
+      "pattern": "^[0-9]+(\\.[0-9]+)?(Ki|Mi|Gi|Ti|Pi|Ei|k|M|G|T|P|E)?$",
+      "default": "10Gi",
+      "examples": ["5Gi", "10Gi", "50Gi", "100Gi"]
     }
   },
   "required": ["database_name"],
