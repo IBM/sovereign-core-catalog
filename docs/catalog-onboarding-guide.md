@@ -368,6 +368,14 @@ Your PR must include:
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artifacts** — see deployment model sections above
 
+## Repository structure
+
+Two-step model: company identity first, component listing second.
+
+> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
+
+---
+
 ### Roles and responsibilities (RACI)
 
 Understanding who is responsible for each aspect of the onboarding and ongoing operation keeps teams aligned and avoids gaps after go-live.
@@ -379,14 +387,6 @@ Understanding who is responsible for each aspect of the onboarding and ongoing o
 | Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
 | Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
 | Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
-
----
-
-## Repository structure
-
-Two-step model: company identity first, component listing second.
-
-> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
 
 ---
 
