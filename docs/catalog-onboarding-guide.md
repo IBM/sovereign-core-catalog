@@ -24,7 +24,7 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
     - [Step 4 — Meet the security bar](#step-4--meet-the-security-bar)
     - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
     - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
-  - [Step 7 — Validate the end-to-end experience](#step-7--validate-the-end-to-end-experience)
+    - [Step 7 — Validate the end-to-end experience](#step-7--validate-the-end-to-end-experience)
 11. [Repository structure](#repository-structure)
 12. [Asset lifecycle states](#asset-lifecycle-states)
 13. [Coming soon](#coming-soon)
