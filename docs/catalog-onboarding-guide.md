@@ -1,4 +1,4 @@
-﻿# IBM Sovereign Core — Catalog onboarding guide
+# IBM Sovereign Core — Catalog onboarding guide
 
 For business partners, ISVs, and IBM product teams. IBM product teams should also refer to the internal addendum for additional guidelines specific to IBM offerings.
 
@@ -16,9 +16,18 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
 8. [How to start — the onboarding stages](#how-to-start--the-onboarding-stages)
 9. [What the team commits to](#what-the-team-commits-to)
 10. [BYOP products onboarding](#byop-products-onboarding)
+    - [Step 1 — Understand key concepts](#step-1--understand-key-concepts)
+    - [Step 2 — Prepare metadata and company profile](#step-2--prepare-metadata-and-company-profile)
+    - [Step 3 — Implement the Sovereign Core integration](#step-3--implement-the-sovereign-core-integration)
+      - [Step 3a — Single-tenant integration](#step-3a--single-tenant-integration)
+      - [Step 3b — Multi-tenant integration](#step-3b--multi-tenant-integration)
+    - [Step 4 — Meet the security bar](#step-4--meet-the-security-bar)
+    - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
+    - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
 11. [Repository structure](#repository-structure)
 12. [Asset lifecycle states](#asset-lifecycle-states)
-13. [Get in touch](#get-in-touch)
+13. [Coming soon](#coming-soon)
+14. [Get in touch](#get-in-touch)
 
 ---
 
@@ -200,7 +209,7 @@ A catalog listing is not a one-time activity. The obligations that come with it 
 
 This section covers the technical integration steps for teams bringing a product to the catalog via the BYOP (Bring Your Own Product) mechanism. It applies to both IBM product teams and external partners targeting Level 2 or higher.
 
-### Platform building blocks
+### Step 1 — Understand key concepts
 
 | Concept | What it is |
 |---|---|
@@ -225,7 +234,7 @@ graph LR
     Catalog -- "triggers" --> BYOP
 ```
 
-### Onboarding journey
+### Step 2 — Prepare metadata and company profile
 
 ```mermaid
 flowchart TD
@@ -242,16 +251,7 @@ flowchart TD
     J --> K[Listed in catalog]
 ```
 
-### Submit your listing — GitHub pull request
-
-To appear in the catalog, submit a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog). For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository. Your PR must include:
-
-- **Company profile** — name, logo, contact details, description
-- **Software profile** — product name, version, category, description
-- **Technical metadata** — air-gap support, supported architectures, resource requirements
-- **Sovereign Core integration artifacts** — see deployment model section below
-
-### Step 3 — Choose your deployment model
+### Step 3 — Implement the Sovereign Core integration
 
 Before implementing the integration, determine how your software serves multiple customers. Even if your application supports a multi-tenant model, the recommended deployment approach is ultimately up to you as the software provider — consider your architecture, operational complexity, and customer requirements when choosing.
 
@@ -328,7 +328,7 @@ flowchart TD
 
 **Custom broker** — Full control over provisioning logic. Implement `/v2/catalog`, `/v2/service_instances`, and `/v2/service_bindings`. Required for multi-tenant services that need custom tenant lifecycle management.
 
-### Step 4 — Security requirements
+### Step 4 — Meet the security bar
 
 Security is a mandatory gate — not optional.
 
@@ -337,7 +337,7 @@ Security is a mandatory gate — not optional.
 - Follow IBM secure-by-default standards: no hardcoded secrets, non-root containers, TLS 1.2 or higher throughout.
 - Automated vulnerability scans must be integrated into your CI/CD pipeline before submission.
 
-### Steps 5, 6 & 7 — Optional enhancements
+### Step 5 — Optional enhancements
 
 Not required for initial listing, but required for Level 3 (Integrated) and strongly recommended for a complete managed-service experience:
 
@@ -347,9 +347,48 @@ Not required for initial listing, but required for Level 3 (Integrated) and stro
 | **Sovereign Core IAM integration** | Single sign-on and RBAC via the platform identity provider — no separate user directory needed. |
 | **Logging & metrics** | Integrates your service with the platform's log aggregation and metrics stack for unified MSP monitoring. |
 
-### Coming soon
+### Step 6 — Submit your pull request (PR)
 
-**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
+Submitting a pull request to the public GitHub repository at [github.com/IBM/sovereign-core-catalog](https://github.com/IBM/sovereign-core-catalog) is how your product becomes listed in the catalog. This is a mandatory step — not optional. All catalog changes, new listings, updates, and removals go through a PR. There is no other path to publication.
+
+For PR format and structure, refer to the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) in the public repository.
+
+**Step 1 — Join:** Fork the repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open a PR titled `[Company Join] Your Company Name`. This must be merged before any component PR will pass CI.
+
+**Step 2 — List:** Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → validate locally → open a PR titled `[New Listing] Software: Your Company — Product Name v1.0`. CI validates schema automatically.
+
+**Step 3 — Maintain:** New version? Add a new `<version>/` folder via PR. Deprecating? Update `lifecycleStatus: deprecated`. Withdrawing? Set `lifecycleStatus: retired`. All changes go via PR — never a direct push to main.
+
+> **CI validation runs automatically on every PR:** schema correctness, required fields, taxonomy vocabulary, secrets scan, and broken reference checks. Human IBM review takes place only after CI passes.
+
+Your PR must include:
+
+- **Company profile** — name, logo, contact details, description
+- **Software profile** — product name, version, category, description
+- **Technical metadata** — air-gap support, supported architectures, resource requirements
+- **Sovereign Core integration artifacts** — see deployment model sections above
+
+## Repository structure
+
+Two-step model: company identity first, component listing second.
+
+> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
+
+---
+
+## Asset lifecycle states
+
+Every catalog entry carries a `lifecycleStatus` field that controls visibility and deployment eligibility. State transitions are enforced by the CI pipeline — a PR cannot be approved directly without first passing through `review`.
+
+| State | Storefront | Deployable | Description |
+|---|---|---|---|
+| `draft` | Hidden | No | Entry submitted, CI validation in progress |
+| `review` | Hidden | No | CI passed, awaiting IBM reviewer approval |
+| `approved` | Public | Yes | Merged to main, visible in the public catalog |
+| `deprecated` | Visible with warning | Discouraged | End-of-life signalled; successor available |
+| `retired` | Hidden | No | Removed from active catalog; retained for audit |
+
+---
 
 ### Roles and responsibilities (RACI)
 
@@ -365,35 +404,9 @@ Understanding who is responsible for each aspect of the onboarding and ongoing o
 
 ---
 
-## Repository structure
+## Coming soon
 
-Two-step model: company identity first, component listing second.
-
-> **The two-step rule:** Every partner must first submit a `companies/<slug>/profile.yaml` PR and have it merged before any component listing will pass CI validation. The `companyRef` field in every metadata file must resolve to an existing company profile.
-
-### Contribution lifecycle
-
-**Step 1 — Join:** Fork the repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open a PR titled `[Company Join] Your Company Name`. This must be merged before any component PR will pass CI.
-
-**Step 2 — List:** Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → validate locally → open a PR titled `[New Listing] Software: Your Company — Product Name v1.0`. CI validates schema automatically.
-
-**Step 3 — Maintain:** New version? Add a new `<version>/` folder via PR. Deprecating? Update `lifecycleStatus: deprecated`. Withdrawing? Set `lifecycleStatus: retired`. All changes go via PR — never a direct push to main.
-
-> **CI validation runs automatically on every PR:** schema correctness, required fields, taxonomy vocabulary, secrets scan, and broken reference checks. Human IBM review takes place only after CI passes.
-
----
-
-## Asset lifecycle states
-
-Every catalog entry carries a `lifecycleStatus` field that controls visibility and deployment eligibility. State transitions are enforced by the CI pipeline — a PR cannot be approved directly without first passing through `review`.
-
-| State | Storefront | Deployable | Description |
-|---|---|---|---|
-| `draft` | Hidden | No | Entry submitted, CI validation in progress |
-| `review` | Hidden | No | CI passed, awaiting IBM reviewer approval |
-| `approved` | Public | Yes | Merged to main, visible in the public catalog |
-| `deprecated` | Visible with warning | Discouraged | End-of-life signalled; successor available |
-| `retired` | Hidden | No | Removed from active catalog; retained for audit |
+**Application compliance declaration and continuous automated compliance** — A forthcoming capability that will allow software teams to declare their compliance posture and have it continuously verified within the Sovereign Core platform.
 
 ---
 
