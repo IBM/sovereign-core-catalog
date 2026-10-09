@@ -381,9 +381,7 @@ Publishing a pull request is not the end of onboarding — it is the beginning o
 - **Confirm documentation is reachable** — all links in your catalog entry (runbooks, architecture diagrams, support contacts) must be live and accurate.
 - **Sign off with your IBM focal** — your IBM Sovereign Core technical sponsor confirms the end-to-end experience meets the bar for the integration level you have claimed.
 
-This step is a prerequisite for your listing moving from 
-eview to pproved status. A listing that passes CI and IBM review but has not been end-to-end validated will remain in 
-eview until sign-off is complete.
+This step is a prerequisite for your listing moving from “review” to “approved” status. A listing that passes CI and IBM review but has not been end-to-end validated will remain in “review” until sign-off is complete.
 
 ## Repository structure
 
