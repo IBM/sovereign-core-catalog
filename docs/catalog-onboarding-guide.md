@@ -24,6 +24,7 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
     - [Step 4 — Meet the security bar](#step-4--meet-the-security-bar)
     - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
     - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
+  - [Step 7 — Validate the end-to-end experience](#step-7--validate-the-end-to-end-experience)
 11. [Repository structure](#repository-structure)
 12. [Asset lifecycle states](#asset-lifecycle-states)
 13. [Coming soon](#coming-soon)
@@ -367,6 +368,22 @@ Your PR must include:
 - **Software profile** — product name, version, category, description
 - **Technical metadata** — air-gap support, supported architectures, resource requirements
 - **Sovereign Core integration artifacts** — see deployment model sections above
+
+### Step 7 — Validate the end-to-end experience
+
+Publishing a pull request is not the end of onboarding — it is the beginning of your product being live. Before your listing is considered fully onboarded, complete an end-to-end validation of the experience a service provider and tenant will have.
+
+**What this step covers:**
+
+- **Deploy a test instance** — provision your service through the Sovereign Core catalog UI, exactly as an MSP administrator would. Confirm the deployment completes without manual intervention.
+- **Verify the tenant experience** — log in as a tenant and confirm the service is discoverable, provisionable, and accessible after deployment. Check that post-deployment access details (endpoints, credentials, documentation links) surface correctly.
+- **Run through your demo** — walk through any sales or partner demo you plan to deliver using this listing. If something breaks or requires a workaround during a demo, it is not ready.
+- **Confirm documentation is reachable** — all links in your catalog entry (runbooks, architecture diagrams, support contacts) must be live and accurate.
+- **Sign off with your IBM focal** — your IBM Sovereign Core technical sponsor confirms the end-to-end experience meets the bar for the integration level you have claimed.
+
+This step is a prerequisite for your listing moving from 
+eview to pproved status. A listing that passes CI and IBM review but has not been end-to-end validated will remain in 
+eview until sign-off is complete.
 
 ## Repository structure
 
