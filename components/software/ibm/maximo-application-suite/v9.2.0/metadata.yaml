@@ -12,7 +12,7 @@ metadata:
   intendedUsers: ["Platform engineers", "Asset management teams", "Operations teams", "IT administrators"]
   version: "9.2.0"
   lifecycleStatus: "draft"
-  storefrontVisibility: "private"
+  storefrontVisibility: "public"
   availabilityState: "byop_ready"
 spec:
   openSource:
