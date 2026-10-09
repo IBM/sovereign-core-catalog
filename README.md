@@ -12,7 +12,7 @@ Digital sovereignty is no longer a niche requirement. Governments, financial ins
 
 **The bar is defined and the path is fast.** A Level 1 validation can be achieved in approximately five business days once intake inputs are complete. You do not need to complete a full platform integration to get your product listed and your sellers unblocked. The catalog is designed to let you enter at the right level for your current readiness and deepen the integration over time as the opportunity justifies it.
 
-**For MSPs, the catalog is a product catalog for your customers.** The platform catalog is a curated, centrally controlled service registry that your administrators govern and your tenants self-serve from. Onboarding your own software or a partner's software into the catalog means your customers get a repeatable, one-click provisioning experience — rather than a bespoke installation that no one can maintain at version three.
+**For MSPs, the catalog is a product catalog for your customers.** The platform catalog is a curated service registry available inside every Sovereign Core deployment. MSP and central IT administrators control which services are visible to their tenants, and tenants self-serve from that curated set. Onboarding your own software or a partner's software into the catalog means your customers get a repeatable, one-click provisioning experience — rather than a bespoke installation that no one can maintain at version three.
 
 ---
 
@@ -42,7 +42,7 @@ The **public catalog** is where partners, ISVs, and IBM product teams publish th
 
 The **platform catalog** is the in-platform deployment engine available inside every deployed Sovereign Core environment. It consumes the same listings from the public catalog and makes them available to service providers and tenants for one-click provisioning. A listing in the public catalog automatically becomes available in the platform catalog once approved.
 
-> **Design principle:** The repository stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, no product code. All actual artifacts remain in vendor-owned OCI registries.
+> **Design principle:** The public catalog repository at github.com/IBM/sovereign-core-catalog stores only metadata, compliance pointers, and deployment references. No binaries, no secrets, and no product code are stored here. All actual deployment artifacts remain in registries owned and operated by the contributing vendor.
 
 ---
 
