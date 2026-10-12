@@ -29,13 +29,30 @@ set -euo pipefail
 # Args
 # ---------------------------------------------------------------------------
 DRY_RUN=false
-if [[ "${1:-}" == "--dry-run" ]]; then
-  DRY_RUN=true
-  shift
+POSITIONAL_ARGS=()
+
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run)
+      DRY_RUN=true
+      ;;
+    -h|--help)
+      echo "Usage: $0 [--dry-run] <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"
+      exit 0
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$arg")
+      ;;
+  esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -lt 1 || ${#POSITIONAL_ARGS[@]} -gt 2 ]]; then
+  echo "Usage: $0 [--dry-run] <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"
+  exit 1
 fi
-[[ $# -lt 1 ]] && { echo "Usage: $0 [--dry-run] <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"; exit 1; }
-PRODUCT_NAME="$1"
-PRODUCT_VERSION="${2:-}"   # optional — resolved after clone if empty
+
+PRODUCT_NAME="${POSITIONAL_ARGS[0]}"
+PRODUCT_VERSION="${POSITIONAL_ARGS[1]:-}"   # optional — resolved after clone if empty
 
 # ---------------------------------------------------------------------------
 # Load env
