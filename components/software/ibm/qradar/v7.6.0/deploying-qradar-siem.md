@@ -348,8 +348,8 @@ Before provisioning QRadar, make sure you have the following information:
    - Desired deployment plan (e.g. `medium-ha`, `small-ha`, `large-ha`, or standalone `tiny`, `small`, `medium`, `large`).
 
 4. **Network information**
-   - Primary DNS server IP address (e.g. `8.8.8.8`).
-   - Secondary DNS server IP address, when available (e.g. `8.8.4.4`).
+   - Primary DNS server IP address (e.g. `<your-primary-dns>`).
+   - Secondary DNS server IP address, when available (e.g. `<your-secondary-dns>`).
    - Required timezone, for example `UTC`, `America/New_York`, or `Europe/London`.
 
 5. **QRadar credentials**
@@ -405,10 +405,10 @@ Before provisioning QRadar, make sure you have the following information:
   "instanceName": "qradar-prod-ha",
   "plan": "medium-ha",
   "qradar": {
-    "admin_password": "SecureAdm1nP@ssw0rd!",
-    "dns_primary": "8.8.8.8",
-    "dns_secondary": "8.8.4.4",
-    "root_password": "VerySecureR00tP@ssw0rd!",
+    "admin_password": "<YOUR_ADMIN_PASSWORD>",
+    "dns_primary": "<YOUR_PRIMARY_DNS_IP>",
+    "dns_secondary": "<YOUR_SECONDARY_DNS_IP>",
+    "root_password": "<YOUR_ROOT_PASSWORD>",
     "security_template": "Enterprise",
     "timezone": "UTC"
   }
@@ -436,10 +436,10 @@ Before provisioning QRadar, make sure you have the following information:
 | `instance.name` | String | Yes | Name of the instance object. Use lowercase alphanumeric characters and hyphens. | `"qradar-prod-ha"` |
 | `instanceName` | String | Yes | Unique instance identifier matching `instance.name`. | `"qradar-prod-ha"` |
 | `plan` | String | Yes | Deployment plan sizing and topology (`tiny`, `small`, `medium`, `large`, `small-ha`, `medium-ha`, `large-ha`). | `"medium-ha"` |
-| `qradar.admin_password` | String | Yes | Password for the QRadar Web Console `admin` user. Use a strong password containing uppercase/lowercase letters, numbers, and symbols. | `"SecureAdm1nP@ssw0rd!"` |
-| `qradar.root_password` | String | Yes | Password for the operating system `root` user on the underlying VM. | `"VerySecureR00tP@ssw0rd!"` |
-| `qradar.dns_primary` | String | Yes | IP address of the primary DNS resolver reachable by the VM. | `"8.8.8.8"` |
-| `qradar.dns_secondary` | String | Optional | IP address of the secondary DNS resolver. | `"8.8.4.4"` |
+| `qradar.admin_password` | String | Yes | Password for the QRadar Web Console `admin` user. Use a strong password containing uppercase/lowercase letters, numbers, and symbols. | `"<YOUR_ADMIN_PASSWORD>"` |
+| `qradar.root_password` | String | Yes | Password for the operating system `root` user on the underlying VM. | `"<YOUR_ROOT_PASSWORD>"` |
+| `qradar.dns_primary` | String | Yes | IP address of the primary DNS resolver reachable by the VM. | `"<YOUR_PRIMARY_DNS_IP>"` |
+| `qradar.dns_secondary` | String | Optional | IP address of the secondary DNS resolver. | `"<YOUR_SECONDARY_DNS_IP>"` |
 | `qradar.security_template` | String | Yes | QRadar security template profile. Default is `Enterprise`. | `"Enterprise"` |
 | `qradar.timezone` | String | Yes | Standard timezone identifier for QRadar log event timestamps. | `"UTC"`, `"America/New_York"` |
 
@@ -664,9 +664,9 @@ oc describe vmi qradar-primary -n <instance-namespace> | grep -A3 'Unschedulable
 | Option | When to use |
 |--------|-------------|
 | **Add a worker node** ✅ Recommended for production | The cluster genuinely needs a second node for HA |
-| **Accept co-location** — force-delete the stuck VMI | Lab/demo only — both VMs run on the same node, anti-affinity is `IgnoredDuringExecution` so running VMs are not evicted |
+| **Accept co-location** — force-delete the stuck VMI | Non-production / test environments only — both VMs run on the same node, anti-affinity is `IgnoredDuringExecution` so running VMs are not evicted |
 
-**Lab/demo workaround — force the VMI to reschedule:**
+**Workaround for non-production environments — force the VMI to reschedule:**
 
 ```bash
 # Force-delete the stuck VMI pod so KubeVirt recreates it fresh
