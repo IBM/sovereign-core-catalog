@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
-# import.sh <product_name> [vX.X.X]
+# import.sh [--dry-run] <product_name> [vX.X.X]
 #
 # Imports a BYOP product from the external catalog repo into the platform:
 #   1. Sparse-clone the product directory from the external catalog repo
 #   2. Copy the helm chart to Quay (helm-registry) or the GitOps repo (helm-git)
 #   3. Mirror container images to Quay
 #   4. Create the BYOPTemplate CR
+#
+# --dry-run  Print every mutating command without executing it.
+#            Read-only/discovery steps (clone, pull, yq) still run normally.
 #
 # Product directory layout expected in the catalog repo:
 #   <product>/
@@ -25,9 +28,31 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Args
 # ---------------------------------------------------------------------------
-[[ $# -lt 1 ]] && { echo "Usage: $0 <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"; exit 1; }
-PRODUCT_NAME="$1"
-PRODUCT_VERSION="${2:-}"   # optional — resolved after clone if empty
+DRY_RUN=false
+POSITIONAL_ARGS=()
+
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run)
+      DRY_RUN=true
+      ;;
+    -h|--help)
+      echo "Usage: $0 [--dry-run] <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"
+      exit 0
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$arg")
+      ;;
+  esac
+done
+
+if [[ ${#POSITIONAL_ARGS[@]} -lt 1 || ${#POSITIONAL_ARGS[@]} -gt 2 ]]; then
+  echo "Usage: $0 [--dry-run] <product_name> [vX.X.X]  (e.g. $0 kafka v1.2.3)"
+  exit 1
+fi
+
+PRODUCT_NAME="${POSITIONAL_ARGS[0]}"
+PRODUCT_VERSION="${POSITIONAL_ARGS[1]:-}"   # optional — resolved after clone if empty
 
 # ---------------------------------------------------------------------------
 # Load env
@@ -70,21 +95,28 @@ done
 # ---------------------------------------------------------------------------
 # Resolve Quay hostname — use QUAY_REGISTRY override if set, otherwise look up from cluster
 # ---------------------------------------------------------------------------
-if [[ -n "${QUAY_REGISTRY:-}" ]]; then
-  # Strip scheme if the override includes one
-  QUAY_REGISTRY="${QUAY_REGISTRY#https://}"
-  QUAY_REGISTRY="${QUAY_REGISTRY#http://}"
-  echo "==> Using QUAY_REGISTRY override: ${QUAY_REGISTRY}"
+echo "==> Looking up Quay registry from cluster"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "    [DRY RUN] skipping 'oc get quayregistry'; using placeholder"
+  QUAY_REGISTRY="<QUAY_REGISTRY>"
 else
-  echo "==> Looking up Quay registry from cluster"
-  QUAY_REGISTRY=$(oc get quayregistry registry -n quay-enterprise \
-    -o jsonpath='{.status.registryEndpoint}' 2>/dev/null || true)
-  [[ -z "$QUAY_REGISTRY" ]] && { echo "ERROR: could not retrieve Quay registryEndpoint from quay-enterprise namespace; set QUAY_REGISTRY in import.env to override"; exit 1; }
-  # Strip scheme — helm and skopeo expect a bare hostname
-  QUAY_REGISTRY="${QUAY_REGISTRY#https://}"
-  QUAY_REGISTRY="${QUAY_REGISTRY#http://}"
-  echo "    QUAY_REGISTRY=${QUAY_REGISTRY}"
+  if [[ -n "${QUAY_REGISTRY:-}" ]]; then
+    # Strip scheme if the override includes one
+    QUAY_REGISTRY="${QUAY_REGISTRY#https://}"
+    QUAY_REGISTRY="${QUAY_REGISTRY#http://}"
+    echo "==> Using QUAY_REGISTRY override: ${QUAY_REGISTRY}"
+  else
+    echo "==> Looking up Quay registry from cluster"
+    QUAY_REGISTRY=$(oc get quayregistry registry -n quay-enterprise \
+      -o jsonpath='{.status.registryEndpoint}' 2>/dev/null || true)
+    [[ -z "$QUAY_REGISTRY" ]] && { echo "ERROR: could not retrieve Quay registryEndpoint from quay-enterprise namespace; set QUAY_REGISTRY in import.env to override"; exit 1; }
+    # Strip scheme — helm and skopeo expect a bare hostname
+    QUAY_REGISTRY="${QUAY_REGISTRY#https://}"
+    QUAY_REGISTRY="${QUAY_REGISTRY#http://}"
+    echo "    QUAY_REGISTRY=${QUAY_REGISTRY}"
+  fi
 fi
+echo "    QUAY_REGISTRY=${QUAY_REGISTRY}"
 
 # ---------------------------------------------------------------------------
 # Working directory — always created so later steps can write temp files
@@ -260,18 +292,24 @@ if [[ "$STEP3_PUSH_CHART" == "false" ]]; then
 elif [[ "$TARGET_TYPE" == "helm-registry" ]]; then
   echo "==> Step 3: Pushing helm chart to Quay registry"
 
-  helm registry login "$QUAY_REGISTRY" --username "$QUAY_USERNAME" --password "$QUAY_PASSWORD" \
-    --insecure
-
   CHART_TGZ="${WORK_DIR}/${CHART_NAME}-${CHART_VERSION}.tgz"
-  helm package "$CHART_SRC" --destination "$WORK_DIR"
-
-  helm push "$CHART_TGZ" \
-    "oci://${QUAY_REGISTRY}/sovcloud/cp/sovereign-cloud-platform/byop/charts" \
-    --insecure-skip-tls-verify
-
   SPEC_REGISTRY="oci://${QUAY_REGISTRY}/sovcloud/cp/sovereign-cloud-platform/byop/charts/${CHART_NAME}"
   SPEC_REPO_URL=""
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    echo "    [DRY RUN] helm registry login ${QUAY_REGISTRY} --username \$QUAY_USERNAME --password \$QUAY_PASSWORD --insecure"
+    echo "    [DRY RUN] helm package ${CHART_SRC} --destination ${WORK_DIR}"
+    echo "    [DRY RUN] helm push ${CHART_TGZ} oci://${QUAY_REGISTRY}/sovcloud/cp/sovereign-cloud-platform/byop/charts --insecure-skip-tls-verify"
+  else
+    helm registry login "$QUAY_REGISTRY" --username "$QUAY_USERNAME" --password "$QUAY_PASSWORD" \
+      --insecure
+
+    helm package "$CHART_SRC" --destination "$WORK_DIR"
+
+    helm push "$CHART_TGZ" \
+      "oci://${QUAY_REGISTRY}/sovcloud/cp/sovereign-cloud-platform/byop/charts" \
+      --insecure-skip-tls-verify
+  fi
 
 elif [[ "$TARGET_TYPE" == "helm-git" ]]; then
   echo "==> Step 3: Copying helm chart to GitOps repo"
@@ -280,22 +318,29 @@ elif [[ "$TARGET_TYPE" == "helm-git" ]]; then
     [[ -z "${!var:-}" ]] && { echo "ERROR: $var must be set in import.env for helm-git targetType"; exit 1; }
   done
 
-  TARGET_CLONE="${WORK_DIR}/target"
-  TARGET_CLONE_URL=$(echo "$TARGET_REPO" | sed "s|https://|https://${TARGET_TOKEN}@|")
-
-  git clone --depth=1 --branch "$TARGET_BRANCH" "$TARGET_CLONE_URL" "$TARGET_CLONE"
-
-  TARGET_PATH="${TARGET_CLONE}/products/${PRODUCT_ID}/${CHART_VERSION}/chart"
-  mkdir -p "$TARGET_PATH"
-  cp -r "${CHART_SRC}/." "$TARGET_PATH/"
-
-  git -C "$TARGET_CLONE" add .
-  git -C "$TARGET_CLONE" diff --cached --quiet || \
-    git -C "$TARGET_CLONE" commit -m "chore: import ${PRODUCT_ID} chart ${CHART_VERSION}"
-  git -C "$TARGET_CLONE" push "$TARGET_CLONE_URL" HEAD:"$TARGET_BRANCH"
-
   SPEC_REGISTRY=""
   SPEC_REPO_URL="$TARGET_REPO"
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    echo "    [DRY RUN] git clone --depth=1 --branch ${TARGET_BRANCH} <TARGET_REPO_WITH_TOKEN> ${WORK_DIR}/target"
+    echo "    [DRY RUN] cp -r ${CHART_SRC}/. ${WORK_DIR}/target/products/${PRODUCT_ID}/${CHART_VERSION}/chart/"
+    echo "    [DRY RUN] git commit -m 'chore: import ${PRODUCT_ID} chart ${CHART_VERSION}'"
+    echo "    [DRY RUN] git push HEAD:${TARGET_BRANCH}"
+  else
+    TARGET_CLONE="${WORK_DIR}/target"
+    TARGET_CLONE_URL=$(echo "$TARGET_REPO" | sed "s|https://|https://${TARGET_TOKEN}@|")
+
+    git clone --depth=1 --branch "$TARGET_BRANCH" "$TARGET_CLONE_URL" "$TARGET_CLONE"
+
+    TARGET_PATH="${TARGET_CLONE}/products/${PRODUCT_ID}/${CHART_VERSION}/chart"
+    mkdir -p "$TARGET_PATH"
+    cp -r "${CHART_SRC}/." "$TARGET_PATH/"
+
+    git -C "$TARGET_CLONE" add .
+    git -C "$TARGET_CLONE" diff --cached --quiet || \
+      git -C "$TARGET_CLONE" commit -m "chore: import ${PRODUCT_ID} chart ${CHART_VERSION}"
+    git -C "$TARGET_CLONE" push "$TARGET_CLONE_URL" HEAD:"$TARGET_BRANCH"
+  fi
 
 else
   echo "ERROR: unsupported targetType '${TARGET_TYPE}' in metadata.yaml (must be helm-registry or helm-git)"
@@ -313,7 +358,11 @@ if [[ "$STEP4_MIRROR_IMAGES" == "false" ]]; then
 else
 echo "==> Step 4: Mirroring images to Quay"
 
-skopeo login "$QUAY_REGISTRY" --username "$QUAY_USERNAME" --password "$QUAY_PASSWORD" --tls-verify=false
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "    [DRY RUN] skopeo login ${QUAY_REGISTRY} --username \$QUAY_USERNAME --password \$QUAY_PASSWORD --tls-verify=false"
+else
+  skopeo login "$QUAY_REGISTRY" --username "$QUAY_USERNAME" --password "$QUAY_PASSWORD" --tls-verify=false
+fi
 
 if [[ -n "${PRODUCT_REGISTRY_KEY:-}" ]]; then
   SRC_CREDS="--src-creds ${PRODUCT_REGISTRY_KEY}"
@@ -333,12 +382,17 @@ for (( idx=0; idx<IMAGE_COUNT; idx++ )); do
   echo "    pull: ${SRC_IMAGE}"
   echo "    push: ${DEST_IMAGE}"
 
-  # shellcheck disable=SC2086
-  skopeo copy --all \
-    $SRC_CREDS \
-    --dest-tls-verify=false \
-    "docker://${SRC_IMAGE}" \
-    "docker://${DEST_IMAGE}"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    # shellcheck disable=SC2086
+    echo "    [DRY RUN] skopeo copy --all ${SRC_CREDS} --dest-tls-verify=false docker://${SRC_IMAGE} docker://${DEST_IMAGE}"
+  else
+    # shellcheck disable=SC2086
+    skopeo copy --all \
+      $SRC_CREDS \
+      --dest-tls-verify=false \
+      "docker://${SRC_IMAGE}" \
+      "docker://${DEST_IMAGE}"
+  fi
 done
 fi
 
@@ -415,8 +469,14 @@ ${SOURCE_FIELDS}
   registrationSchema: ${REGISTRATION_SCHEMA}
 EOF
 
-echo "    Applying ${CR_FILE}"
-oc apply -f "$CR_FILE"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "    [DRY RUN] would apply:"
+  cat "$CR_FILE"
+  echo "    [DRY RUN] oc apply -f ${CR_FILE}"
+else
+  echo "    Applying ${CR_FILE}"
+  oc apply -f "$CR_FILE"
+fi
 
 # Apply cluster-scoped ImageTagMirrorSet and ImageDigestMirrorSet directly
 if [[ $IMAGE_COUNT -gt 0 ]]; then
@@ -451,7 +511,13 @@ metadata:
 spec:
   imageDigestMirrors:${ITMS_ENTRIES}
 EOF
-  oc apply -f "$ITMS_IDMS_FILE" || echo "WARNING: Failed to apply ITMS/IDMS directly (cluster-scoped admin permissions may be required)"
+  if [[ "$DRY_RUN" == "true" ]]; then
+    echo "    [DRY RUN] would apply:"
+    cat "$ITMS_IDMS_FILE"
+    echo "    [DRY RUN] oc apply -f ${ITMS_IDMS_FILE}"
+  else
+    oc apply -f "$ITMS_IDMS_FILE" || echo "WARNING: Failed to apply ITMS/IDMS directly (cluster-scoped admin permissions may be required)"
+  fi
 fi
 
 fi  # end Step 5
@@ -462,16 +528,19 @@ fi  # end Step 5
 if [[ "$STEP6_CREATE_PLATFORM_OWNER_SECRET" == "false" ]]; then
   echo "--- Step 6: SKIPPED (STEP6_CREATE_PLATFORM_OWNER_SECRET=false)" # pragma: allowlist secret
 else
-echo "==> Step 6: Ensuring platform owner secret 'byop-platform-owner-secret'"
+  echo "==> Step 6: Ensuring platform owner secret 'byop-platform-owner-secret'"
 
-[[ -z "${SOVEREIGN_CORE_APIKEY:-}" ]] && { echo "ERROR: SOVEREIGN_CORE_APIKEY must be set in import.env for Step 6"; exit 1; } # pragma: allowlist secret
+  [[ -z "${SOVEREIGN_CORE_APIKEY:-}" ]] && { echo "ERROR: SOVEREIGN_CORE_APIKEY must be set in import.env for Step 6"; exit 1; } # pragma: allowlist secret
 
-oc create secret generic byop-platform-owner-secret \
-  --from-literal=apiKey="${SOVEREIGN_CORE_APIKEY}" \
-  --namespace "${BYOP_NAMESPACE}" \
-  --dry-run=client -o yaml | oc apply -f -
-echo "    byop-platform-owner-secret applied to namespace '${BYOP_NAMESPACE}'"
-
+  if [[ "$DRY_RUN" == "true" ]]; then
+    echo "    [DRY RUN] oc create secret generic byop-platform-owner-secret --from-literal=apiKey=\$SOVEREIGN_CORE_APIKEY --namespace ${BYOP_NAMESPACE} --dry-run=client -o yaml | oc apply -f -"
+  else
+    oc create secret generic byop-platform-owner-secret \
+      --from-literal=apiKey="${SOVEREIGN_CORE_APIKEY}" \
+      --namespace "${BYOP_NAMESPACE}" \
+      --dry-run=client -o yaml | oc apply -f -
+    echo "    byop-platform-owner-secret applied to namespace '${BYOP_NAMESPACE}'"
+  fi
 fi
 
 # ---------------------------------------------------------------------------
@@ -502,8 +571,14 @@ stringData:
   password: ${TARGET_TOKEN}
 ARGOEOF
 
-oc apply -f "$ARGOCD_SECRET_FILE"
-echo "    ArgoCD repo secret '${ARGOCD_SECRET_NAME}' applied to namespace '${ARGOCD_NAMESPACE}'"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "    [DRY RUN] would apply:"
+  cat "$ARGOCD_SECRET_FILE"
+  echo "    [DRY RUN] oc apply -f ${ARGOCD_SECRET_FILE}"
+else
+  oc apply -f "$ARGOCD_SECRET_FILE"
+  echo "    ArgoCD repo secret '${ARGOCD_SECRET_NAME}' applied to namespace '${ARGOCD_NAMESPACE}'"
+fi
 
 fi
 
@@ -567,10 +642,20 @@ subjects:
     name: byop-image-mirror-policy
 ACMEOF
 
-oc apply -f "$ACM_MANIFEST"
-echo "    ACM placement resources applied to namespace '${BYOP_NAMESPACE}'"
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "    [DRY RUN] would apply:"
+  cat "$ACM_MANIFEST"
+  echo "    [DRY RUN] oc apply -f ${ACM_MANIFEST}"
+else
+  oc apply -f "$ACM_MANIFEST"
+  echo "    ACM placement resources applied to namespace '${BYOP_NAMESPACE}'"
+fi
 
 fi
 
 echo ""
-echo "Done. BYOPTemplate '${CR_NAME}' applied to namespace '${BYOP_NAMESPACE}'."
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "Dry run complete. No changes were made. BYOPTemplate '${CR_NAME}' would be applied to namespace '${BYOP_NAMESPACE}'."
+else
+  echo "Done. BYOPTemplate '${CR_NAME}' applied to namespace '${BYOP_NAMESPACE}'."
+fi
