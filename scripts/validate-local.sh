@@ -1,12 +1,31 @@
 #!/usr/bin/env bash
 # Sovereign Store — Local Structural Smoke Test
 # Pre-PR local check for metadata files. Full schema validation runs in CI.
+#
+# Invoked by: make validate-local (verbose), make lint (quiet)
+# Paired with: scripts/lint-catalog.sh — validates catalog/catalog.yaml and
+#   v*/metadata.yaml spec.catalog.* fields (import.sh contract).
+# If you change the field contract checked here, ensure lint-catalog.sh and
+# the Makefile targets remain consistent.
+#
+# Options:
+#   -q, --quiet   Suppress per-file progress lines; print only failures and
+#                 the final status line.
 
 set -euo pipefail
 
-echo "🚀 Starting Sovereign Store Structural Smoke Test..."
+QUIET=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -q|--quiet) QUIET=true; shift ;;
+    *) shift ;;
+  esac
+done
+
+echo "Validating listing metadata (v*/metadata.yaml, profile.yaml) against catalog schema"
 
 FOUND_ERRORS=0
+CURRENT_FILE=""
 
 # Checks if a given YAML key exists in the file
 has_yaml_key() {
@@ -99,7 +118,7 @@ check_enum_field() {
     [ -z "$val" ] && return 0
 
     if ! echo "$val" | grep -Eq "^(${allowed})$"; then
-        echo "  ❌ invalid enum value for '$key': \"$val\" — allowed: $(echo "$allowed" | tr '|' ' ')"
+        echo "FAIL ${CURRENT_FILE}: invalid value for '${key}': \"${val}\" — allowed: $(echo "$allowed" | tr '|' ' ')"
         FOUND_ERRORS=1
     fi
 }
@@ -113,7 +132,7 @@ validate_field_patterns() {
         local api_version
         api_version=$(get_yaml_scalar_value "apiVersion" "$meta_file")
         if [ -n "$api_version" ] && [ "$api_version" != "sovereign-catalog.io/v1alpha1" ]; then
-            echo "  ❌ invalid apiVersion format: '$api_version' (expected: sovereign-catalog.io/v1alpha1)"
+            echo "FAIL ${meta_file}: invalid apiVersion '${api_version}' (expected: sovereign-catalog.io/v1alpha1)"
             FOUND_ERRORS=1
         fi
     fi
@@ -123,7 +142,7 @@ validate_field_patterns() {
         local slug
         slug=$(get_yaml_scalar_value "slug" "$meta_file")
         if [ -n "$slug" ] && ! echo "$slug" | grep -Eq "^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$"; then
-            echo "  ❌ invalid slug format: '$slug' (expected: lowercase alphanumeric and hyphens, e.g. 'nova-shield-tech')"
+            echo "FAIL ${meta_file}: invalid slug '${slug}' (expected: lowercase alphanumeric and hyphens, e.g. 'nova-shield-tech')"
             FOUND_ERRORS=1
         fi
     fi
@@ -133,7 +152,7 @@ validate_field_patterns() {
         local company_ref
         company_ref=$(get_yaml_scalar_value "companyRef" "$meta_file")
         if [ -n "$company_ref" ] && ! echo "$company_ref" | grep -Eq "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$|^companies/[a-z0-9]$"; then
-            echo "  ❌ invalid companyRef format: '$company_ref' (expected: 'companies/<slug>')"
+            echo "FAIL ${meta_file}: invalid companyRef '${company_ref}' (expected: 'companies/<slug>')"
             FOUND_ERRORS=1
         fi
     fi
@@ -143,7 +162,7 @@ validate_field_patterns() {
         local lifecycle_status
         lifecycle_status=$(get_yaml_scalar_value "lifecycleStatus" "$meta_file")
         if [ -n "$lifecycle_status" ] && ! echo "$lifecycle_status" | grep -Eq "^(draft|review|approved|deprecated|retired)$"; then
-            echo "  ❌ invalid lifecycleStatus: '$lifecycle_status' (expected: draft|review|approved|deprecated|retired)"
+            echo "FAIL ${meta_file}: invalid lifecycleStatus '${lifecycle_status}' (expected: draft|review|approved|deprecated|retired)"
             FOUND_ERRORS=1
         fi
     fi
@@ -153,7 +172,7 @@ validate_field_patterns() {
         local storefront_vis
         storefront_vis=$(get_yaml_scalar_value "storefrontVisibility" "$meta_file")
         if [ -n "$storefront_vis" ] && ! echo "$storefront_vis" | grep -Eq "^(public|unlisted|private)$"; then
-            echo "  ❌ invalid storefrontVisibility: '$storefront_vis' (expected: public|unlisted|private)"
+            echo "FAIL ${meta_file}: invalid storefrontVisibility '${storefront_vis}' (expected: public|unlisted|private)"
             FOUND_ERRORS=1
         fi
     fi
@@ -163,7 +182,7 @@ validate_field_patterns() {
         local avail_state
         avail_state=$(get_yaml_scalar_value "availabilityState" "$meta_file")
         if [ -n "$avail_state" ] && ! echo "$avail_state" | grep -Eq "^(available_central_it|byop_ready|technical_assets_available|discoverable_only)$"; then
-            echo "  ❌ invalid availabilityState: '$avail_state' (expected: available_central_it|byop_ready|technical_assets_available|discoverable_only)"
+            echo "FAIL ${meta_file}: invalid availabilityState '${avail_state}' (expected: available_central_it|byop_ready|technical_assets_available|discoverable_only)"
             FOUND_ERRORS=1
         fi
     fi
@@ -195,7 +214,7 @@ check_required_fields() {
             fields="apiVersion kind"
             ;;
         *)
-            echo "  ⚠️ unknown kind: $kind"
+            echo "WARN ${meta_file}: unknown kind '${kind}'"
             FOUND_ERRORS=1
             return
             ;;
@@ -208,10 +227,10 @@ check_required_fields() {
 
     for field in $fields; do
         if ! has_yaml_key "$field" "$meta_file"; then
-            echo "  ❌ missing required field: $field"
+            echo "FAIL ${meta_file}: missing required field '${field}'"
             FOUND_ERRORS=1
         elif [ "$field" != "capabilities" ] && is_yaml_key_empty "$field" "$meta_file"; then
-            echo "  ❌ required field present but empty: $field"
+            echo "FAIL ${meta_file}: required field '${field}' is present but empty"
             FOUND_ERRORS=1
         fi
     done
@@ -238,10 +257,11 @@ check_required_fields() {
 # Locate all metadata & profile YAML files in components and companies
 while IFS= read -r meta_file; do
     [ -z "$meta_file" ] && continue
-    echo "🔍 Checking file: $meta_file"
+    CURRENT_FILE="$meta_file"
+    [[ "$QUIET" == "false" ]] && echo "ok   ${meta_file}: checking"
 
     if ! has_yaml_key "kind" "$meta_file"; then
-        echo "  ❌ missing required field: kind"
+        echo "FAIL ${meta_file}: missing required field 'kind'"
         FOUND_ERRORS=1
         continue
     fi
@@ -252,9 +272,11 @@ while IFS= read -r meta_file; do
 done < <(find components companies \( -name "profile.yaml" -o \( -name "metadata.yaml" -not -path "*/open-source/*" \) -o -path "*/open-source/*/v*/metadata.yaml" \) -print 2>/dev/null)
 
 if [ "$FOUND_ERRORS" -eq 1 ]; then
-    echo "❌ Validation FAILED. Please resolve missing attributes."
+    echo ""
+    echo "FAILED: listing metadata validation found errors."
     exit 1
 fi
 
-echo "✅ Validation PASSED. Ready for PR."
+echo ""
+echo "OK: all listing metadata files passed."
 exit 0

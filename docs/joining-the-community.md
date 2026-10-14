@@ -70,13 +70,13 @@ This information is not cosmetic — downstream catalog consumers use it to filt
 
 ### 3. Validate locally
 
-Run the structural smoke test before opening a PR:
+Run all local checks before opening a PR:
 
 ```bash
-./scripts/validate-local.sh
+make lint
 ```
 
-The script checks that your file contains the required `apiVersion`, `kind`, and jurisdiction fields. Fix any failures before proceeding.
+This checks that your file contains the required `apiVersion`, `kind`, and jurisdiction fields, and validates any catalog import contract files. Fix any failures before proceeding.
 
 ### 4. Open a pull request
 

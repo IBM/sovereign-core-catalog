@@ -123,7 +123,7 @@ Every catalog entry carries a `lifecycleStatus` field that controls visibility a
 ### Three-stage partner contribution
 
 **Stage 1 — Join: submit your company profile**
-Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
+Fork repo → create `companies/<your-slug>/profile.yaml` → run `make lint` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
 
 **Stage 2 — List: propose a component**
 Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → validate locally → open PR titled `[New Listing] Software: Acme — ProductName v1.0`. CI validates schema automatically. See the [proposing a component guide](https://github.com/IBM/sovereign-core-catalog/blob/main/docs/proposing-a-component.md) for the full PR format and structure.
