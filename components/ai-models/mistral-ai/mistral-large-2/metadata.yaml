@@ -4,29 +4,29 @@ metadata:
   companyRef: "companies/mistral-ai"
   vendor: "Mistral AI"
   product: "Mistral family"
-  shortDescription: "Mistral AI's open-weight, open-source, and proprietary large language models, available on IBM Sovereign Core through IBM watsonx.ai under IBM's license and indemnity. They support enterprise reasoning, agentic AI, and multilingual workloads that run inside the customer's own boundary."
+  shortDescription: "Mistral AI's large language models, available on IBM Sovereign Core through IBM watsonx.ai. They support enterprise reasoning, agentic AI, and multilingual workloads that can run in the customer's own environment."
   fullDescription: |-
-    IBM Sovereign Core clients can access Mistral AI's open-weight, open-source, and proprietary models through the existing IBM and Mistral AI watsonx.ai offerings. The available model families are Mistral Large, Mistral Medium, Mistral Small, Codestral, Devstral, Magistral, Ministral, and Voxtral. Together they support retrieval-augmented generation (RAG), question answering, function calling, multilingual applications, vision, and coding.
+    IBM Sovereign Core clients can access Mistral AI models through the existing IBM and Mistral AI watsonx.ai offerings. The available model families are Mistral Large, Mistral Medium, Mistral Small, Codestral, Devstral, Magistral, Ministral, and Voxtral. Together they support retrieval-augmented generation (RAG), question answering, function calling, multilingual applications, vision, and coding.
 
-    Mistral Large 4 is the flagship model, with enterprise-grade reasoning and agentic AI capabilities. Mistral AI models are built to deliver strong performance while using infrastructure efficiently, which helps organizations move AI beyond experimentation and keep deployment choice.
+    The Mistral Large models offer enterprise-grade reasoning and agentic AI capabilities. Mistral AI models are designed to perform well while using infrastructure efficiently, which can help organizations move AI beyond experimentation.
 
     Core capabilities:
     - Agentic AI that supports autonomous workflows and assistants.
-    - Multilingual intelligence with strong support across global languages.
-    - Cost-efficient AI that is designed to optimize compute use and operating costs.
-    - Platform flexibility for organizations that want AI beyond hyperscaler-only services.
+    - Multilingual intelligence with support across global languages.
+    - Efficient AI that is designed to optimize compute use.
+    - Platform flexibility beyond hyperscaler-only services.
 
     What makes this offering different:
-    - IBM clients get access to Mistral AI's models under IBM's license and indemnity.
-    - Clients can run the models on premises.
-    - IBM delivers and manages the models over an air gap, so clients don't need to open firewall paths for telemetry or updates.
-    - IBM embeds Mistral AI's proprietary engine in watsonx.ai, so watsonx.ai can use the full model capabilities and Mistral AI's optimizations.
-    - Clients also get Mistral AI's dual-licensed open-weight models under IBM's license and indemnity.
+    - Available through IBM watsonx.ai on IBM Sovereign Core.
+    - Can be deployed on premises.
+    - Designed to support air-gapped environments.
+    - Integrated with watsonx.ai.
+    - Mistral AI's open-weight models are also available.
 
     Typical workflows include citizen services assistants for public sector agencies, financial research and analysis for banks and insurers, and enterprise knowledge agents that help employees find information, automate work, and make decisions faster.
 
     IBM part numbers: D0QN4ZX (Resource Unit Monthly License), D0QN5ZX (Resource Unit Subscription License), D0QN8ZX (Non-Production Resource Unit Monthly License), and D0QN9ZX (Non-Production Resource Unit Subscription License).
-  sovereignCoreRelevance: "Mistral AI models on IBM Sovereign Core let organizations run enterprise AI without relying on external AI services. IBM delivers and manages the models over an air gap, so clients can keep their data, models, and operations in their chosen environment without opening firewall paths for telemetry or updates. Efficient open-weight models help lower AI costs while clients keep ownership of their deployment. Because AI runs where the data already lives, the models suit sensitive and regulated data. Mistral AI is headquartered in France, which supports organizations that want a regional AI strategy and more deployment choice."
+  sovereignCoreRelevance: "Mistral AI models on IBM Sovereign Core give organizations an option to run AI in their chosen environment, including on premises and in air-gapped deployments. Because AI can run where the data already lives, the models can suit organizations with sensitive or regulated data. Mistral AI is headquartered in France, which may interest organizations that want a regional AI strategy."
   category: "text_generation"
   industries:
     ["government", "bfsi", "healthcare", "energy", "telco", "sovereign_ai"]
