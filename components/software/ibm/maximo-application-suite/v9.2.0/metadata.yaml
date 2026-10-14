@@ -30,7 +30,7 @@ spec:
       csiAccessModes: ["ReadWriteOnce", "ReadWriteMany"]
       volumeSnapshotSupport: true
     kubernetesCompatibility:
-      minOcpVersionTested: "4.14"
+      minOcpVersionTested: "4.18"
   security:
     podSecurityStandard: "baseline"
     requiresClusterAdmin: true
