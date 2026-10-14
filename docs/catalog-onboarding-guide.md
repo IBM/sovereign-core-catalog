@@ -78,12 +78,14 @@ A product enters the catalog at one of four integration levels. The level descri
 
 ### Level 1 — Validated
 
-The minimum entry level. The product is discoverable in the catalog and confirmed to run on Sovereign Core. Installation and day-two operations remain the responsibility of the product team. Validation is performed either by the Sovereign Core SRE team or by the partner providing documented proof.
+The minimum entry level. The product is discoverable in the catalog and confirmed to run on Sovereign Core with a one-click install experience — meaning it deploys without any manual configuration steps.
+
+To meet this level, the product must ship as a single Helm chart with no external dependencies. It must deploy successfully using the standard Sovereign Core installation scripts out of the box, with no configuration required from the operator. Installation and day-two operations remain the responsibility of the product team. Validation is performed either by the Sovereign Core SRE team or by the partner providing documented proof.
 
 **Permitted claim:** "Validated on Sovereign Core"
 **Typical timeline:** Approximately five business days once intake inputs are complete.
 
-This is the right entry point for a product team with an active customer opportunity or that wants to create future opportunities with the lowest initial investment. The product team can decide later whether to deepen the product's integration in Sovereign Core.
+This is the right entry point for a product team with an active customer opportunity or that wants to create future opportunities with the lowest initial investment. The product team can decide later whether to deepen the platform integration.
 
 ### Level 2 — BYOP (Bring Your Own Product)
 
