@@ -1,8 +1,8 @@
 apiVersion: v2
-name: qradar
+name: ibm-qradar
 description: IBM QRadar SIEM 7.6.0 on OpenShift Virtualization (standalone and HA)
 type: application
-version: 1.0.0
+version: "7.6.0"
 appVersion: "7.6.0"
 keywords:
   - qradar
