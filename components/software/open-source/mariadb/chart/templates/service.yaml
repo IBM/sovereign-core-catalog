@@ -33,5 +33,3 @@ spec:
     app: {{ .Values.commonLabels.app | quote }}
     instance: {{ $instanceName | quote }}
   clusterIP: {{ .Values.service.clusterIP }}
-
-# Made with Bob

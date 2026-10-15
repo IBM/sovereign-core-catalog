@@ -32,5 +32,3 @@ data:
   {{- with index .Values.databaseConfig "collation" }}
   collation: {{ . | quote }}
   {{- end }}
-
-# Made with Bob
