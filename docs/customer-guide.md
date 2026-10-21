@@ -30,12 +30,12 @@ The catalog is organised by component category. Start by browsing the directory 
 | AI Models | `components/ai-models/` | Foundation model listings with hardware requirements |
 | Services | `components/services/` | Hosting providers, system integrators, MSPs, auditors |
 
-Each company directory under a category is namespaced by the company's `slug`. Within it, you will find one `profile.yaml` (hardware, services) or one directory per product (software, AI models), with versioned subdirectories for software.
+Each company directory under a category is namespaced by the company's `slug`. Within it, you will find one directory per product or service, each containing a `metadata.yaml` (software adds versioned subdirectories).
 
 **Key files to read for each candidate:**
 
 1. `companies/<slug>/profile.yaml` — the company's jurisdiction, ultimate parent ownership, and certifications.
-2. The component `metadata.yaml` or `profile.yaml` — the product's sovereignty posture, architecture, and deployment pointer.
+2. The component `metadata.yaml` — the product's sovereignty posture, architecture, and deployment pointer.
 
 ---
 

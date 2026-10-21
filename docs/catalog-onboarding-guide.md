@@ -25,6 +25,7 @@ For business partners, ISVs, and IBM product teams. IBM product teams should als
     - [Step 5 — Optional enhancements](#step-5--optional-enhancements)
     - [Step 6 — Submit your pull request (PR)](#step-6--submit-your-pull-request-pr)
     - [Step 7 — Validate the end-to-end experience](#step-7--validate-the-end-to-end-experience)
+    - [Step 8 — Demo your product to the Sovereign Core team](#step-8--demo-your-product-to-the-sovereign-core-team)
 11. [Repository structure](#repository-structure)
 12. [Asset lifecycle states](#asset-lifecycle-states)
 13. [Coming soon](#coming-soon)
@@ -186,11 +187,17 @@ The product team submits a manifest — a structured declaration of deployment t
 
 ### Stage 3 — Readiness review
 
-A biweekly review panel examines exceptions and confirms the level the product has actually earned. The permitted seller claim is generated directly from the review record — catalog copy is not written separately.
+A biweekly review panel examines exceptions and confirms the level the product has actually earned. For Level 2 and above, the review includes the Step 8 demo. The permitted seller claim is generated directly from the review record — catalog copy is not written separately.
 
 ### Stage 4 — Publication and currency
 
 The product goes live with a catalog entry, an entitlement and metering integration, an active support path, and a named currency owner. Currency is an ongoing obligation: the product team re-validates on every product release and on every Sovereign Core release for as long as the listing is published. The platform team owns the validation profile; the product team owns everything else.
+
+### Stage 5 — Announcement
+
+Announcement is the final stage. It begins once your listing is approved and live in the catalog, and it applies to every integration level. Your product team prepares the materials that Sovereign Core needs to announce your product, and your IBM focal helps you shape them and submit them to the Sovereign Core team.
+
+Typical materials include blog content that introduces your product on Sovereign Core and explains what customers can do with it, and better together materials that show the combined value of your product and Sovereign Core. Agree on the format with your focal. Sovereign Core announces your product as soon as you complete onboarding and submit your announcement materials, so have them ready early to avoid delaying the announcement.
 
 ---
 
@@ -243,13 +250,16 @@ flowchart TD
     B --> C[Step 2<br/>Prepare metadata &<br/>company / product profile]
     C --> D[Step 3<br/>Implement Sovereign Core<br/>integration]
     D --> E{What deployment<br/>model?}
-    E -- "Multi-tenant<br/>service" --> F[Step 3a<br/>Multi-Tenant Integration]
-    E -- "Single-tenant<br/>service" --> G[Step 3b<br/>Single-Tenant Integration]
-    F --> H[Step 4<br/>Meet security bar<br/>≥ zero critical CVEs]
+    E -- "Single-tenant<br/>service" --> F[Step 3a<br/>Single-Tenant Integration]
+    E -- "Multi-tenant<br/>service" --> G[Step 3b<br/>Multi-Tenant Integration]
+    F --> H[Step 4<br/>Meet security bar<br/>Zero critical or high CVEs]
     G --> H
     H --> I[Step 5<br/>Optional enhancements<br/>Metering · IAM · Observability]
     I --> J[Step 6<br/>Submit PR to Public<br/>GitHub Repository]
-    J --> K[Listed in catalog]
+    J --> K[Step 7<br/>Validate the end-to-end<br/>experience]
+    K --> L[Step 8<br/>Demo to the Sovereign Core team]
+    L --> M[Approved and listed in catalog]
+    M --> N[Stage 5<br/>Announcement]
 ```
 
 ### Step 3 — Implement the Sovereign Core integration
@@ -377,11 +387,28 @@ Publishing a pull request is not the end of onboarding — it is the beginning o
 
 - **Deploy a test instance** — provision your service through the Sovereign Core catalog UI, exactly as an MSP administrator would. Confirm the deployment completes without manual intervention.
 - **Verify the tenant experience** — log in as a tenant and confirm the service is discoverable, provisionable, and accessible after deployment. Check that post-deployment access details (endpoints, credentials, documentation links) surface correctly.
-- **Run through your demo** — walk through any sales or partner demo you plan to deliver using this listing. If something breaks or requires a workaround during a demo, it is not ready.
+- **Rehearse your demo** — if your level requires the Step 8 demo, do a dry run of it, and rehearse any sales or partner demo you plan to deliver using this listing. This is your own internal rehearsal and is not reviewed by IBM. If something breaks or requires a workaround during the rehearsal, it is not ready.
 - **Confirm documentation is reachable** — all links in your catalog entry (runbooks, architecture diagrams, support contacts) must be live and accurate.
 - **Sign off with your IBM focal** — your IBM Sovereign Core technical sponsor confirms the end-to-end experience meets the bar for the integration level you have claimed.
 
-This step is a prerequisite for your listing moving from “review” to “approved” status. A listing that passes CI and IBM review but has not been end-to-end validated will remain in “review” until sign-off is complete.
+A listing that passes CI and IBM review but has not been end-to-end validated will remain in “review” until sign-off is complete. For listings at Level 2 and above, this step is also a prerequisite for the Sovereign Core demo in Step 8, and the listing remains in “review” until that demo is complete as well.
+
+### Step 8 — Demo your product to the Sovereign Core team
+
+After your end-to-end validation, your product team presents a formal demo of the product running in Sovereign Core to the IBM Sovereign Core team. The demo shows how the product works in the platform and why the listing matters to both the platform and its customers. It is different from the rehearsal in Step 7: Step 7 is your own check that the experience works, while Step 8 is the demo that the Sovereign Core team attends and evaluates.
+
+This demo is required for listings at Level 2 (BYOP) and above, including products that enter the catalog directly at Level 3 (Integrated) or Level 4 (Premium). Level 1 (Validated) listings do not require it.
+
+Plan for 45 minutes to 1 hour. You choose the format and flow, as long as the demo covers these four areas:
+
+- **Deployment process** — show how the product is deployed in Sovereign Core, from enabling it in the catalog through to a running instance. Use the same path that an MSP administrator and tenant will follow.
+- **Customer use case** — walk through a realistic scenario that shows what a customer does with the product in Sovereign Core, from the tenant's point of view.
+- **Value to Sovereign Core** — explain what the product adds to the platform, such as new capabilities, new customer segments, or a stronger solution story.
+- **Value to the customer** — explain what customers gain by running the product in Sovereign Core instead of elsewhere, such as data residency, operational control, or compliance alignment.
+
+Use a live environment wherever possible. If a part of the flow needs a workaround or a recorded segment, say so during the demo, so the Sovereign Core team can see where the experience still needs work.
+
+Completing this demo is part of approval and of the announcement of your product in Sovereign Core. A listing at Level 2 or above moves from “review” to “approved” only after both the Step 7 sign-off and the Step 8 demo are complete, and the Sovereign Core team will not announce the listing until then. After approval, submit your announcement materials as described in [Stage 5 — Announcement](#stage-5--announcement).
 
 ## Repository structure
 
@@ -415,6 +442,9 @@ Understanding who is responsible for each aspect of the onboarding and ongoing o
 | Provide technical support to Sovereign Core customers using the BYOP software | ✅ Responsible | — | — |
 | Maintain and support custom broker and deployment code (when non-OOTB broker is used) | ✅ Responsible | — | — |
 | Provide technical support to BYOP software providers on Sovereign Core integration topics | Consulted | ✅ Responsible | — |
+| Prepare and deliver the Step 8 demo of the product running in Sovereign Core (Level 2 and above) | ✅ Responsible | — | — |
+| Attend and evaluate the demo, and confirm the listing can move to approved (Level 2 and above) | — | ✅ Responsible | — |
+| Prepare and submit announcement materials (blog content, better together materials) | ✅ Responsible | Supportive | — |
 | Leverage the BYOP software to further refine, tailor, and deliver the service to tenants/customers | — | — | ✅ Responsible |
 
 ---
