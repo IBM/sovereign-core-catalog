@@ -18,7 +18,7 @@ Use this process to correct a field, add a newly obtained certification, update 
    update/<category>/<your-company-slug>/<product-slug>
    ```
 
-2. Edit the relevant `metadata.yaml` or `profile.yaml` in-place.
+2. Edit the relevant `metadata.yaml` in-place.
 
 3. Run the local validation script:
 
