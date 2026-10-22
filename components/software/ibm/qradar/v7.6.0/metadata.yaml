@@ -37,7 +37,7 @@ spec:
     kmsIntegration: true
   deployment:
     type: "Helm"
-    repository: "oci://icr.io/cpopen/charts/ibm-qradar:7.6.0"
+    repository: "oci://icr.io/sovereign-core/charts/ibm-qradar:7.6.0"
   links:
-    docsUrl: "https://www.ibm.com/docs/en/qsip/7.5"
+    docsUrl: "https://www.ibm.com/support/pages/node/7292185"
     productPageUrl: "https://www.ibm.com/products/qradar-siem"
