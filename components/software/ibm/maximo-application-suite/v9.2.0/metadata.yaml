@@ -38,7 +38,7 @@ spec:
     kmsIntegration: false
   deployment:
     type: "Operator"
-    repository: "oci://icr.io/cpopen/ibm-operator-catalog:v9-260918-amd64"
+    repository: "oci://icr.io/cpopen/ibm-maximo-operator-catalog:v9-260918-amd64"
   links:
     docsUrl: "https://www.ibm.com/docs/en/mas-cd/continuous-delivery"
     productPageUrl: "https://www.ibm.com/products/maximo"
