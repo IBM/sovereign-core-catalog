@@ -1,0 +1,43 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/ibm"
+  vendor: "International Business Machines Corporation"
+  product: "IBM Integration Software"
+  shortDescription: "IBM Integration Software is a self-managed integration platform (formerly IBM Cloud Pak for Integration and IBM webMethods Hybrid Integration) built to assemble, orchestrate and operate modern enterprise integrations"
+  fullDescription: "IBM Integration Software is a comprehensive set of software integration tools within a single, unified experience. With this tool set, you can connect your applications, data, systems, and services, across cloud or on-premises environments, as part of a managed, scalable, and secure deployment."
+  sovereignCoreRelevance: "Enables modern enterprise integration patterns in sovereign environments."
+  category: "infrastructure"
+  industries: ["bfsi", "government", "healthcare", "energy", "telco"]
+  intendedUsers:
+    ["Platform engineers", "Data architects", "Infrastructure teams"]
+  version: "16.2.1"
+  lifecycleStatus: "draft"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  openSource:
+    enabled: false
+    license: "IBM International Program License Agreement"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "restricted"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: true
+    kmsIntegration: true
+  deployment:
+    type: "Operator"
+    repository: "icr.io/cpopen/ibm-integration-platform-navigator-catalog:9.0.0-2026-09-28-1743-6e598d13"
+  links:
+    docsUrl: "https://www.ibm.com/docs/en/cloud-paks/cp-integration/"
+    productPageUrl: "https://www.ibm.com/products/cloud-pak-for-integration"
