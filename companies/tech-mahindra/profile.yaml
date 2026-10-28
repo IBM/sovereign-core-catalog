@@ -1,0 +1,12 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "tech-mahindra"
+  displayName: "Tech Mahindra Limited"
+  aboutDescription: "Tech Mahindra is a global consulting and systems integration company that operates in over 90 countries. It designs digital solutions for industry leaders and is part of the Mahindra Group."
+spec:
+  jurisdiction:
+    corporateHQ: "India"
+    ultimateParentCompanyHQ: "India"
+  contact:
+    website: "https://www.techmahindra.com"
