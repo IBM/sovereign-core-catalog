@@ -1,0 +1,12 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "dell"
+  displayName: "Dell Technologies Inc."
+  aboutDescription: "Dell Inc., formerly Dell Computer Corporation, is an American technology company that develops, sells, repairs, and supports personal computers (PCs), servers, data storage devices, network switches, software, and computer peripherals, including printers and webcams, among other products and services."
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+  contact:
+    website: "https://www.dell.com"
