@@ -98,6 +98,26 @@ properties:
       - serviceType
       - sovereignty
     properties:
+      certifications:
+        type: array
+        items:
+          type: object
+          required:
+            - framework
+            - status
+          properties:
+            framework:
+              type: string
+              description: "Compliance certification framework name (e.g., ISO-27001, SOC2, BSI-C5, FedRAMP-High)."
+            status:
+              type: string
+              enum:
+                - Active
+                - In Progress
+                - Expired
+              description: "Current status of the compliance certification."
+          additionalProperties: false
+        description: "List of compliance certifications held by this product."
       serviceType:
         type: string
         enum:
@@ -154,26 +174,6 @@ properties:
             type: string
             description: "Security clearance level required for staff."
         additionalProperties: false
-      certifications:
-        type: array
-        items:
-          type: object
-          required:
-            - framework
-            - status
-          properties:
-            framework:
-              type: string
-              description: "Certification framework name (e.g., BSI-C5, SecNumCloud, ISO-27001)."
-            status:
-              type: string
-              enum:
-                - Active
-                - In Progress
-                - Expired
-                - Pending
-              description: "Current status of the certification."
-          additionalProperties: false
       capabilities:
         type: object
         properties:
