@@ -1,0 +1,12 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "intel"
+  displayName: "Intel Corporation"
+  aboutDescription: "Intel Corporation is an American multinational technology and semiconductor company."
+spec:
+  jurisdiction:
+    corporateHQ: "USA"
+    ultimateParentCompanyHQ: "USA"
+  contact:
+    website: "https://www.intel.com"
