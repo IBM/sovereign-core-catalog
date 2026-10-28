@@ -2,11 +2,11 @@
 
 ## End User Guide
 
-This guide explains how to provision and manage **IBM QRadar SIEM 7.6.0** by using the **IBM Sovereign Core Service Catalog (GitOps CSB Broker Web Interface)**.
+This guide explains how to provision and manage **IBM QRadar SIEM 7.6.0** by using the **IBM Sovereign Core Console Web Interface**.
 
-The IBM Sovereign Core Service Catalog provides self-service deployment of enterprise services onto OpenShift clusters through GitOps. QRadar SIEM is deployed on **OpenShift Virtualization by using Helm charts**.
+The IBM Sovereign Core web console provides self-service deployment of enterprise services onto OpenShift clusters through GitOps. QRadar SIEM is deployed on **OpenShift Virtualization by using Helm charts**.
 
-> **Service model:** The Service Catalog documentation describes this capability as a **Tech Preview available under a try-and-buy model**. Deployment is self-service and **IBM Support is not included**.
+> **Service model:** The IBM Sovereign Core documentation describes this capability as a **Tech Preview available under a try-and-buy model**. Deployment is self-service and **IBM Support is not included**.
 
 ---
 
@@ -39,9 +39,113 @@ The Service Catalog provides the following plans:
 
 ## 2. Prerequisites
 
-### 2a. Platform administrator — one-time cluster setup
+### 2a. Platform administrator — install OpenShift Virtualization Operator
 
-> **Who performs this step:** A cluster administrator, not the end user. This step is required **once per cluster** before any QRadar instance can be provisioned. If your cluster administrator confirms these secrets are already in place, skip to [Section 2b](#2b-end-user-information).
+> **Who performs this step:** A cluster administrator. This step is required **once per cluster** before deploying any QRadar instance. If OpenShift Virtualization is already installed and healthy on your cluster, proceed to [Section 2b](#2b-platform-administrator--configure-registry-secrets-in-qradar-media).
+
+IBM QRadar SIEM is deployed as Virtual Machines (VMs) using KubeVirt and Containerized Data Importer (CDI). The OpenShift Virtualization Operator must be installed and active on the OpenShift cluster to enable creating and managing these virtual machines.
+
+#### Option 1: Install using the OpenShift Web Console
+
+1. Log in to the OpenShift Web Console as a cluster administrator.
+2. In the side navigation menu, navigate to **Operators** > **OperatorHub**.
+3. In the search box, enter `OpenShift Virtualization`.
+4. Select the **OpenShift Virtualization** tile and click **Install**.
+5. On the **Install Operator** page:
+   - Ensure the installation mode is set to **All namespaces on the cluster (default)** or target namespace is `openshift-cnv`.
+   - Select the desired update channel (for example, `stable`).
+   - Set approval strategy to **Automatic** (recommended).
+   - Click **Install**.
+6. Wait for the operator installation to complete (status displays **Installed operator ready for use**).
+7. Navigate to **Operators** > **Installed Operators** and select **OpenShift Virtualization**.
+8. In the **OpenShift Virtualization Deployment** (or **HyperConverged Cluster**) tab, click **Create HyperConverged**.
+9. Accept the default configuration settings and click **Create**.
+10. Wait until the HyperConverged resource status shows **Available** and **Ready**.
+
+#### Option 2: Install using the OpenShift CLI (`oc`)
+
+1. Create the `openshift-cnv` namespace:
+
+   ```bash
+   oc create namespace openshift-cnv --dry-run=client -o yaml | oc apply -f -
+   ```
+
+2. Create the `OperatorGroup` for OpenShift Virtualization:
+
+   ```bash
+   cat <<EOF | oc apply -f -
+   apiVersion: operators.coreos.com/v1
+   kind: OperatorGroup
+   metadata:
+     name: openshift-cnv-group
+     namespace: openshift-cnv
+   spec:
+     targetNamespaces:
+     - openshift-cnv
+   EOF
+   ```
+
+3. Create the `Subscription` to install the OpenShift Virtualization Operator:
+
+   ```bash
+   cat <<EOF | oc apply -f -
+   apiVersion: operators.coreos.com/v1alpha1
+   kind: Subscription
+   metadata:
+     name: kubevirt-hyperconverged
+     namespace: openshift-cnv
+   spec:
+     channel: stable
+     installPlanApproval: Automatic
+     name: kubevirt-hyperconverged
+     source: redhat-operators
+     sourceNamespace: openshift-marketplace
+   EOF
+   ```
+
+4. Wait for the OpenShift Virtualization Operator pod to become ready:
+
+   ```bash
+   oc wait --for=condition=Ready pod -l name=hyperconverged-cluster-operator -n openshift-cnv --timeout=300s
+   ```
+
+5. Deploy the `HyperConverged` custom resource to initialize KubeVirt and CDI components:
+
+   ```bash
+   cat <<EOF | oc apply -f -
+   apiVersion: hco.kubevirt.io/v1beta1
+   kind: HyperConverged
+   metadata:
+     name: kubevirt-hyperconverged
+     namespace: openshift-cnv
+   spec: {}
+   EOF
+   ```
+
+6. **Verify the installation:**
+
+   ```bash
+   oc get hyperconverged kubevirt-hyperconverged -n openshift-cnv
+   ```
+
+   Expected output:
+
+   ```text
+   NAME                     AGE   READY   STATUS
+   kubevirt-hyperconverged  2m    True    ReconcileComplete
+   ```
+
+   Verify that the core virtualization pods are running:
+
+   ```bash
+   oc get pods -n openshift-cnv
+   ```
+
+---
+
+### 2b. Platform administrator — configure registry secrets in qradar-media
+
+> **Who performs this step:** A cluster administrator, not the end user. This step is required **once per cluster** before any QRadar instance can be provisioned. If your cluster administrator confirms these secrets are already in place, proceed to [Section 2c](#2c-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) or [Section 2e](#2e-end-user-information).
 
 QRadar VM images are stored in a private container registry (Quay). Two secrets must exist in the `qradar-media` namespace so that:
 
@@ -95,7 +199,7 @@ quay-cdi-secret    Opaque                           2      8s
 
 ---
 
-### 2b. Platform administrator — configure the tool image for the secret-copy Job
+### 2c. Platform administrator — configure the tool image for the secret-copy Job
 
 > **Who performs this step:** A cluster administrator. This step is required **once per cluster** and must be completed before the first QRadar instance is provisioned. It ensures the `quay-secret-copy` Job can start successfully on that cluster.
 
@@ -171,7 +275,7 @@ oc delete job quay-secret-copy -n <instance-namespace>
 
 ---
 
-### 2c. Platform administrator — configure the StorageClass
+### 2d. Platform administrator — configure the StorageClass
 
 > **Who performs this step:** A cluster administrator. This step is required **once per cluster** before the first QRadar instance is provisioned. An incorrect StorageClass causes the DataVolume PVC to remain `Pending` indefinitely.
 
@@ -227,130 +331,137 @@ oc delete pvc qradar-primary-rootdisk qradar-secondary-rootdisk -n <instance-nam
 
 ---
 
-### 2d. End user information
+### 2e. End user information
 
 Before provisioning QRadar, make sure you have the following information:
 
-1. **Service Catalog access**
-   - Service Catalog URL.
-   - Credentials to access the catalog.
+1. **IBM Sovereign Core Console access**
+   - IBM Sovereign Core console web URL (for example, `https://mspui.apps.<cluster-domain>/home`).
+   - User credentials with tenant access.
 
-2. **Target cluster information**
-   - OpenShift cluster name or identifier where QRadar will be deployed.
+2. **Tenant account details**
+   - Target tenant account name (such as **Platform** or your assigned tenant workspace).
+   - Dedicated **Tenant URL** link available from the **Tenant details** sidebar.
 
-3. **Network information**
-   - Primary DNS server IP address.
-   - Secondary DNS server IP address, when available.
+3. **Instance identification & plan**
+   - Instance name (e.g. `qradar-prod-ha` or `qradar-prod-standalone`).
+   - Desired deployment plan (e.g. `medium-ha`, `small-ha`, `large-ha`, or standalone `tiny`, `small`, `medium`, `large`).
+
+4. **Network information**
+   - Primary DNS server IP address (e.g. `<your-primary-dns>`).
+   - Secondary DNS server IP address, when available (e.g. `<your-secondary-dns>`).
    - Required timezone, for example `UTC`, `America/New_York`, or `Europe/London`.
 
-4. **QRadar credentials**
+5. **QRadar credentials**
    - Password for the QRadar Web Console `admin` user.
    - Password for the underlying operating system `root` user.
+   - Security template profile (default: `Enterprise`).
 
-> **Credential handling:** Save the `admin_password` and `root_password` securely. These passwords cannot be retrieved in plain text from the Service Catalog UI after provisioning.
+> **Credential handling:** Save the `admin_password` and `root_password` securely. These passwords cannot be retrieved in plain text from the UI after provisioning.
 
 ---
 
 ## 3. Provisioning Procedure
 
-### Step 1: Open the Service Catalog
+### Step 1: Open the IBM Sovereign Core Console Home Page
 
-1. Open a browser.
-2. Navigate to the IBM Sovereign Core Service Catalog web portal.
-3. In the top navigation, open **Available Services**.
+1. Open a browser and navigate to the IBM Sovereign Core console web URL:
+   ```text
+   https://mspui.apps.<cluster-domain>/home
+   ```
+2. Log in with your credentials.
+3. The **Home** dashboard displays system and operations metrics along with the **Tenant list** in the right sidebar.
 
-The catalog URL is environment-specific. An example format is:
+### Step 2: Navigate to the Tenant Account Platform Page
 
-```text
-https://byop-catalog-app-byop.apps.<cluster-domain>/
-```
+1. In the **Tenant list** on the right sidebar of the Home page, scroll down to locate **Platform** (or your designated tenant account).
+2. Click on **Platform**.
+3. The console opens the **Home / Tenant account / Platform** page.
 
-### Step 2: Select the QRadar Service and Plan
+### Step 3: Open the Tenant Workspace via Tenant URL
 
-1. Locate the **QRadar SIEM (Helm)** service card.
-2. Review the available plans.
-3. Select the plan that matches your deployment requirement.
-4. The **Provision Service** dialog opens.
+1. On the **Platform** page, locate the **Tenant details** pane in the right sidebar.
+2. Find the **Tenant URL** field (for example, `https://accountui.apps.<cluster-domain>/tenant/platform/sub/...`).
+3. Click the **Tenant URL** link.
+4. This opens the **IBM Sovereign Core - Tenant** portal in a new browser tab.
 
-The service supports:
+### Step 4: Access the Catalog and Select QRadar SIEM Service
 
-- Single-console standalone deployments.
-- Two-node HA deployments consisting of a primary and secondary VM.
+1. In the **IBM Sovereign Core - Tenant** portal navigation, select the **Catalog** tab (`Home / Workspace / catalog`).
+2. In the **Services** section, locate the **QRadar SIEM Service** card.
+3. Click the **Deploy** button on the card.
+4. The **Deploy instance** wizard opens.
 
-For HA deployments, the primary and secondary VMs use a fixed `10.0.0.x` private network for synchronization.
+### Step 5: Configure Deployment Settings (JSON Deploy)
 
-### Step 3: Enter Provisioning Parameters
-
-In the **Provision Service** dialog, provide the following:
-
-#### Instance ID
-
-Enter a unique name for the service instance.
-
-Examples:
-
-```text
-secops-qradar-prod
-qateam-standalone-test4
-```
-
-Use lowercase alphanumeric characters and hyphens (`-`).
-
-#### Target Cluster
-
-Select the target OpenShift cluster from the **Target Cluster** dropdown.
-
-Example:
-
-```text
-in-cluster (Hub)
-```
-
-#### Parameters (JSON)
-
-Click **Fill Example** and replace the example values with values for your environment.
+1. In the **Deploy instance** wizard, ensure you are on the **JSON deploy** step.
+2. In the **JSON input** box, enter your deployment configuration JSON.
 
 ```json
 {
+  "instance": {
+    "name": "qradar-prod-ha"
+  },
+  "instanceName": "qradar-prod-ha",
+  "plan": "medium-ha",
   "qradar": {
-    "admin_password": "<YOUR_STRONG_ADMIN_PASSWORD>",
-    "dns_primary": "<PRIMARY_DNS_IP>",
-    "dns_secondary": "<SECONDARY_DNS_IP>",
-    "root_password": "<YOUR_STRONG_ROOT_PASSWORD>",
+    "admin_password": "<YOUR_ADMIN_PASSWORD>",
+    "dns_primary": "<YOUR_PRIMARY_DNS_IP>",
+    "dns_secondary": "<YOUR_SECONDARY_DNS_IP>",
+    "root_password": "<YOUR_ROOT_PASSWORD>",
     "security_template": "Enterprise",
     "timezone": "UTC"
   }
 }
 ```
 
+3. Review the **Validation status** panel on the right. Ensure all fields show green checkmarks and **All fields valid (11 / 11 fields)** is displayed:
+   - `instance`
+   - `instance.name`
+   - `instanceName`
+   - `plan`
+   - `qradar`
+   - `qradar.admin_password`
+   - `qradar.dns_primary`
+   - `qradar.dns_secondary`
+   - `qradar.root_password`
+   - `qradar.security_template`
+   - `qradar.timezone`
+4. Click **Next**.
+
 ### Parameter reference
 
 | Parameter | Type | Required | Description | Example |
 |---|---|---|---|---|
-| `qradar.admin_password` | String | Yes | Password for the QRadar Web Console `admin` user. Use a strong password containing uppercase/lowercase letters, numbers, and symbols. | `"SecureAdm1nP@ssw0rd"` |
-| `qradar.root_password` | String | Yes | Password for the operating system `root` user on the underlying VM. | `"VerySecureR00tP@ssw0rd!"` |
-| `qradar.dns_primary` | String | Yes | IP address of the primary DNS resolver reachable by the VM. | `"8.8.8.8"` or `"10.x.x.x"` |
-| `qradar.dns_secondary` | String | Optional | IP address of the secondary DNS resolver. | `"8.8.4.4"` or `"10.x.x.y"` |
-| `qradar.security_template` | String | Yes | QRadar security template profile. The documented default is `Enterprise`. | `"Enterprise"` |
-| `qradar.timezone` | String | Yes | Standard timezone identifier for QRadar log event timestamps. | `"UTC"`, `"EST"`, `"America/New_York"` |
+| `instance.name` | String | Yes | Name of the instance object. Use lowercase alphanumeric characters and hyphens. | `"qradar-prod-ha"` |
+| `instanceName` | String | Yes | Unique instance identifier matching `instance.name`. | `"qradar-prod-ha"` |
+| `plan` | String | Yes | Deployment plan sizing and topology (`tiny`, `small`, `medium`, `large`, `small-ha`, `medium-ha`, `large-ha`). | `"medium-ha"` |
+| `qradar.admin_password` | String | Yes | Password for the QRadar Web Console `admin` user. Use a strong password containing uppercase/lowercase letters, numbers, and symbols. | `"<YOUR_ADMIN_PASSWORD>"` |
+| `qradar.root_password` | String | Yes | Password for the operating system `root` user on the underlying VM. | `"<YOUR_ROOT_PASSWORD>"` |
+| `qradar.dns_primary` | String | Yes | IP address of the primary DNS resolver reachable by the VM. | `"<YOUR_PRIMARY_DNS_IP>"` |
+| `qradar.dns_secondary` | String | Optional | IP address of the secondary DNS resolver. | `"<YOUR_SECONDARY_DNS_IP>"` |
+| `qradar.security_template` | String | Yes | QRadar security template profile. Default is `Enterprise`. | `"Enterprise"` |
+| `qradar.timezone` | String | Yes | Standard timezone identifier for QRadar log event timestamps. | `"UTC"`, `"America/New_York"` |
 
-### Step 4: Provision the Service
+### Step 6: Review Configuration and Deploy
 
-1. Review the instance ID, target cluster, JSON parameters, and credentials.
-2. Confirm that the DNS information is correct.
-3. Click **Provision**.
+1. On the **Review & deploy** step, review your configuration under **JSON data**.
+2. If any changes are needed, click **Back** to return to the JSON editor.
+3. Click **Deploy**.
 
-The catalog broker starts the GitOps workflow to deploy the QRadar VM or VM pair on OpenShift Virtualization.
+The IBM Sovereign Core platform triggers the GitOps workflow, and Argo CD deploys the QRadar Helm chart to create the Virtual Machines on OpenShift Virtualization.
 
 ---
 
 ## 4. Monitor the Deployment
 
-After provisioning starts:
+After clicking **Deploy**, Argo CD synchronizes the Helm chart onto the OpenShift cluster.
 
-1. Return to the main Service Catalog dashboard.
-2. Scroll to **Provisioned Instances**.
-3. Locate the instance by its **Instance ID**.
+To monitor deployment progress:
+
+1. Return to the **Home / Tenant account / Platform** page in the IBM Sovereign Core console.
+2. In the **Instances** section, locate the card for your deployed instance (for example, `qradar-prod-ha` or `qradar-prod-standalone`).
+3. Check the instance status indicator (for example, `Running` or `Ready to deploy`).
 
 A provisioned instance displays information such as:
 
@@ -456,8 +567,8 @@ oc describe pod -n <instance-namespace> -l job-name=quay-secret-copy | grep -A5 
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `unauthorized: Please login to the Red Hat Registry` | Cluster has no Red Hat pull secret | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
-| `no such host: image-registry.openshift-image-registry.svc` | Internal image registry is not deployed (`ManagementState: Removed`) | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
+| `unauthorized: Please login to the Red Hat Registry` | Cluster has no Red Hat pull secret | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2c](#2c-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
+| `no such host: image-registry.openshift-image-registry.svc` | Internal image registry is not deployed (`ManagementState: Removed`) | Switch to Option C (`quay.io/openshift/origin-cli`) per [Section 2c](#2c-platform-administrator--configure-the-tool-image-for-the-secret-copy-job) |
 | `ImagePullBackOff` on a private mirror | `toolImage.pullSecret` is missing or wrong | Create the pull secret in the instance namespace and set `toolImage.pullSecret` to its name |
 
 **Fix — update the instance `values.yaml` and force a re-sync:**
@@ -503,7 +614,7 @@ oc get sc
 
 | Error message | Cause | Fix |
 |---|---|---|
-| `storageclass.storage.k8s.io "<name>" not found` | The `storageClassName` in the instance `values.yaml` does not exist on this cluster | Set `storage.storageClassName` to a valid class per [Section 2c](#2c-platform-administrator--configure-the-storageclass) |
+| `storageclass.storage.k8s.io "<name>" not found` | The `storageClassName` in the instance `values.yaml` does not exist on this cluster | Set `storage.storageClassName` to a valid class per [Section 2d](#2d-platform-administrator--configure-the-storageclass) |
 
 **Fix — update the instance `values.yaml` and delete the stuck resources:**
 
@@ -553,9 +664,9 @@ oc describe vmi qradar-primary -n <instance-namespace> | grep -A3 'Unschedulable
 | Option | When to use |
 |--------|-------------|
 | **Add a worker node** ✅ Recommended for production | The cluster genuinely needs a second node for HA |
-| **Accept co-location** — force-delete the stuck VMI | Lab/demo only — both VMs run on the same node, anti-affinity is `IgnoredDuringExecution` so running VMs are not evicted |
+| **Accept co-location** — force-delete the stuck VMI | Non-production / test environments only — both VMs run on the same node, anti-affinity is `IgnoredDuringExecution` so running VMs are not evicted |
 
-**Lab/demo workaround — force the VMI to reschedule:**
+**Workaround for non-production environments — force the VMI to reschedule:**
 
 ```bash
 # Force-delete the stuck VMI pod so KubeVirt recreates it fresh
@@ -584,8 +695,8 @@ oc get events -n <namespace> --sort-by='.lastTimestamp' | grep -i "secret\|acces
 
 | Error message | Cause | Fix |
 |---|---|---|
-| `couldn't find key accessKeyId in Secret …/quay-pull-secret` | `quay-pull-secret` is a `dockerconfigjson` secret — CDI expects `quay-cdi-secret` (Opaque) | Create `quay-cdi-secret` in `qradar-media` per [Section 2a](#2a-platform-administrator--one-time-cluster-setup) |
-| `secret "quay-cdi-secret" not found` | The `quay-cdi-secret` was not created in `qradar-media` before provisioning | Create both secrets in `qradar-media` per [Section 2a](#2a-platform-administrator--one-time-cluster-setup) |
+| `couldn't find key accessKeyId in Secret …/quay-pull-secret` | `quay-pull-secret` is a `dockerconfigjson` secret — CDI expects `quay-cdi-secret` (Opaque) | Create `quay-cdi-secret` in `qradar-media` per [Section 2b](#2b-platform-administrator--configure-registry-secrets-in-qradar-media) |
+| `secret "quay-cdi-secret" not found` | The `quay-cdi-secret` was not created in `qradar-media` before provisioning | Create both secrets in `qradar-media` per [Section 2b](#2b-platform-administrator--configure-registry-secrets-in-qradar-media) |
 | `manifest unknown` | Image tag does not exist in the registry | Verify the golden disk and ISO images are pushed and tagged correctly in Quay |
 
 After creating missing secrets, delete stuck importer pods to trigger an immediate retry:
@@ -751,28 +862,30 @@ Use this checklist before and after provisioning.
 ### Before provisioning
 
 **Platform administrator (once per cluster):**
+- [ ] OpenShift Virtualization Operator installed and `HyperConverged` deployment active (see [Section 2a](#2a-platform-administrator--install-openshift-virtualization-operator)).
 - [ ] `qradar-media` namespace exists on the target cluster.
-- [ ] `quay-pull-secret` (`kubernetes.io/dockerconfigjson`) created in `qradar-media`.
-- [ ] `quay-cdi-secret` (`Opaque`, keys: `accessKeyId` + `secretKey`) created in `qradar-media`.
-- [ ] `toolImage.repository` in instance `values.yaml` set to an image reachable from this cluster (see [Section 2b](#2b-platform-administrator--configure-the-tool-image-for-the-secret-copy-job)).
-- [ ] `storage.storageClassName` in instance `values.yaml` set to a valid RWO block StorageClass on this cluster (see [Section 2c](#2c-platform-administrator--configure-the-storageclass)).
+- [ ] `quay-pull-secret` (`kubernetes.io/dockerconfigjson`) created in `qradar-media` (see [Section 2b](#2b-platform-administrator--configure-registry-secrets-in-qradar-media)).
+- [ ] `quay-cdi-secret` (`Opaque`, keys: `accessKeyId` + `secretKey`) created in `qradar-media` (see [Section 2b](#2b-platform-administrator--configure-registry-secrets-in-qradar-media)).
+- [ ] `toolImage.repository` in instance `values.yaml` set to an image reachable from this cluster (see [Section 2c](#2c-platform-administrator--configure-the-tool-image-for-the-secret-copy-job)).
+- [ ] `storage.storageClassName` in instance `values.yaml` set to a valid RWO block StorageClass on this cluster (see [Section 2d](#2d-platform-administrator--configure-the-storageclass)).
 
 **End user:**
-- [ ] Service Catalog URL and credentials available.
-- [ ] Target OpenShift cluster identified.
+- [ ] IBM Sovereign Core console URL and user credentials available.
+- [ ] Tenant account (**Platform**) and Tenant URL identified.
+- [ ] Instance name and target plan (`medium-ha`, etc.) selected.
 - [ ] Primary DNS IP available.
 - [ ] Secondary DNS IP available, if applicable.
 - [ ] Timezone selected.
 - [ ] QRadar `admin` password prepared.
 - [ ] QRadar OS `root` password prepared.
-- [ ] Standalone or HA plan selected.
 
 ### During provisioning
 
-- [ ] Unique Instance ID entered.
-- [ ] Correct target cluster selected.
-- [ ] JSON parameters validated.
-- [ ] **Provision** selected.
+- [ ] Navigated to **Catalog** tab in the Tenant workspace portal.
+- [ ] Clicked **Deploy** on **QRadar SIEM Service**.
+- [ ] JSON parameters entered and validated (**All fields valid (11 / 11 fields)**).
+- [ ] Configuration reviewed on **Review & deploy** step.
+- [ ] Clicked **Deploy** to start Argo CD GitOps synchronization.
 
 ### After provisioning
 
