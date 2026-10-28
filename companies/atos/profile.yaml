@@ -1,0 +1,12 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "atos"
+  displayName: "Atos Group SE"
+  aboutDescription: "Atos Group is a global, AI-powered technology partner that shapes secure, end-to-end digital journeys. Its offerings span cloud and modern infrastructure, cybersecurity, data and AI, digital applications, digital workplace, smart platforms, and consulting and advisory, plus the Eviden portfolio of cybersecurity products and mission-critical systems."
+spec:
+  jurisdiction:
+    corporateHQ: "France"
+    ultimateParentCompanyHQ: "France"
+  contact:
+    website: "https://www.atosgroup.com"
