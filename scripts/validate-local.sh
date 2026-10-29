@@ -73,7 +73,7 @@ get_yaml_value() {
     local key="$1"
     local file="$2"
     local line_num
-    line_num=$(grep -n -E "^[[:space:]]*${key}:" "$file" | head -n 1 | cut -d: -f1)
+    line_num=$(grep -n -E "^[[:space:]]*${key}:" "$file" 2>/dev/null | head -n 1 | cut -d: -f1 || true)
     [ -z "$line_num" ] && return 0
     local line
     line=$(sed -n "${line_num}p" "$file")

@@ -88,11 +88,12 @@ sovereign-core-catalog/
 │   │       └── metadata.yaml
 │   ├── hardware/                 # GPUs, servers, storage, HSMs
 │   │   └── <company>/<product>/
-│   │       └── profile.yaml
+│   │       └── metadata.yaml
 │   └── services/                 # MSPs, hosting, SI, audit partners
-│       └── <company>/
-│           └── profile.yaml
-├── schemas/                      # JSON Schema — one per resource kind
+│       └── <company>/<service>/
+│           └── metadata.yaml
+├── schemas/                      # YAML schemas — one per resource kind (machine-readable)
+│   └── samples/                  # Annotated contributor templates — one per resource kind
 ├── scripts/                      # Local validation before opening PR
 └── docs/                         # Governance, onboarding, and briefing docs
 ```
@@ -150,7 +151,7 @@ PR       for                              for audit
 Fork repo → create `companies/<your-slug>/profile.yaml` → run `./scripts/validate-local.sh` → open PR titled `[Company Join] Your Company Name`. Must be merged before any component PR.
 
 **Stage 2 — List: propose a component**
-Create `components/<type>/<your-slug>/<product>/<version>/metadata.yaml` → validate locally → open PR titled `[New Listing] Software: Acme — ProductName v1.0`. CI validates schema automatically.
+Create the metadata file under `components/<type>/` using a template from `schemas/samples/` → validate locally → open PR titled `[New Listing] Software: Acme — ProductName v1.0`. CI validates schema automatically.
 
 **Stage 3 — Maintain: keep your listing current**
 New version? Add a new `<version>/` folder via PR. Deprecating? Update `lifecycleStatus: deprecated`. Withdrawing? Set `lifecycleStatus: retired`. All changes via PR — never direct push to main.

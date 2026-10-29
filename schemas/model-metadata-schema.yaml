@@ -1,0 +1,250 @@
+# JSON Schema (YAML representation) for ModelListing catalog entries.
+# Authoritative schema — validates components/ai-models/<slug>/<model>/metadata.yaml files.
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://sovereign-catalog.io/schemas/model-listing/v1alpha1"
+title: ModelListing
+description: >
+  Schema for AI model catalog entries in the Sovereign Store.
+type: object
+required:
+  - apiVersion
+  - kind
+  - metadata
+  - spec
+properties:
+  apiVersion:
+    type: string
+    const: "sovereign-catalog.io/v1alpha1"
+  kind:
+    type: string
+    const: ModelListing
+  metadata:
+    type: object
+    required:
+      - companyRef
+      - vendor
+      - product
+      - version
+      - shortDescription
+      - fullDescription
+      - sovereignCoreRelevance
+      - industries
+      - intendedUsers
+      - category
+      - availabilityState
+      - lifecycleStatus
+      - storefrontVisibility
+    properties:
+      companyRef:
+        type: string
+        pattern: "^companies/[a-z0-9][a-z0-9-]*[a-z0-9]$"
+        description: "Relative path to the canonical company profile (e.g. companies/mistral)."
+      vendor:
+        type: string
+        description: "Legal entity name of the model vendor."
+      product:
+        type: string
+        description: "Model display name."
+      version:
+        type: string
+        description: "Model version identifier."
+      shortDescription:
+        type: string
+        description: "Short storefront summary for cards and carousel."
+      fullDescription:
+        type: string
+        description: "Longer model description for detail views."
+      sovereignCoreRelevance:
+        type: string
+        description: "Explanation of why this offering is relevant in sovereign or regulated environments."
+      industries:
+        type: array
+        items:
+          type: string
+          enum:
+            - government
+            - bfsi
+            - healthcare
+            - telco
+            - energy
+            - sovereign_ai
+            - vmware_modernization
+        description: "Industry segments this offering is intended for."
+      intendedUsers:
+        type: array
+        items:
+          type: string
+        description: "Primary user roles or personas for this offering (e.g. Data scientists, AI engineers, Compliance officers, Platform engineers)."
+      category:
+        type: string
+        enum:
+          - text_generation
+          - embeddings
+          - vision
+          - speech
+          - multimodal
+          - code_generation
+        description: "Primary model capability category."
+      availabilityState:
+        type: string
+        enum:
+          - available_central_it
+          - byop_ready
+          - technical_assets_available
+          - discoverable_only
+        description: "Semantic availability state for storefront display and fulfillment handling."
+      lifecycleStatus:
+        type: string
+        enum:
+          - draft
+          - review
+          - approved
+          - deprecated
+          - retired
+        description: "Current lifecycle state of this catalog entry. Drives storefront visibility and deployment eligibility."
+      storefrontVisibility:
+        type: string
+        enum:
+          - public
+          - unlisted
+          - private
+        description: "Controls whether this entry appears in the public storefront (public), is accessible by direct link only (unlisted), or is hidden from all customers (private)."
+    additionalProperties: false
+  spec:
+    type: object
+    required:
+      - openSource
+      - jurisdiction
+      - architecture
+      - deployment
+    properties:
+      certifications:
+        type: array
+        items:
+          type: object
+          required:
+            - framework
+            - status
+          properties:
+            framework:
+              type: string
+              description: "Compliance certification framework name (e.g., ISO-27001, SOC2, BSI-C5, FedRAMP-High)."
+            status:
+              type: string
+              enum:
+                - Active
+                - In Progress
+                - Expired
+              description: "Current status of the compliance certification."
+          additionalProperties: false
+        description: "List of compliance certifications held by this product."
+      openSource:
+        type: object
+        required:
+          - enabled
+          - license
+        properties:
+          enabled:
+            type: boolean
+            description: "Whether this model is distributed under an open-source licence."
+          license:
+            type: string
+            description: "SPDX licence identifier or name of proprietary/research licence."
+          upstreamProject:
+            type: string
+            format: uri
+            description: "URL of the upstream project or model card."
+          sourceAvailable:
+            type: boolean
+            description: "Whether model weights or source are publicly accessible even if not OSI-approved."
+        additionalProperties: false
+      jurisdiction:
+        type: object
+        required:
+          - hq
+        properties:
+          hq:
+            type: string
+            enum:
+              - USA
+              - UK
+              - France
+              - Germany
+              - India
+              - Canada
+              - Australia
+              - Japan
+            description: "Country/region where the model vendor is headquartered."
+          ultimateParentCompanyHQ:
+            type: string
+            enum:
+              - USA
+              - UK
+              - France
+              - Germany
+              - India
+              - Canada
+              - Australia
+              - Japan
+            description: "Country/region of the ultimate parent company."
+        additionalProperties: false
+      architecture:
+        type: object
+        required:
+          - format
+        properties:
+          format:
+            type: string
+            enum:
+              - Safetensors
+              - GGUF
+              - ONNX
+              - PyTorch
+              - TensorFlow
+            description: "Model weight serialization format."
+          airgapReady:
+            type: boolean
+            description: "Whether the model can be deployed with zero internet connectivity."
+          contextWindow:
+            type: integer
+            description: "Maximum context window size in tokens."
+          hardwareRequirements:
+            type: object
+            properties:
+              minimumVramGB:
+                type: integer
+                description: "Minimum VRAM required in GB."
+              recommendedAccelerator:
+                type: string
+                description: "Reference path to a recommended hardware profile."
+            additionalProperties: false
+        additionalProperties: false
+      deployment:
+        type: object
+        required:
+          - weightsRepository
+          - servingEngine
+        properties:
+          weightsRepository:
+            type: string
+            description: "URI for downloading model weights (e.g., hf:// or oci://)."
+          servingEngine:
+            type: string
+            description: "Inference serving engine (e.g., vLLM, TGI, Triton)."
+        additionalProperties: false
+      links:
+        type: object
+        required:
+          - productPageUrl
+        properties:
+          docsUrl:
+            type: string
+            format: uri
+            description: "Public product documentation URL."
+          productPageUrl:
+            type: string
+            format: uri
+            description: "Canonical public product page URL."
+        additionalProperties: false
+    additionalProperties: false
+additionalProperties: false

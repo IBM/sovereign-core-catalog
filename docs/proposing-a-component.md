@@ -15,9 +15,9 @@ There are four component categories:
 | Category | Directory | Metadata file |
 |---|---|---|
 | Software (K8s / VM / bare-metal apps) | `components/software/<slug>/<product>/<version>/` | `metadata.yaml` |
-| Hardware (servers, GPUs, accelerators) | `components/hardware/<slug>/<product>/` | `profile.yaml` |
+| Hardware (servers, GPUs, accelerators) | `components/hardware/<slug>/<product>/` | `metadata.yaml` |
 | AI Models (foundation models, weights) | `components/ai-models/<slug>/<model>/` | `metadata.yaml` |
-| Services (hosting, SI, audit, consulting) | `components/services/<slug>/` | `profile.yaml` |
+| Services (hosting, SI, audit, consulting) | `components/services/<slug>/<service>/` | `metadata.yaml` |
 
 ---
 
@@ -59,7 +59,7 @@ metadata:
   product: "<Product Name>"
 ```
 
-A `jurisdiction` or `sovereignty.corporateHQ` block is also required in every file. See the JSON Schemas under `schemas/` for the full per-category field requirements.
+A `jurisdiction` or `sovereignty.corporateHQ` block is also required in every file. See the YAML schemas under `schemas/` for the full per-category field requirements, and the annotated starter templates under `schemas/samples/` for examples.
 
 #### Software listings
 

@@ -5,7 +5,7 @@ on:
     paths:
       - 'components/**/*.yaml'
       - 'companies/**/*.yaml'
-      - 'schemas/**/*.json'
+      - 'schemas/**/*.yaml'
 
 jobs:
   validate:
@@ -27,23 +27,23 @@ jobs:
           for file in $(find components/software -name 'metadata.yaml' 2>/dev/null); do
             echo "Validating $file"
             node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
-            ajv validate -s schemas/software-listing-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+            ajv validate -s schemas/software-metadata-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
           done
 
       - name: Validate HardwareProfile files
         run: |
-          for file in $(find components/hardware -name 'profile.yaml' 2>/dev/null); do
+          for file in $(find components/hardware -name 'metadata.yaml' 2>/dev/null); do
             echo "Validating $file"
             node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
-            ajv validate -s schemas/hardware-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+            ajv validate -s schemas/hardware-metadata-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
           done
 
       - name: Validate ServiceProfile files
         run: |
-          for file in $(find components/services -name 'profile.yaml' 2>/dev/null); do
+          for file in $(find components/services -name 'metadata.yaml' 2>/dev/null); do
             echo "Validating $file"
             node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
-            ajv validate -s schemas/service-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+            ajv validate -s schemas/service-metadata-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
           done
 
       - name: Validate ModelListing files
@@ -51,7 +51,7 @@ jobs:
           for file in $(find components/ai-models -name 'metadata.yaml' 2>/dev/null); do
             echo "Validating $file"
             node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
-            ajv validate -s schemas/model-listing-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+            ajv validate -s schemas/model-metadata-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
           done
 
       - name: Validate CompanyProfile files
@@ -59,7 +59,15 @@ jobs:
           for file in $(find companies -name 'profile.yaml' 2>/dev/null); do
             echo "Validating $file"
             node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
-            ajv validate -s schemas/company-profile-schema.json -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+            ajv validate -s schemas/company-profile-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
+          done
+
+      - name: Validate SovereignCoreHelmMapping files
+        run: |
+          for file in $(find components/software -name 'values-mapping.yaml' 2>/dev/null); do
+            echo "Validating $file"
+            node -e "const yaml=require('js-yaml');const fs=require('fs');const doc=yaml.load(fs.readFileSync('$file','utf8'));fs.writeFileSync('/tmp/validate.json',JSON.stringify(doc));"
+            ajv validate -s schemas/sovereigncore-helm-mapping-schema.yaml -d /tmp/validate.json --spec=draft2020 -c ajv-formats || exit 1
           done
 
       - name: Scan for secrets
