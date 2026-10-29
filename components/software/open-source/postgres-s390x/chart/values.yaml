@@ -1,0 +1,85 @@
+# Default values for postgres-s390x chart
+nameOverride: ""
+fullnameOverride: ""
+
+namespaceOverride: ""
+
+commonLabels:
+  app: postgres-s390x
+  service-type: postgres-s390x
+commonAnnotations: {}
+
+instance:
+  name: ""
+  id: ""
+  environment: ""
+  clusterName: ""
+
+# Official s390x-specific PostgreSQL image from Docker Hub
+# Tags: https://hub.docker.com/r/s390x/postgres/tags
+image:
+  registry: ""
+  repository: s390x/postgres
+  tag: "17.11"
+  pullPolicy: IfNotPresent
+
+# imagePullSecrets — list of secret names already present in the namespace.
+# The broker populates this from image_pull_secret_name.
+# If dockerhubPullSecret.create=true, the chart also creates the secret itself.
+imagePullSecrets: []
+
+# Optionally let the chart create a Docker Hub pull secret in the namespace.
+# Set create=true and supply credentials when deploying outside the broker.
+dockerhubPullSecret:
+  create: false
+  secretName: "dockerhub-pull-secret"
+  dockerServer: "docker.io"
+  dockerUsername: ""
+  dockerPassword: ""
+  dockerEmail: ""
+
+service:
+  port: 5432
+  clusterIP: None
+
+statefulset:
+  replicas: 1
+
+auth:
+  superuserPassword: "change-me-superuser-password"
+  database: "appdb"
+  username: "appuser"
+  password: "change-me-password"
+
+pgConfig: {}
+  # max_connections: "100"
+  # shared_buffers: "128MB"
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 1Gi
+  # storageClass: ""   # e.g. ocs-storagecluster-ceph-rbd
+  storageClass: ""
+
+# podSecurityContext is passed by the user at provision time.
+# Set fsGroup to the namespace UID range start so Kubernetes chowns
+# the mounted volume before postgres starts (e.g. fsGroup: 1001570000).
+podSecurityContext: {}
+
+container:
+  name: postgres
+  resources: {}
+
+probes:
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+  liveness:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+
+
