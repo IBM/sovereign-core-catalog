@@ -1,0 +1,38 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/ibm"
+  vendor: "International Business Machines Corporation"
+  product: "IBM Bob Self-Hosted"
+  shortDescription: "IBM Bob is an AI-powered development partner available for customer-managed deployment on Red Hat OpenShift."
+  fullDescription: "IBM Bob Self-Hosted helps developers understand, plan, build, and validate software through its IDE, Bob Shell, Skills, and agentic workflows. Its OpenShift-hosted backend includes identity and model-gateway components. The customer separately provides an IBM-supported local or approved external LLM endpoint. This offering does not include deployment of model weights, GPUs, or LLM-serving infrastructure."
+  sovereignCoreRelevance: "Enables teams in regulated environments to deploy IBM Bob within a customer-controlled OpenShift platform. Sovereign Core catalog integration is intended to simplify provisioning and governance through Helm and GitOps. Fully disconnected operation requires a separately provided local LLM and validation of offline clients, images, licensing, telemetry, and support workflows."
+  category: "ai"
+  industries: ["bfsi", "government", "healthcare", "energy", "sovereign_ai"]
+  intendedUsers: ["Software developers", "Platform engineers", "Enterprise architects", "Security and compliance teams", "Managed service providers"]
+  version: "2.0.0"
+  lifecycleStatus: "draft"
+  storefrontVisibility: "private"
+  availabilityState: "technical_assets_available"
+spec:
+  openSource:
+    enabled: false
+    license: "IBM International Program License Agreement"
+    sourceAvailable: false
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  architecture:
+    format: "Kubernetes"
+    airgapReady: false
+    storage:
+      csiAccessModes: ["ReadWriteOnce", "ReadWriteMany"]
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: true
+  deployment:
+    type: "Helm"
+    repository: "oci://icr.io/cpopen/bob:2.0.0"
+  links:
+    docsUrl: "https://bob.ibm.com/docs/ide/enterprise/on-premises/overview"
+    productPageUrl: "https://www.ibm.com/products/bob"
