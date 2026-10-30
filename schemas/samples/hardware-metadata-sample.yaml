@@ -162,6 +162,14 @@ spec:
   #   kmmRequired: false
 
   # ----------------------------------------------------------
+  # SUPPORT (optional block — remove entirely if not applicable)
+  # Named contacts for queries about this hardware offering.
+  # ----------------------------------------------------------
+  # support:
+  #   - email: "<contact@company.com>"      # [REQUIRED] functional or personal email
+  #     name: "<Contact Name>"             # [OPTIONAL]
+
+  # ----------------------------------------------------------
   # LINKS (optional block — remove entirely if not applicable)
   # ----------------------------------------------------------
   # links:

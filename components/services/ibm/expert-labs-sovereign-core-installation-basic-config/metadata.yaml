@@ -45,12 +45,12 @@ spec:
         - "AI sovereignty"
         - "Regulatory alignment"
         - "Continuous compliance monitoring"
-      contacts:
-        - name: "Apostolos Dailianas"
-          email: "apostolos.dailianas3@ibm.com"
-        - name: "Saumil Patel"
-          email: "saumilpp@us.ibm.com"
-        - name: "Alecia Ramsay"
-          email: "aleciarm@us.ibm.com"
+  support:
+    - name: "Apostolos Dailianas"
+      email: "apostolos.dailianas3@ibm.com"
+    - name: "Saumil Patel"
+      email: "saumilpp@us.ibm.com"
+    - name: "Alecia Ramsay"
+      email: "aleciarm@us.ibm.com"
   links:
     productPageUrl: "https://www.ibm.com/products/expertlabs"

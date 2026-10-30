@@ -93,7 +93,7 @@ metadata:
 
 # ------------------------------------------------------------
 # SPEC SECTION
-# certifications, Service type, sovereignty and capabilities.
+# Service type, sovereignty, certifications, capabilities, support, and links.
 # ------------------------------------------------------------
 spec:
   # ----------------------------------------------------------
@@ -149,27 +149,19 @@ spec:
   # ----------------------------------------------------------
   # CAPABILITIES (optional block — remove entirely if not applicable)
   # The schema allows additional properties; include what describes your service.
-  # Structure your capabilities under a meaningful key (e.g. consulting, hosting).
   # ----------------------------------------------------------
   # capabilities:
-  #   consulting:                         # rename this key to match your service type
-  #     engagementType: "Implementation"  # e.g. Advisory, Implementation, Assessment
-  #     deliverables:
-  #       - "<Deliverable 1>"
-  #       - "<Deliverable 2>"
-  #     focusAreas:
-  #       - "<Focus area 1>"
-  #       - "<Focus area 2>"
-  #     contacts:
-  #       - name: "<Contact Name>"
-  #         email: "<contact@company.com>"
-  #     support:
-  #       general: "<Geography>"          # e.g. "WW" (worldwide), "EMEA", "EU"
-  #       sovereign: "<Geography>"        # geography where sovereign-specific support is available
-  #
   #   hosting:                            # include this sub-block if serviceType is Hosting
   #     providesBareMetal: true
   #     airGappedReady: true
+
+  # ----------------------------------------------------------
+  # SUPPORT (optional block — remove entirely if not applicable)
+  # Named contacts for queries about this service offering.
+  # ----------------------------------------------------------
+  # support:
+  #   - email: "<contact@company.com>"      # [REQUIRED] functional or personal email
+  #     name: "<Contact Name>"             # [OPTIONAL]
 
   # ----------------------------------------------------------
   # LINKS (optional block — remove entirely if not applicable)

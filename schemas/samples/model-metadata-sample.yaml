@@ -188,6 +188,14 @@ spec:
     servingEngine: "<serving-engine>"
 
   # ----------------------------------------------------------
+  # SUPPORT (optional block — remove entirely if not applicable)
+  # Named contacts for queries about this model offering.
+  # ----------------------------------------------------------
+  # support:
+  #   - email: "<contact@company.com>"      # [REQUIRED] functional or personal email
+  #     name: "<Contact Name>"             # [OPTIONAL]
+
+  # ----------------------------------------------------------
   # LINKS (optional block — remove entirely if not applicable)
   # ----------------------------------------------------------
   # links:
