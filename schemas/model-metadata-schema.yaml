@@ -232,6 +232,22 @@ properties:
             type: string
             description: "Inference serving engine (e.g., vLLM, TGI, Triton)."
         additionalProperties: false
+      support:
+        type: array
+        description: "Named contacts who can be reached for queries about this model offering."
+        items:
+          type: object
+          required:
+            - email
+          properties:
+            name:
+              type: string
+              description: "Full name of the contact person (optional)."
+            email:
+              type: string
+              format: email
+              description: "Work email address of the contact person."
+          additionalProperties: false
       links:
         type: object
         required:

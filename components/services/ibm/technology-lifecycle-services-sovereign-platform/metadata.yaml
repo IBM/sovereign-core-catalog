@@ -43,12 +43,9 @@ spec:
         - "AI governance"
         - "Regulatory compliance"
         - "Infrastructure integration"
-      contacts:
-        - name: "Enikő Husztiová"
-          email: "Eniko.Huszti@sk.ibm.com"
-      support:
-        general: "WW"
-        sovereign: "EU"
+  support:
+    - name: "Enikő Husztiová"
+      email: "Eniko.Huszti@sk.ibm.com"
   links:
     productPageUrl: "https://www.ibm.com/services/technology-lifecycle-services?lnk=flathl"
     docsUrl: "https://www.ibm.com/support/pages/sovereign-support"
