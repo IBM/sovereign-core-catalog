@@ -1,0 +1,12 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: CompanyProfile
+metadata:
+  slug: "cegeka"
+  displayName: "Cegeka Groep NV"
+  aboutDescription: "Cegeka is a family-owned technology provider headquartered in Hasselt, Belgium. It serves customers worldwide with application services, business solutions, quality engineering, data and AI, digital workplaces, cyber resilience, networking and regulatory, and hybrid cloud."
+spec:
+  jurisdiction:
+    corporateHQ: "Germany"
+    ultimateParentCompanyHQ: "Germany"
+  contact:
+    website: "https://www.cegeka.com"
