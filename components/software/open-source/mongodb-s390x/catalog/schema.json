@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "clusterTarget":                          {"type": "string"},
+    "namespace":                              {"type": "string"},
+    "instanceName":                           {"type": "string"},
+
+    "diskImage.sourceContainerDisk":          {"type": "string"},
+    "diskImage.sourceURL":                    {"type": "string"},
+    "diskImage.sourcePVCName":                {"type": "string"},
+    "diskImage.pullSecret":                   {"type": "string"},
+    "diskImage.certConfigMap":                {"type": "string"},
+    "diskImage.storageClassName":             {"type": "string"},
+    "diskImage.diskSizeGi":                   {"type": "integer"},
+
+    "vm.cpuCores":                            {"type": "integer"},
+    "vm.memoryGi":                            {"type": "integer"},
+
+    "mongodb.databaseName":                   {"type": "string"},
+    "mongodb.databaseUser":                   {"type": "string"},
+    "mongodb.keyFile":                        {"type": "string"},
+
+    "ha.enabled":                             {"type": "boolean"},
+    "ha.replicaCount":                        {"type": "integer"},
+    "ha.replicaSetName":                      {"type": "string"},
+
+    "vip.enabled":                            {"type": "boolean"},
+    "vip.lb_type":                            {"type": "string"},
+    "vip.nodePort":                           {"type": "integer"},
+    "vip.metallbAddressPool":                 {"type": "string"},
+
+    "networkPolicy.enabled":                  {"type": "boolean"},
+    "serviceAccount.enabled":                 {"type": "boolean"},
+    "governance.namespaceLabel.enabled":     {"type": "boolean"},
+    "governance.namespaceLabel.controlOwner": {"type": "string"},
+    "network.blockExternalServices":          {"type": "boolean"},
+
+    "compliance.enableEncryption":            {"type": "boolean"},
+    "compliance.auditLog.enabled":            {"type": "boolean"},
+    "compliance.auditLog.path":               {"type": "string"},
+
+    "logging.rsyslog.enabled":                {"type": "boolean"},
+    "logging.rsyslog.forwarding.enabled":     {"type": "boolean"},
+    "logging.rsyslog.forwarding.host":        {"type": "string"},
+    "logging.rsyslog.forwarding.port":        {"type": "integer"},
+    "logging.rsyslog.forwarding.protocol":    {"type": "string"},
+
+    "logging.fluentbit.enabled":              {"type": "boolean"},
+    "logging.fluentbit.siemEndpoint":         {"type": "string"},
+    "logging.fluentbit.siemPort":             {"type": "integer"},
+    "logging.fluentbit.tlsEnabled":           {"type": "boolean"},
+
+    "backup.enabled":                         {"type": "boolean"},
+    "backup.schedule":                        {"type": "string"},
+
+    "monitoring.enabled":                     {"type": "boolean"},
+    "argocd.grantAdminRole":                  {"type": "boolean"}
+  },
+  "required": [
+    "clusterTarget",
+    "namespace",
+    "instanceName",
+    "diskImage.sourceContainerDisk",
+    "mongodb.databaseName",
+    "mongodb.databaseUser",
+    "ha.enabled"
+  ]
+}

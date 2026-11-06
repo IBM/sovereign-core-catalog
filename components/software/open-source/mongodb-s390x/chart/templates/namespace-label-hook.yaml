@@ -1,0 +1,152 @@
+{{- /*
+  namespace-label-hook.yaml — COMPLIANCE Phase 1
+
+  ── Controls implemented ────────────────────────────────────────────────────
+  mdb-gov-01 → iscf-gov-01
+    Applies the sovereignty/control-owner governance label to the release
+    namespace so platform posture reporting (Concert, Compliance Operator)
+    can correctly attribute controls to this workload.
+
+    Implemented as a Helm post-install / post-upgrade Job so the chart
+    remains self-contained without requiring cluster-admin privileges.
+
+  Control: mdb-gov-01 · ISCF: iscf-gov-01
+
+  ── Render conditions ────────────────────────────────────────────────────────
+  Only rendered when governance.namespaceLabel.enabled=true (default: true).
+  Opt-out: set governance.namespaceLabel.enabled=false if the namespace label
+           is already managed externally (e.g. via GitOps Namespace manifest).
+
+  ── RBAC requirement ─────────────────────────────────────────────────────────
+  The Job uses a dedicated ServiceAccount (ns-label-sa) with a ClusterRole
+  scoped to patch only the single release namespace. The ClusterRole is
+  deleted by the hook-delete-policy after the Job succeeds.
+*/ -}}
+{{- if .Values.governance.namespaceLabel.enabled }}
+---
+## COMPLIANCE Phase 1 — mdb-gov-01 (iscf-gov-01)
+## Dedicated ServiceAccount for the namespace-label hook Job.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "mongodb-vm.fullname" . }}-ns-label-sa
+  namespace: {{ .Values.namespaceOverride | default .Release.Namespace }}
+  labels:
+    {{- include "mongodb-vm.labels" . | nindent 4 }}
+  annotations:
+    {{- include "mongodb-vm.annotations" . | nindent 4 }}
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    compliance.sovcore.ibm.com/controls: "mdb-gov-01"
+    compliance.sovcore.ibm.com/iscf: "iscf-gov-01"
+---
+## COMPLIANCE Phase 1 — mdb-gov-01 (iscf-gov-01)
+## ClusterRole: patch namespace labels only.
+## Scoped to the single release namespace via resourceNames.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "mongodb-vm.fullname" . }}-ns-label
+  labels:
+    {{- include "mongodb-vm.labels" . | nindent 4 }}
+  annotations:
+    {{- include "mongodb-vm.annotations" . | nindent 4 }}
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    compliance.sovcore.ibm.com/controls: "mdb-gov-01"
+    compliance.sovcore.ibm.com/iscf: "iscf-gov-01"
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    resourceNames: [{{ .Values.namespaceOverride | default .Release.Namespace | quote }}]
+    verbs: ["get", "patch"]
+---
+## COMPLIANCE Phase 1 — mdb-gov-01 (iscf-gov-01)
+## ClusterRoleBinding: bind ns-label ClusterRole to the hook SA.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "mongodb-vm.fullname" . }}-ns-label
+  labels:
+    {{- include "mongodb-vm.labels" . | nindent 4 }}
+  annotations:
+    {{- include "mongodb-vm.annotations" . | nindent 4 }}
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    compliance.sovcore.ibm.com/controls: "mdb-gov-01"
+    compliance.sovcore.ibm.com/iscf: "iscf-gov-01"
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "mongodb-vm.fullname" . }}-ns-label-sa
+    namespace: {{ .Values.namespaceOverride | default .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mongodb-vm.fullname" . }}-ns-label
+  apiGroup: rbac.authorization.k8s.io
+---
+## COMPLIANCE Phase 1 — mdb-gov-01 (iscf-gov-01)
+## Post-install/upgrade Job: apply sovereignty/control-owner label to namespace.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "mongodb-vm.fullname" . }}-ns-label
+  namespace: {{ .Values.namespaceOverride | default .Release.Namespace }}
+  labels:
+    {{- include "mongodb-vm.labels" . | nindent 4 }}
+  annotations:
+    {{- include "mongodb-vm.annotations" . | nindent 4 }}
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    compliance.sovcore.ibm.com/controls: "mdb-gov-01"
+    compliance.sovcore.ibm.com/iscf: "iscf-gov-01"
+    compliance.sovcore.ibm.com/phase: "1"
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 120
+  template:
+    metadata:
+      labels:
+        {{- include "mongodb-vm.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: ns-label-hook
+    spec:
+      serviceAccountName: {{ include "mongodb-vm.fullname" . }}-ns-label-sa
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: label-ns
+          image: registry.redhat.io/openshift4/ose-cli:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          command:
+            - /bin/sh
+            - -c
+            - |
+              oc label namespace "$(NAMESPACE)" \
+                "sovereignty/control-owner={{ .Values.governance.namespaceLabel.controlOwner }}" \
+                "openshift.io/user-monitoring=true" \
+                --overwrite
+              echo "mdb-gov-01: namespace $(NAMESPACE) labelled sovereignty/control-owner={{ .Values.governance.namespaceLabel.controlOwner }} openshift.io/user-monitoring=true"
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+{{- end }}

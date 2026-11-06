@@ -1,0 +1,162 @@
+# Helm values template for MongoDB Enterprise Advanced VM (s390x)
+# Rendered by the BYOP broker at deployment time.
+# Schema: catalog/schema.json (flat dot-notation keys)
+
+nameOverride: "{{ instanceName }}"
+namespaceOverride: "{{ namespace }}"
+
+## Boot disk — CDI DataVolume source
+diskImage:
+{% if diskImage.sourceContainerDisk is defined and diskImage.sourceContainerDisk %}
+  sourceContainerDisk: "{{ diskImage.sourceContainerDisk }}"
+{% endif %}
+{% if diskImage.sourceURL is defined and diskImage.sourceURL %}
+  sourceURL: "{{ diskImage.sourceURL }}"
+{% endif %}
+{% if diskImage.sourcePVCName is defined and diskImage.sourcePVCName %}
+  sourcePVCName: "{{ diskImage.sourcePVCName }}"
+{% endif %}
+{% if diskImage.sourcePVCNamespace is defined and diskImage.sourcePVCNamespace %}
+  sourcePVCNamespace: "{{ diskImage.sourcePVCNamespace }}"
+{% endif %}
+{% if diskImage.pullSecret is defined and diskImage.pullSecret %}
+  pullSecret: "{{ diskImage.pullSecret }}"
+{% endif %}
+{% if diskImage.certConfigMap is defined and diskImage.certConfigMap %}
+  certConfigMap: "{{ diskImage.certConfigMap }}"
+{% endif %}
+  storageClassName: "{{ diskImage.storageClassName | default('ocs-storagecluster-ceph-rbd-virtualization') }}"
+  diskSizeGi: {{ diskImage.diskSizeGi | default(25) }}
+
+## VM sizing
+vm:
+  cpuCores: {{ vm.cpuCores | default(2) }}
+  memoryGi: {{ vm.memoryGi | default(4) }}
+
+## MongoDB credentials + database
+mongodb:
+  databaseName: "{{ mongodb.databaseName }}"
+  databaseUser: "{{ mongodb.databaseUser }}"
+{% if mongodb.keyFile is defined and mongodb.keyFile %}
+  keyFile: "{{ mongodb.keyFile }}"
+{% endif %}
+
+## Replica Set / HA
+ha:
+  enabled: {{ ha.enabled | default(false) }}
+  replicaCount: {{ ha.replicaCount | default(3) }}
+  replicaSetName: "{{ ha.replicaSetName | default('rs0') }}"
+  port: {{ ha.port | default(27017) }}
+
+## VIP / LoadBalancer (probe-gated primary endpoint)
+vip:
+  enabled: {{ vip.enabled | default(false) }}
+  lb_type: "{{ vip.lb_type | default('local') }}"
+  port: {{ vip.port | default(27017) }}
+  nodePort: {{ vip.nodePort | default(0) }}
+{% if vip.metallbAddressPool is defined and vip.metallbAddressPool %}
+  metallbAddressPool: "{{ vip.metallbAddressPool }}"
+{% endif %}
+{% if vip.probe is defined %}
+  probe:
+    periodSeconds: {{ vip.probe.periodSeconds | default(5) }}
+    failureThreshold: {{ vip.probe.failureThreshold | default(2) }}
+    successThreshold: {{ vip.probe.successThreshold | default(2) }}
+    timeoutSeconds: {{ vip.probe.timeoutSeconds | default(3) }}
+{% endif %}
+
+## NetworkPolicy
+networkPolicy:
+  enabled: {{ networkPolicy.enabled | default(true) }}
+
+## ServiceAccount + RBAC
+serviceAccount:
+  enabled: {{ serviceAccount.enabled | default(true) }}
+
+## Governance namespace label
+governance:
+  namespaceLabel:
+    enabled: {{ governance.namespaceLabel.enabled | default(true) }}
+    controlOwner: "{{ governance.namespaceLabel.controlOwner | default('tenant') }}"
+
+## Kyverno network policy
+network:
+  blockExternalServices: {{ network.blockExternalServices | default(false) }}
+
+## Compliance — mongod.conf hardening (Phase 2)
+compliance:
+  enableEncryption: {{ compliance.enableEncryption | default(false) }}
+  auditLog:
+    enabled: {{ compliance.auditLog.enabled | default(false) }}
+    path: "{{ compliance.auditLog.path | default('/var/log/mongodb/audit.json') }}"
+    auditAuthorizationSuccess: {{ compliance.auditLog.auditAuthorizationSuccess | default(true) }}
+
+## Logging — rsyslog forwarding
+logging:
+  rsyslog:
+    enabled: {{ logging.rsyslog.enabled | default(false) }}
+    forwarding:
+      enabled: {{ logging.rsyslog.forwarding.enabled | default(false) }}
+      host: "{{ logging.rsyslog.forwarding.host | default('') }}"
+      port: {{ logging.rsyslog.forwarding.port | default(514) }}
+      protocol: "{{ logging.rsyslog.forwarding.protocol | default('tcp') }}"
+      format: "{{ logging.rsyslog.forwarding.format | default('rfc5424') }}"
+{% if logging.rsyslog.fileMonitoring is defined %}
+    fileMonitoring:
+      mongodLog:
+        enabled: {{ logging.rsyslog.fileMonitoring.mongodLog.enabled | default(true) }}
+        tag: "{{ logging.rsyslog.fileMonitoring.mongodLog.tag | default('mongodb-mongod') }}"
+        facility: "{{ logging.rsyslog.fileMonitoring.mongodLog.facility | default('local6') }}"
+        severity: "{{ logging.rsyslog.fileMonitoring.mongodLog.severity | default('info') }}"
+      auditLog:
+        enabled: {{ logging.rsyslog.fileMonitoring.auditLog.enabled | default(false) }}
+        path: "{{ logging.rsyslog.fileMonitoring.auditLog.path | default('/var/log/mongodb/audit.json') }}"
+        tag: "{{ logging.rsyslog.fileMonitoring.auditLog.tag | default('mongodb-audit') }}"
+        facility: "{{ logging.rsyslog.fileMonitoring.auditLog.facility | default('local7') }}"
+        severity: "{{ logging.rsyslog.fileMonitoring.auditLog.severity | default('notice') }}"
+{% endif %}
+{% if logging.rsyslog.rateLimit is defined %}
+    rateLimit:
+      intervalSeconds: {{ logging.rsyslog.rateLimit.intervalSeconds | default(5) }}
+      burstCount: {{ logging.rsyslog.rateLimit.burstCount | default(500) }}
+{% endif %}
+{% if logging.rsyslog.customConf is defined and logging.rsyslog.customConf %}
+    customConf: "{{ logging.rsyslog.customConf }}"
+{% endif %}
+  fluentbit:
+    enabled: {{ logging.fluentbit.enabled | default(false) }}
+    siemEndpoint: "{{ logging.fluentbit.siemEndpoint | default('') }}"
+    siemPort: {{ logging.fluentbit.siemPort | default(5044) }}
+    tlsEnabled: {{ logging.fluentbit.tlsEnabled | default(true) }}
+
+## Backup
+backup:
+  enabled: {{ backup.enabled | default(false) }}
+  schedule: "{{ backup.schedule | default('0 2 * * *') }}"
+  retention: "{{ backup.retention | default('720h') }}"
+  storageLocation: "{{ backup.storageLocation | default('default') }}"
+
+## Monitoring
+monitoring:
+  enabled: {{ monitoring.enabled | default(false) }}
+  scrapeInterval: "{{ monitoring.scrapeInterval | default('30s') }}"
+  alertPendingDuration: "{{ monitoring.alertPendingDuration | default('2m') }}"
+
+## NTP site override
+{% if ntp is defined and ntp.server is defined and ntp.server %}
+ntp:
+  server: "{{ ntp.server }}"
+{% endif %}
+
+## SSH and Concert credentials
+{% if sshAuthorizedKeys is defined and sshAuthorizedKeys %}
+sshAuthorizedKeys:
+  - "{{ sshAuthorizedKeys }}"
+{% endif %}
+{% if concertSSHKeySecret is defined and concertSSHKeySecret %}
+concertSSHKeySecret: "{{ concertSSHKeySecret }}"
+{% endif %}
+
+## ArgoCD RBAC
+argocd:
+  grantAdminRole: {{ argocd.grantAdminRole | default(true) }}

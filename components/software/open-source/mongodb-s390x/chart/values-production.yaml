@@ -1,0 +1,62 @@
+# =============================================================================
+# values-production.yaml — Production compliance overlay for mongodb-vm chart
+# =============================================================================
+#
+# mdb-enc-02, mdb-aud-01, mdb-aud-02, mdb-enc-05, mdb-aud-05
+# Controls: iscf-cr-01, iscf-dr-06, iscf-ia-04, iscf-gov-02, iscf-gov-03,
+#           iscf-dr-10, iscf-mi-01, iscf-sc-04
+#
+# PURPOSE:
+#   This file is the production-grade Helm values overlay. It enables all
+#   compliance controls that are coded but disabled by default in values.yaml
+#   to prevent production deployments from silently missing compliance targets.
+#
+# USAGE:
+#   Helm render with this overlay:
+#     helm upgrade --install <release> ./chart \
+#       -f chart/values.yaml \
+#       -f chart/values-production.yaml \
+#       --set diskImage.sourceContainerDisk=<registry>/byop/mongodb-ea-bootc:8.0-s390x
+#
+#   ArgoCD / BYOP broker:
+#     Set valueFiles to include both values.yaml and values-production.yaml
+#     in the ApplicationSet or provisioning template.
+#
+# NOTES:
+#   - This file only overrides fields that must differ from the default.
+#   - All other defaults (HA, VIP, SA, NetworkPolicy, etc.) remain in values.yaml.
+#   - Never commit secrets or instance-specific values here.
+#   - For non-production environments use values.yaml defaults (all off).
+# =============================================================================
+
+## ── mdb-enc-02 (iscf-cr-01 / iscf-dr-06) — WiredTiger encryption-at-rest ────
+## Requires MongoDB Enterprise Advanced licence.
+## Pair with diskImage.storageClassName below (mdb-enc-05).
+compliance:
+  enableEncryption: true
+
+  ## ── mdb-aud-01 (iscf-ia-04 / iscf-gov-03 / iscf-dr-10) ──────────────────
+  ## ── mdb-aud-02 (iscf-ia-04 / iscf-gov-02 / iscf-ai-04)  ──────────────────
+  auditLog:
+    enabled: true
+    ## Default path — do not change unless /var/log/mongodb is remounted.
+    path: "/var/log/mongodb/audit.json"
+    ## Log ALL auth decisions (success + failure) — required for mdb-aud-02.
+    auditAuthorizationSuccess: true
+
+## ── mdb-enc-05 (iscf-dr-01 / iscf-dr-05 / iscf-dr-06) — Encrypted storage ──
+## ODF CEPH encrypted RBD storage class provides encryption-at-rest at the
+## block layer, complementing WiredTiger encryption for defence-in-depth.
+diskImage:
+  storageClassName: ocs-storagecluster-ceph-rbd-encrypted
+
+## ── mdb-aud-05 (iscf-mi-01 / iscf-dr-10) — rsyslog centralised log forwarding
+## Enable rsyslog-based log forwarding for audit log preservation.
+## Override logging.rsyslog.forwarding.host with your SIEM endpoint.
+## For Fluent-bit (preferred) see logging.fluentbit below.
+logging:
+  rsyslog:
+    enabled: true
+    fileMonitoring:
+      auditLog:
+        enabled: true
