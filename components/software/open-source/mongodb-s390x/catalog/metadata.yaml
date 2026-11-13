@@ -1,0 +1,12 @@
+sourceType: helm-registry
+sourceRepo: oci://quay.io/mongodbhelm/mongodb-vm
+sourceVersion: "1.1.36"
+name: mongodbvm
+# images list:
+# - 'source' is a placeholder for the boot disk container image that the customer/vendor
+#   publishes to their preferred source registry location (e.g. Quay.io, ICR, Artifactory).
+# - 'destination' is the canonical reference path that will be mirrored into Sovereign Core's
+#   internal Quay registry during product onboarding (e.g. <internal-quay>/sovcloud/<destination>).
+images:
+  - source: "quay.io/mongodb-ea-bootc/mongodb-ea-bootc-containerdisk:8.0-s390x"
+    destination: "quay.io/mongodb-ea-bootc/mongodb-ea-bootc-containerdisk:8.0-s390x"

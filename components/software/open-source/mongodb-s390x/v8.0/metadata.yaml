@@ -1,0 +1,57 @@
+apiVersion: sovereign-catalog.io/v1alpha1
+kind: SoftwareListing
+metadata:
+  companyRef: "companies/open-source"
+  vendor: "MongoDB, Inc."
+  product: "MongoDB Enterprise Advanced VM"
+  shortDescription: "Enterprise-grade MongoDB document database deployed as an OCP Virt VirtualMachine on IBM Z (s390x) with standalone and HA replica set support."
+  fullDescription: "MongoDB Enterprise Advanced 8.0 deployed as an OpenShift Virtualization (OCP Virt) VirtualMachine on IBM Z architecture (s390x). The boot disk is a bootc-built (RHEL Image Mode) OCI-native qcow2 produced by securedimage/build.sh on an s390x build host. First-boot credential injection and mongod configuration are handled via cloud-init write_files + runcmd. Supports single VM standalone deployments and 3-member Replica Sets with pod anti-affinity. Compliance controls Phase 1 (NetworkPolicy, ServiceAccount RBAC, encrypted storage class) and Phase 2 (WiredTiger encryption-at-rest, MongoDB audit log) are enforced at chart and runtime layers. FIPS-compliant SCRAM-SHA-256 authentication is enforced throughout. VIP primary-only LoadBalancer service with readiness probe baked into bootc image (mongo-primary-probe.service). Firewall ports 27017 and 8080 opened via firewall-offline-cmd at image build time."
+  sovereignCoreRelevance: "Enables air-gapped, on-premises deployment of MongoDB Enterprise Advanced on IBM Z s390x virtualized infrastructure, ensuring confidential computing and data sovereignty within regulated environments."
+  category: "data"
+  industries: ["government", "bfsi", "healthcare", "telco", "energy"]
+  intendedUsers: ["Database administrators", "Application developers", "Platform engineers"]
+  version: "8.0"
+  lifecycleStatus: "approved"
+  storefrontVisibility: "public"
+  availabilityState: "available_central_it"
+spec:
+  jurisdiction:
+    hq: "USA"
+    ultimateParentCompanyHQ: "USA"
+  openSource:
+    enabled: false
+    license: "SSPL-1.0"
+    upstreamProject: "https://github.com/mongodb/mongo"
+    upstreamVersion: "8.0"
+  architecture:
+    format: "VM"
+    airgapReady: true
+    dependencyEndpoints: []
+    storage:
+      csiAccessModes: ["ReadWriteOnce"]
+      volumeSnapshotSupport: true
+  security:
+    podSecurityStandard: "baseline"
+    requiresClusterAdmin: false
+    readOnlyRootFilesystem: false
+    kmsIntegration: false
+  deployment:
+    type: "Helm"
+    repository: "oci://quay.io/mongodbhelm/mongodb-vm"
+  catalog:
+    brokerType: "platform"
+    sourceType: "helm-registry"
+    sourceRepo: "oci://quay.io/mongodbhelm/mongodb-vm"
+    sourceVersion: "1.1.39"
+    name: "mongodbvm"
+    # images list:
+    # - 'source' is a placeholder for the boot disk container image that the customer/vendor
+    #   publishes to their preferred source registry location (e.g. Quay.io, ICR, Artifactory).
+    # - 'destination' is the canonical reference path that will be mirrored into Sovereign Core's
+    #   internal Quay registry during product onboarding (e.g. <internal-quay>/sovcloud/<destination>).
+    images:
+      - source: "quay.io/mongodb-ea-bootc/mongodb-ea-bootc-containerdisk:8.0-s390x"
+        destination: "quay.io/mongodb-ea-bootc/mongodb-ea-bootc-containerdisk:8.0-s390x"
+  links:
+    docsUrl: "https://www.mongodb.com/docs/manual/"
+    productPageUrl: "https://www.mongodb.com/products/self-managed/enterprise-advanced"

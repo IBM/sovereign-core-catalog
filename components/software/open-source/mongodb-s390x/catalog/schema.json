@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "clusterTarget":                          {"type": "string"},
+    "namespace":                              {"type": "string"},
+    "instanceName":                           {"type": "string"},
+
+    "diskImage.sourceContainerDisk":          {"type": "string"},
+    "diskImage.storageClassName":             {"type": "string"},
+    "diskImage.diskSizeGi":                   {"type": "integer"},
+
+    "vm.cpuCores":                            {"type": "integer"},
+    "vm.memoryGi":                            {"type": "integer"},
+
+    "mongodb.databaseName":                   {"type": "string"},
+    "mongodb.databaseUser":                   {"type": "string"},
+    "mongodb.keyFile":                        {"type": "string"},
+
+    "ha.enabled":                             {"type": "boolean"},
+    "ha.replicaCount":                        {"type": "integer"},
+    "ha.replicaSetName":                      {"type": "string"},
+
+    "vip.enabled":                            {"type": "boolean"},
+    "vip.lb_type":                            {"type": "string"},
+    "vip.metallbAddressPool":                 {"type": "string"},
+
+    "governance.namespaceLabel.enabled":     {"type": "boolean"},
+    "network.blockExternalServices":          {"type": "boolean"},
+
+    "ssh.enabled":                            {"type": "boolean"},
+    "ssh.nodePort":                           {"type": "integer", "minimum": 30000, "maximum": 32767},
+    "ssh.concertSourceCidr":                  {"type": "string"},
+
+    "compliance.enableEncryption":            {"type": "boolean"},
+    "compliance.auditLog.enabled":            {"type": "boolean"},
+
+    "compliance.tls.enabled":                 {"type": "boolean"},
+    "compliance.tls.externalHostname":        {"type": "string"},
+
+    "vault.address":                          {"type": "string", "pattern": "^https://"},
+    "vault.namespace":                        {"type": "string"},
+    "vault.pkiMount":                         {"type": "string"},
+    "vault.roleId":                           {"type": "string"},
+    "vault.renewalRoleId":                    {"type": "string"},
+    "vault.wrappedSecretIds":                 {"type": "array", "items": {"type": "string"}},
+    "vault.renewalSecretIds":                 {"type": "array", "items": {"type": "string"}},
+    "vault.caCert":                           {"type": "string"},
+
+    "logging.rsyslog.enabled":                {"type": "boolean"},
+    "logging.rsyslog.forwarding.host":        {"type": "string"},
+    "logging.rsyslog.forwarding.port":        {"type": "integer"},
+
+    "logging.fluentbit.enabled":              {"type": "boolean"},
+    "logging.fluentbit.siemEndpoint":         {"type": "string"},
+    "logging.fluentbit.siemPort":             {"type": "integer"},
+
+    "backup.enabled":                         {"type": "boolean"}
+  },
+  "required": [
+    "clusterTarget",
+    "namespace",
+    "instanceName",
+    "diskImage.sourceContainerDisk",
+    "mongodb.databaseName",
+    "mongodb.databaseUser",
+    "ha.enabled",
+    "ssh.concertSourceCidr"
+  ]
+}
