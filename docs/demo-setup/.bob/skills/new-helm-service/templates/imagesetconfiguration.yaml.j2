@@ -1,0 +1,9 @@
+kind: ImageSetConfiguration
+apiVersion: mirror.openshift.io/v1alpha2
+storageConfig:
+  local:
+    path: ./metadata
+mirror:
+  additionalImages:
+    # Latest stable: {{ source_ref }}
+    - name: {{ source_ref }}

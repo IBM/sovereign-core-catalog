@@ -1,0 +1,18 @@
+{{- $fullname := include "nginx.fullname" . -}}
+{{- $namespace := default .Release.Namespace .Values.namespaceOverride -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $fullname }}-html
+  namespace: {{ $namespace }}
+  labels:
+    {{- include "nginx.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>{{ .Values.welcomeMessage }}</title></head>
+    <body><h1>{{ .Values.welcomeMessage }}</h1></body>
+    </html>
+
+# Made with IBM Bob

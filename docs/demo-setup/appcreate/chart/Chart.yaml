@@ -1,0 +1,8 @@
+apiVersion: v2
+name: nginx
+description: A Helm chart for a simple nginx web server on Kubernetes / OpenShift
+type: application
+version: "1.0.0"
+appVersion: "1.27.5"
+
+# Made with IBM Bob

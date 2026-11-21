@@ -1,0 +1,46 @@
+## OpenShift-specific overrides for Gitea deployment
+
+## Image registry override for air-gapped deployments
+## Uncomment and set to your internal registry
+image:
+  registry: "registry.example.com"
+  repository: "gitea/gitea"
+#   tag: "1.26.2"
+
+## Gitea server configuration
+gitea:
+  config:
+    server:
+      DOMAIN: "gitea.example.com"
+
+route:
+  enabled: true
+
+storage:
+  persistentVolumeClaimName:  # Empty - chart will create new PVC
+  requestedSize: 10Gi
+  # className: ceph-rbd-platform  # Uses cluster default
+
+postgres:
+  enabled: true
+  image:
+     registry: "registry.example.com"
+     repository: "gitea/postgres"
+     tag: "13.12"
+  settings:
+    superuserPassword: "test"
+  userDatabase:
+    name: "gitea"
+    user: "gitea"
+    password: "test"
+  storage:
+    requestedSize: 10Gi
+    # className: ceph-rbd-platform  # Uses cluster default
+
+redis:
+  enabled: true
+  image:
+     registry: "registry.example.com"
+     repository: "gitea/redis"
+  #   tag: "7.0.12"
+

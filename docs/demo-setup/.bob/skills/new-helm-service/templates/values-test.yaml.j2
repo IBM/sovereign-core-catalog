@@ -1,0 +1,34 @@
+# Usage:
+#   helm upgrade --install {{ name }}-test services/{{ helm_name }}/v1/chart \
+#     -f services/{{ helm_name }}/v1/values-test.yaml \
+#     --create-namespace \
+#     --namespace {{ name }}-test
+#
+# NOTE: uses upstream registry directly — NOT BYOP_REGISTRY — so this works without an air-gap registry.
+# TODO: add chart-specific test values below (resolve all spec.* from values.yaml.tmpl)
+
+namespaceOverride: {{ name }}-test
+
+commonLabels:
+  app: {{ helm_name }}
+  service-type: {{ helm_name }}
+
+commonAnnotations:
+  sovcore.byop.ibm.com/crn: "crn:unknown"
+  sovcore.byop.ibm.com/account-id: "test-account"
+  sovcore.byop.ibm.com/sub-account-id: "test-sub-account"
+  sovcore.byop.ibm.com/platform: "test"
+
+instance:
+  name: {{ name }}-test
+  id: "test-instance-id"
+  environment: test
+  clusterName: "test-cluster"
+
+imagePullSecrets: []
+
+# Use upstream source image directly — no airgap needed locally
+image:
+  registry: {{ upstream_registry }}
+  repository: {{ upstream_repository }}
+  tag: "{{ tag }}"

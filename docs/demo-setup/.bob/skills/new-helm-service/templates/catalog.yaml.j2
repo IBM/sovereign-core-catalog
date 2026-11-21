@@ -1,0 +1,10 @@
+name: {{ helm_name }}
+display_name: {{ display }}
+description: {{ description }}
+plans:
+  - id: standard
+    name: Standard
+    description: Default deployment with persistent storage and auto-generated credentials
+  - id: {{ helm_name }}_plan
+    name: Default
+    description: Default deployment with persistent storage and auto-generated credentials
