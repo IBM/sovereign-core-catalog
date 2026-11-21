@@ -1,0 +1,102 @@
+{{- $instanceName := default .Release.Name .Values.instance.name -}}
+{{- $fullname := include "nginx.fullname" . -}}
+{{- $namespace := default .Release.Namespace .Values.namespaceOverride -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullname }}
+  namespace: {{ $namespace }}
+  labels:
+    app: {{ .Values.commonLabels.app | quote }}
+    service-type: {{ index .Values.commonLabels "service-type" | quote }}
+    instance: {{ $instanceName | quote }}
+    managed-by: byop-broker
+    environment: {{ .Values.instance.environment | quote }}
+    {{- range $key, $value := .Values.commonLabels }}
+    {{- if and (ne $key "app") (ne $key "service-type") }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
+  annotations:
+    byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+    byop.ibm.com/service-type: "nginx"
+    byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+    {{- with .Values.commonAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.commonLabels.app | quote }}
+      instance: {{ $instanceName | quote }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.commonLabels.app | quote }}
+        instance: {{ $instanceName | quote }}
+        service-type: {{ index .Values.commonLabels "service-type" | quote }}
+        managed-by: byop-broker
+        environment: {{ .Values.instance.environment | quote }}
+        {{- range $key, $value := .Values.commonLabels }}
+        {{- if and (ne $key "app") (ne $key "service-type") }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      annotations:
+        byop.ibm.com/instance-id: {{ .Values.instance.id | quote }}
+        byop.ibm.com/service-type: "nginx"
+        byop.ibm.com/cluster: {{ .Values.instance.clusterName | quote }}
+        {{- with .Values.commonAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range . }}
+        - name: {{ .name | quote }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: nginx
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.readiness.timeoutSeconds }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: {{ .Values.probes.liveness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: html
+          configMap:
+            name: {{ $fullname }}-html
+
+# Made with IBM Bob

@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: SERVICE_NAME-app-set
+  namespace: ARGOCD_NAMESPACE
+  labels:
+    app: SERVICE_NAME
+    service-type: SERVICE_TYPE
+spec:
+  generators:
+    - git:
+        files:
+          - path: "instances/SERVICE_NAME/*/metadata.yaml"
+        repoURL: GITOPS_REPO_URL
+        revision: GITOPS_REPO_REVISION
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  template:
+    metadata:
+      labels:
+        app: SERVICE_NAME
+        service-type: SERVICE_TYPE
+        instance: "{{ instance_name }}"
+      name: "{{ service_type }}-{{ instance_name }}"
+    spec:
+      destination:
+        server: "{{ cluster_url }}"
+        namespace: "{{ namespace }}"
+      project: ARGOCD_PROJECT
+      source:
+        path: services/SERVICE_NAME/SERVICE_VERSION/chart
+        helm:
+          valueFiles:
+            - ../../../../instances/SERVICE_NAME/{{ instance_name }}/values.yaml
+        repoURL: GITOPS_REPO_URL
+        targetRevision: GITOPS_REPO_REVISION
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
