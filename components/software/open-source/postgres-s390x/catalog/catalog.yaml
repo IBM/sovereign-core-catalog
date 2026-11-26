@@ -1,0 +1,6 @@
+display_name: "PostgreSQL Database s390x"
+description: "Full-lifecycle PostgreSQL database service for IBM Z and LinuxONE (s390x) with broker-generated credentials, deployed with Helm. Uses the official s390x/postgres image with enforced s390x node scheduling."
+category: "databases"
+tags: ["PostgreSQL", "Database", "SQL", "s390x", "IBM-Z"]
+support_url: "https://www.ibm.com"
+marketing_url: "https://www.ibm.com/products"

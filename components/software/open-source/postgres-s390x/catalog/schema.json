@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "PostgreSQL (s390x) Instance Parameters",
+  "description": "Parameters for provisioning a PostgreSQL database instance on IBM Z / LinuxONE (s390x)",
+  "properties": {
+    "clusterTarget": {
+      "type": "string",
+      "description": "ArgoCD cluster name to deploy to (e.g. claas-api-ocpz-standard-5-b39-cpd2-pok-stglabs-ibm-com)"
+    },
+    "database_name": {
+      "type": "string",
+      "description": "Name of the user database to create",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 64,
+      "examples": ["myapp", "production_db", "test_database"]
+    },
+    "database_user": {
+      "type": "string",
+      "description": "Database user with full access to the user database (auto-generated if not provided)",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "minLength": 1,
+      "maxLength": 32,
+      "default": "appuser",
+      "examples": ["appuser", "dbadmin", "service_account"]
+    },
+    "database_password": {
+      "type": "string",
+      "description": "Password for the database user (auto-generated if not provided)",
+      "minLength": 8,
+      "maxLength": 128,
+      "examples": ["SecureP@ssw0rd123"],
+      "x-generate": {
+        "type": "password",
+        "length": 24,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "superuser_password": {
+      "type": "string",
+      "description": "PostgreSQL superuser (postgres) password (auto-generated if not provided)",
+      "minLength": 12,
+      "maxLength": 128,
+      "examples": ["VerySecureR00tP@ss"],
+      "x-generate": {
+        "type": "password",
+        "length": 32,
+        "include": "alphanumeric-symbols"
+      }
+    },
+    "image_pull_secret_name": {
+      "type": "string",
+      "description": "Name of a pre-existing Kubernetes imagePullSecret in the target namespace used to pull the s390x/postgres image from Docker Hub. Required when the cluster cannot pull anonymously (e.g. Docker Hub rate limits).",
+      "minLength": 1,
+      "maxLength": 253,
+      "examples": ["dockerhub-pull-secret"]
+    },
+    "storage_class": {
+      "type": "string",
+      "description": "Kubernetes StorageClass name for the PostgreSQL data PersistentVolumeClaim. Must support ReadWriteOnce access mode.",
+      "minLength": 1,
+      "maxLength": 253,
+      "examples": [
+        "ocs-storagecluster-ceph-rbd",
+        "managed-nfs-storage",
+        "ibmc-block-gold"
+      ]
+    },
+    "storage_size": {
+      "type": "string",
+      "description": "Size of the PostgreSQL data PersistentVolumeClaim (Kubernetes quantity format).",
+      "pattern": "^[0-9]+(\\.[0-9]+)?(Ki|Mi|Gi|Ti|Pi|Ei|k|M|G|T|P|E)?$",
+      "default": "10Gi",
+      "examples": ["5Gi", "10Gi", "50Gi", "100Gi"]
+    }
+  },
+  "required": ["clusterTarget", "database_name"],
+  "additionalProperties": false
+}
