@@ -1,0 +1,34 @@
+## Flat top-level keys consumed by scripts/import.sh
+display_name: MongoDB Enterprise Advanced VM s390x
+description: MongoDB Enterprise Advanced 8.0 deployed as an OCP Virt VirtualMachine on IBM Z (s390x), supporting standalone and 3-member Replica Set HA deployments
+category: other
+support_url: https://www.ibm.com
+marketing_url: https://www.ibm.com/products/sovereign-core
+tags: [Database, MongoDB, Enterprise, s390x, VM]
+provisioning_duration_minutes: 10
+
+## BYOPTemplate CR metadata (also read by import.sh)
+name: MongoDB Enterprise Advanced VM s390x
+metadata:
+  name: mongodbvm-helm-registry
+  namespace: byop-broker
+spec:
+  productId: mongodbvm
+  sourceType: helm-registry
+  # Set to the version of the mongodb-vm chart you pushed (same as sourceVersion in metadata.yaml).
+  version: "1.1.46"
+  catalogRegistration:
+    displayName: MongoDB Enterprise Advanced VM s390x
+    description: MongoDB Enterprise Advanced 8.0 deployed as an OCP Virt VirtualMachine on IBM Z (s390x), supporting standalone and 3-member Replica Set HA deployments
+    plans:
+      - id: standard
+        name: Standard
+        description: Standalone MongoDB EA 8.0 VM on s390x (2 vCPU, 4 Gi RAM, 25 Gi disk)
+      - id: ha
+        name: High Availability
+        description: MongoDB EA 8.0 Replica Set on s390x (3 VMs, 2 vCPU / 4 Gi RAM / 25 Gi disk each)
+    category: other
+    tags: [Database, MongoDB, Enterprise, s390x, VM]
+    supportUrl: https://www.ibm.com
+    marketingUrl: https://www.ibm.com/products/sovereign-core
+    provisioningDurationMinutes: 10
